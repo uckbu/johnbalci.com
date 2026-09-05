@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="A customizable portfolio template for your background, projects, and contact information."
+  >
+
+  <title>Your Name — Portfolio</title>
+
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .hero-text {
+      flex: 1 1 400px;
+      min-width: 0;
+    }
+
+    .hero-photo {
+      flex: 0 0 auto;
+      width: 340px;
+      height: 340px;
+      margin-top: 20px;
+    }
+
+    .hero-photo img {
+      width: 340px;
+      height: 340px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+  </style>
+
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const introItems = [
+        { element: document.querySelector("header"), delay: 30 },
+        { element: document.querySelector(".logo"), delay: 90 },
+        { element: document.querySelector("nav"), delay: 150 },
+        { element: document.querySelector(".hero h1"), delay: 220 },
+        { element: document.querySelector(".tagline"), delay: 300 },
+        { element: document.querySelector(".bio"), delay: 380 },
+        { element: document.querySelector(".about-links"), delay: 470 },
+        { element: document.querySelector(".hero-photo"), delay: 300 }
+      ].filter((item) => item.element);
+
+      introItems.forEach(({ element, delay }) => {
+        element.style.setProperty("--reveal-delay", `${delay}ms`);
+      });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          introItems.forEach(({ element }) => {
+            element.classList.add("is-visible");
+          });
+        });
+      });
+
+      const scrollItems = [
+        document.querySelector("#projects > h2"),
+        ...document.querySelectorAll(".project-category"),
+        ...document.querySelectorAll(".project-card"),
+        document.querySelector("#contact")
+      ].filter(Boolean);
+
+      if (!("IntersectionObserver" in window)) {
+        scrollItems.forEach((item) => item.classList.add("is-visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries, activeObserver) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            entry.target.classList.add("is-visible");
+            activeObserver.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.08,
+          rootMargin: "0px 0px -35px 0px"
+        }
+      );
+
+      scrollItems.forEach((item) => observer.observe(item));
+    });
+  </script>
+</head>
+
+<body>
+<header class="reveal">
+  <div class="nav-inner">
+    <a href="#" class="logo reveal">Your Name</a>
+
+    <nav class="reveal" aria-label="Primary navigation">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" hidden><span aria-hidden="true">◐</span> Dark mode</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="about" class="hero">
+    <div class="hero-text">
+      <h1 class="reveal">Your Name</h1>
+
+      <p class="tagline reveal">
+        Your Role · Your Organization
+      </p>
+
+      <p class="bio reveal">
+        Introduce yourself here. Share your background, the kind of work you enjoy,
+        and what you would like to create next. Use this space to describe your
+        interests, experience, and approach in your own words.
+      </p>
+
+      <p class="about-links reveal">
+        Your City, Country
+        &nbsp;·&nbsp;
+        <a href="mailto:hello@example.com">Email</a>
+        &nbsp;·&nbsp;
+        <a
+          href="https://example.com/linkedin"
+          target="_blank"
+          rel="noopener"
+        >
+          LinkedIn
+        </a>
+        &nbsp;·&nbsp;
+        <a
+          href="https://example.com/github"
+          target="_blank"
+          rel="noopener"
+        >
+          GitHub
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <section id="projects" class="projects">
+    <h2 class="reveal">Projects</h2>
+
+    <h3 class="project-category reveal">Digital Design Projects</h3>
+
+    <div class="project-grid">
+      <a
+        class="project-card reveal"
+        href="projects/project-one.html"
+      >
+        <h4>Project One</h4>
+        <p class="project-meta">
+          Your Team or Organization
+        </p>
+        <span class="view-link">View project →</span>
+      </a>
+    </div>
+
+    <h3 class="project-category reveal">PCB Projects</h3>
+
+    <div class="project-grid">
+      <a
+        class="project-card reveal"
+        href="projects/project-two.html"
+      >
+        <h4>Project Two</h4>
+        <p class="project-meta">Personal Project</p>
+        <span class="view-link">View project →</span>
+      </a>
+
+      <a
+        class="project-card reveal"
+        href="projects/project-three.html"
+      >
+        <h4>Project Three</h4>
+        <p class="project-meta">
+          Your Team or Organization
+        </p>
+        <span class="view-link">View project →</span>
+      </a>
+
+      <a
+        class="project-card reveal"
+        href="projects/project-four.html"
+      >
+        <h4>Project Four</h4>
+        <p class="project-meta">Your Team or Organization</p>
+        <span class="view-link">View project →</span>
+      </a>
+    </div>
+
+    <h3 class="project-category reveal">Analog Projects</h3>
+
+    <div class="project-grid">
+      <a
+        class="project-card reveal"
+        href="projects/project-five.html"
+      >
+        <h4>Project Five</h4>
+        <p class="project-meta">Class Project</p>
+        <span class="view-link">View project →</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="contact" class="contact reveal">
+    <h2>Contact</h2>
+
+    <p>
+      <a href="mailto:hello@example.com">
+        hello@example.com
+      </a>
+    </p>
+
+    <p>
+      <a
+        href="https://example.com/github"
+        target="_blank"
+        rel="noopener"
+      >
+        GitHub
+      </a>
+
+      &nbsp;·&nbsp;
+
+      <a
+        href="https://example.com/linkedin"
+        target="_blank"
+        rel="noopener"
+      >
+        LinkedIn
+      </a>
+    </p>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2026 Your Name</p>
+</footer>
+</body>
+</html>
