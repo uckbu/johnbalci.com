@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Scrapr engineering case study: constrained researcher retrieval, semantic ranking, and the systems behind research discovery.">
+  <title>Scrapr — John Balci</title>
+  <script src="../theme.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="scrapr-showcase.css">
+  <script src="../navigation.js" defer></script>
+  <script src="scrapr-case-study.js" defer></script>
+  <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin defer></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin defer></script>
+  <script src="scrapr-terminal-react.js" defer></script>
+</head>
+<body class="scrapr-page">
+<header class="topbar">
+  <a href="../index.html" class="logo">John Balci</a>
+  <nav aria-label="Primary navigation"><a href="../index.html#about">About</a><a href="../index.html#projects">Projects</a><a href="../index.html#research">Research</a><a href="../index.html#contact">Contact</a></nav>
+</header>
+<main class="scrapr-main">
+<article class="scrapr-study">
+  <header class="scrapr-hero">
+    <a class="scrapr-back" href="../index.html#projects">← All projects</a>
+    <div class="scrapr-hero-grid">
+      <div><p class="scrapr-kicker">Software project</p><h1>Scrapr</h1><p class="scrapr-deck">Researcher discovery and semantic ranking.</p><p class="scrapr-summary">I built Scrapr to help students find researchers whose recent publications align with their interests. This project explores the retrieval pipeline, ranking model, and engineering tradeoffs behind the search.</p><p class="project-meta">Next.js · TypeScript · Electron · OpenAlex</p></div>
+      <div class="scrapr-hero-aside">
+        <dl><div><dt>Role</dt><dd>Founder &amp; Software Engineer</dd></div><div><dt>Company</dt><dd>JEB Digital Ventures</dd></div><div><dt>Timeline</dt><dd>Sep 2025 — Present</dd></div><div><dt>Focus</dt><dd>Retrieval · Ranking · Systems</dd></div></dl>
+        <a class="scrapr-visit" href="https://scrapr.site" target="_blank" rel="noopener noreferrer">Visit live product ↗</a>
+      </div>
+    </div>
+    <nav class="scrapr-index" aria-label="Case study sections"><a href="#theory"><span>01</span>The premise</a><a href="#model"><span>02</span>The model</a><a href="#architecture"><span>03</span>Architecture</a><a href="#retrieval"><span>04</span>Retrieval</a><a href="#resilience"><span>05</span>Resilience</a><a href="#performance"><span>06</span>Performance</a></nav>
+  </header>
+
+  <section id="theory" class="scrapr-section scrapr-intro">
+    <div class="section-marker"><span>01</span><p>The theory &amp; core idea</p></div>
+    <div class="section-content">
+      <p class="scrapr-pullquote">The starting problem was finding researchers whose current work matched my interests.</p>
+      <div class="prose-columns"><p>Finding a suitable research opportunity is difficult. The real task is finding a professor whose current work aligns with you, a lab that is actively publishing work you care about, and a principal investigator who can apply your skills to the next iteration of that work.</p><p>I had the skills to contribute, but finding the right research meant combing through pages of non-indexed, outdated, and deprecated projects. Labs cannot document every active project, researchers cannot optimize their SEO while doing the work, and much of the most interesting work sits behind a wall of “in-the-know.”</p></div>
+      <p class="scrapr-thesis">Scrapr treats this as a constrained entity-retrieval and ranking problem: given a free-text research interest, an institution, and a parsed CV, discover active researchers at that institution whose published work is semantically aligned with the student—and rank them so the next useful conversation is easier to start.</p>
+      <div class="tradeoff-grid" aria-label="Core information retrieval tradeoffs">
+        <article><span>01</span><h3>Recall vs. precision</h3><p>Three retrieval strategies maximize recall. Semantic re-ranking and keyword boosts compress the candidate set for precision.</p></article>
+        <article><span>02</span><h3>Latency vs. completeness</h3><p>Up to 10 pages per search term, capped at 30 author profiles, bound an otherwise expensive paper–author cross-product.</p></article>
+        <article><span>03</span><h3>Online compute vs. offline index</h3><p>Every search fans out live to OpenAlex. The in-process embedding cache survives warm serverless requests; cold starts rebuild it.</p></article>
+        <article><span>04</span><h3>Semantic fidelity vs. cost</h3><p>1536-dimensional OpenAI embeddings provide semantic matching. Bag-of-words Jaccard similarity remains the reduced-quality fallback.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="model" class="scrapr-section">
+    <div class="section-marker"><span>02</span><p>Mathematical model</p></div>
+    <div class="section-content">
+      <p class="section-lead">A researcher’s score is the relevance of their single strongest publication. Titles provide a concise signal; abstracts carry more topical information.</p>
+      <div class="equation-card"><span class="equation-label">Semantic relevance</span><div class="equation">\[S_{\mathrm{semantic}} = 0.4\,\cos(\vec q,\vec t) + 0.6\,\cos(\vec q,\vec a)\]</div><div class="equation-legend"><span>\(\vec q\) search query</span><span>\(\vec t\) paper title</span><span>\(\vec a\) paper abstract</span></div></div>
+      <div class="equation-pair"><div class="equation-card compact"><span class="equation-label">Cosine similarity</span><div class="equation">\[\cos(\vec u,\vec v)=\frac{\vec u\cdot\vec v}{\lVert\vec u\rVert\lVert\vec v\rVert}\]</div></div><div class="equation-card compact"><span class="equation-label">Final score</span><div class="equation">\[S_{\mathrm{final}}=\min\!\left(1,\ S_{\mathrm{semantic}}\left(1+0.2I_t+0.1I_a\right)\right)\]</div></div></div>
+      <p>The 40–60 weighting reflects a practical finding: abstracts contain more topical signal than titles. Exact keyword matches then act as a modest multiplier—strong enough to preserve literal intent without replacing the semantic comparison.</p>
+      <div class="cosine-lab" id="score-demo">
+        <div class="lab-heading"><div><p class="scrapr-kicker">Interactive model</p><h3>Rotate the papers around the query</h3></div><output id="score-result" aria-live="polite">0.76</output></div>
+        <div class="lab-grid">
+          <figure class="vector-figure"><svg id="vector-chart" viewBox="0 0 520 390" role="img" aria-labelledby="vector-title vector-desc"><title id="vector-title">Cosine similarity vector explorer</title><desc id="vector-desc">A fixed query vector and adjustable title and abstract vectors show how their angles change cosine similarity.</desc><g class="vector-grid"><circle cx="260" cy="195" r="64"/><circle cx="260" cy="195" r="128"/><circle cx="260" cy="195" r="176"/><path d="M52 195H468M260 18V372"/></g><path class="vector query-vector" d="M260 195 L428 195"/><path id="title-vector" class="vector title-vector" d="M260 195 L380 75"/><path id="abstract-vector" class="vector abstract-vector" d="M260 195 L405 120"/><circle cx="260" cy="195" r="5" class="vector-origin"/><text x="435" y="190" class="vector-label">query q</text><text id="title-vector-label" x="384" y="69" class="vector-label">title t</text><text id="abstract-vector-label" x="410" y="116" class="vector-label">abstract a</text></svg><figcaption>Closer vectors point in a more similar semantic direction.</figcaption></figure>
+          <div class="lab-controls"><label for="title-angle"><span>Title angle</span><output id="title-value">46°</output></label><input id="title-angle" type="range" min="0" max="90" step="1" value="46"><label for="abstract-angle"><span>Abstract angle</span><output id="abstract-value">37°</output></label><input id="abstract-angle" type="range" min="0" max="90" step="1" value="37"><label class="lab-check"><input id="title-keyword" type="checkbox"><span>Keyword appears in title <b>×1.20</b></span></label><label class="lab-check"><input id="abstract-keyword" type="checkbox"><span>Keyword appears in abstract <b>×1.10</b></span></label><div class="score-breakdown"><p><span>Title similarity</span><b id="title-cosine">0.69</b></p><p><span>Abstract similarity</span><b id="abstract-cosine">0.80</b></p><p><span>Keyword multiplier</span><b id="keyword-multiplier">1.00×</b></p></div></div>
+        </div>
+      </div>
+      <h3>Reconstructing OpenAlex abstracts</h3><p>OpenAlex stores abstracts as inverted indexes rather than plaintext. To read one, Scrapr flattens every word-position pair, sorts by position, and joins the words.</p>
+      <div class="code-file"><div class="code-file-bar"><span>abstract-reconstruction.txt</span><button class="copy-code" type="button">Copy</button></div><pre><code>Input: { "machine": [0, 5], "learning": [1, 6], "is": [2],
+         "great": [3, 7], "and": [4] }
+
+01  Flatten → [(machine,0), (learning,1), (is,2), (great,3),
+               (and,4), (machine,5), (learning,6), (great,7)]
+02  Sort by position
+03  Join → "machine learning is great and machine learning great"</code></pre><footer><span>Time complexity</span><b>\(O(W\log W)\)</b><span>W = total word occurrences</span></footer></div>
+      <p>This runs on every work during discovery—potentially hundreds of times per search—so its performance matters.</p>
+    </div>
+  </section>
+
+  <section id="architecture" class="scrapr-section">
+    <div class="section-marker"><span>03</span><p>Architecture &amp; data flow</p></div>
+    <div class="section-content">
+      <p class="section-lead">The client gathers a CV, institution, and research interest. The server resolves identity, widens the query, retrieves candidates, verifies current affiliation, and only then pays the cost of semantic ranking.</p>
+      <figure class="flow-diagram"><img src="images/scrapr-flow-diagram.png" alt="Scrapr flow diagram showing CV parsing, researcher search, OpenAlex retrieval, semantic ranking, dashboard results, and email drafting"><figcaption><span>Figure 01</span> End-to-end discovery and outreach flow supplied from the working system design.</figcaption></figure>
+      <div class="code-file"><div class="code-file-bar"><span>institutions.ts</span><button class="copy-code" type="button">Copy</button></div><pre><code>async function getInstitutionId(
+  collegeName: string
+): Promise&lt;string | null&gt; {
+  const variations = getCollegeVariations(collegeName);
+
+  for (const name of variations) {
+    const response = await fetch(
+      `${OPENALEX_INSTITUTIONS_API}?search=${name}&amp;per-page=1`
+    );
+    const data = await response.json();
+    if (data.results?.[0]) return data.results[0].id;
+  }
+
+  return null;
+}</code></pre></div>
+      <p><code>getCollegeVariations()</code> handles the asymmetry between names like “MIT” and “Stanford University” by trying raw, expanded, and stripped forms. Common shorthand such as “CMU” works; highly informal abbreviations remain an unresolved edge case.</p>
+    </div>
+  </section>
+
+  <section id="retrieval" class="scrapr-section">
+    <div class="section-marker"><span>04</span><p>Three-pronged retrieval</p></div>
+    <div class="section-content">
+      <p class="section-lead">Query expansion turns a narrow term such as “optogenetics” into five to eight related academic terms. Three retrieval paths run against OpenAlex and accumulate candidates into one shared author map.</p>
+      <div class="strategy-stack"><article><div class="strategy-number">01</div><div><h3>Traditional text search</h3><p>The broadest net searches titles, abstracts, and available full text for every expanded term.</p></div><code>GET /works?filter=authorships.institutions.lineage:{id}&amp;search={term}</code></article><article><div class="strategy-number">02</div><div><h3>Concept-filtered search</h3><p>The top related concepts catch papers that live in the right ontology even when their words do not match.</p></div><code>GET /works?filter=...lineage:{id},concepts.id:{c1|c2|c3}</code></article><article><div class="strategy-number">03</div><div><h3>Direct author discovery</h3><p>Author records expose researchers whose concept tags match even when no individual paper surfaced earlier.</p></div><code>GET /authors?filter=last_known_institutions.id:{id},concepts.id:{concept}</code></article></div>
+      <h3>The hot inner loop</h3><p><code>addAuthorsFromWork()</code> runs for every work returned by every strategy. It uses a cheap keyword score to choose which publication represents a researcher before the full embedding stage.</p>
+      <div class="code-file"><div class="code-file-bar"><span>add-authors-from-work.ts</span><button class="copy-code" type="button">Copy</button></div><pre><code>// For each authorship on a work:
+// 1. Skip the work when its title matches an exclusion keyword
+// 2. Score paper relevance with the fast keyword method
+// 3. Match institution lineage or a directly discovered author ID
+// 4. Apply the optional lab-name filter
+// 5. Upsert the author; keep the more relevant publication
+// 6. Add up to three recent works, deduplicated by title</code></pre></div>
+      <h3>Affiliation is a correctness gate</h3><p>A work-level affiliation only proves where an author was when a paper was published. Scrapr checks <em>last-known</em> institutions so a former postdoc does not continue to appear in a university’s results years after leaving.</p>
+      <div class="code-file"><div class="code-file-bar"><span>filter-to-primary-institution.ts</span><button class="copy-code" type="button">Copy</button></div><pre><code>const atInstitution = (author.last_known_institutions || []).some(
+  (institution: Institution) =&gt;
+    institution?.id === institutionId ||
+    institution?.lineage?.includes(institutionId)
+);</code></pre></div>
+      <p>The lineage condition preserves legitimate matches when a department is a child of the university—for example, an EECS department nested beneath MIT.</p>
+      <h3>The precision layer</h3><p>After retrieval can produce more than 75 candidates, <code>relevancy.ts</code> re-scores each researcher using dense vector similarity. Embeddings are cached by the first 200 characters of input.</p>
+      <div class="code-split">
+        <div class="code-file"><div class="code-file-bar"><span>get-embedding.ts</span><button class="copy-code" type="button">Copy</button></div><pre><code>async function getEmbedding(text: string) {
+  const cacheKey = text.slice(0, 200);
+  if (embeddingCache.has(cacheKey)) {
+    return embeddingCache.get(cacheKey)!;
+  }
+
+  const response = await client.embeddings.create({
+    model: "text-embedding-3-small",
+    input: text,
+    encoding_format: "float",
+  });
+
+  const vector = response.data[0].embedding;
+  embeddingCache.set(cacheKey, vector);
+  return vector;
+}</code></pre></div>
+        <div class="code-file"><div class="code-file-bar"><span>cosine-similarity.ts</span><button class="copy-code" type="button">Copy</button></div><pre><code>function cosineSimilarity(a: number[], b: number[]) {
+  let dot = 0, magA = 0, magB = 0;
+
+  for (let i = 0; i &lt; a.length; i++) {
+    dot += a[i] * b[i];
+    magA += a[i] * a[i];
+    magB += b[i] * b[i];
+  }
+
+  if (magA === 0 || magB === 0) return 0;
+  return dot / (Math.sqrt(magA) * Math.sqrt(magB));
+}</code></pre><footer><span>Time complexity</span><b>\(O(d)\), \(d=1536\)</b></footer></div>
+      </div>
+      <p>Each vector occupies roughly 6 KiB. For 75 researchers, title and abstract comparison requires at most 150 network calls before cache hits; the query embedding is computed once. A first-200-character cache collision is possible, though unlikely for academic text.</p>
+    </div>
+  </section>
+
+  <section id="resilience" class="scrapr-section">
+    <div class="section-marker"><span>05</span><p>Failure modes &amp; invariants</p></div>
+    <div class="section-content">
+      <p class="section-lead">Every fallback protects a different property: availability, relevance quality, affiliation correctness, or persistence.</p>
+      <div class="failure-table-wrap"><table class="failure-table"><thead><tr><th>Failure</th><th>Impact</th><th>Mitigation</th></tr></thead><tbody><tr><th>Wrong institution match</th><td>Every result belongs to the wrong school.</td><td>Name variations improve matching; fuzzy result validation remains open.</td></tr><tr><th>Query expansion unavailable</th><td>Search continues with reduced recall.</td><td>Return the original topic as the only search term.</td></tr><tr><th>OpenAI unavailable</th><td>Ranking quality degrades.</td><td>Fall back to bag-of-words Jaccard similarity and warn.</td></tr><tr><th>Author verification fails</th><td>The unverified chunk is removed.</td><td>Fail closed and log the provider error.</td></tr><tr><th>History insert fails</th><td>Results render but are not persisted.</td><td>Log and return results; acceptable at current scale.</td></tr><tr><th>CV parsing fails</th><td>No CV-derived keyword boost.</td><td>Continue using query and institution context.</td></tr><tr><th>Embedding cache collision</th><td>A cached vector can mis-score one item.</td><td>Currently unmitigated; replace truncation with a full-content hash.</td></tr></tbody></table></div>
+      <div class="edge-notes"><article><span>EMPTY SET</span><p>If no works or authors match, the API returns an explicit error and keeps the user on the search form.</p></article><article><span>POST-VERIFY ZERO</span><p>If every candidate fails current-affiliation verification, the dashboard currently renders zero results without an error.</p></article></div>
+      <div class="invariant-card"><div><p class="scrapr-kicker">Critical invariant</p><h3>Credit is consumed before work is performed—never after.</h3></div><div class="code-file"><div class="code-file-bar"><span>rate-limit.txt</span><button class="copy-code" type="button">Copy</button></div><pre><code>checkRateLimit("search")
+  → allowed? YES → write incremented counter → do work
+  → allowed? NO  → return 429</code></pre></div></div>
+    </div>
+  </section>
+
+  <section id="performance" class="scrapr-section">
+    <div class="section-marker"><span>06</span><p>Performance &amp; instrumentation</p></div>
+    <div class="section-content">
+      <p class="section-lead">A search is observable from institution resolution to the final ranked list. The terminal below replays the structured log sequence from a representative MIT query.</p>
+      <div id="scrapr-terminal" class="terminal-mount" aria-label="Animated search log terminal"><div class="terminal-fallback">Loading search trace…</div></div>
+      <div class="latency-block"><div class="latency-heading"><p class="scrapr-kicker">Observed performance</p><h3>Where the 7–35 seconds go</h3></div><div class="latency-table-wrap"><table class="latency-table"><thead><tr><th>Phase</th><th>Estimate</th><th>Primary bottleneck</th></tr></thead><tbody><tr><th>Institution resolution</th><td>200–500 ms</td><td>1–2 OpenAlex round trips</td></tr><tr><th>Query expansion</th><td>500–2,000 ms</td><td>Gemini inference</td></tr><tr><th>Concept lookup</th><td>200–800 ms</td><td>1–4 OpenAlex round trips</td></tr><tr><th>Text search</th><td>1–10 s</td><td>Up to 10 pages × N terms</td></tr><tr><th>Concept search</th><td>1–5 s</td><td>Up to 10 paginated pages</td></tr><tr><th>Direct author search</th><td>500 ms–3 s</td><td>3 concept queries + batch work fetches</td></tr><tr><th>Affiliation verification</th><td>200 ms–1 s</td><td>Batched author lookups</td></tr><tr class="latency-emphasis"><th>Semantic ranking</th><td>3–15 s</td><td>Up to 150 embedding calls</td></tr><tr><th>Stats hydration</th><td>500 ms–2 s</td><td>3 batches of 10 author details</td></tr><tr class="latency-total"><th>Total</th><td>7–35 s</td><td>Embedding requests dominate</td></tr></tbody></table></div></div>
+      <p>The critical path is the embedding phase. At roughly 100–300 ms per call, 150 title-and-abstract requests in five-way parallel batches take about six seconds in the best case.</p>
+      <div class="score-tiers" aria-label="Displayed relevance score tiers"><div class="tier-perfect"><b>≥ 0.90</b><span>Perfect match</span></div><div class="tier-strong"><b>≥ 0.70</b><span>Strong match</span></div><div class="tier-good"><b>≥ 0.50</b><span>Good match</span></div><div class="tier-weak"><b>≥ 0.30</b><span>Weak match</span></div><div class="tier-poor"><b>&lt; 0.30</b><span>Poor match</span></div></div>
+    </div>
+  </section>
+
+  <footer class="scrapr-end"><div><h2>What I learned</h2></div><p>Retrieval quality depends on more than a similarity score. Query expansion improves coverage, publication evidence helps rank candidates, and affiliation checks keep the results useful. The remaining work includes stronger institution validation and a collision-resistant embedding cache.</p><a href="../index.html#projects">← Return to project index</a></footer>
+</article>
+</main>
+<footer class="site-footer"><p>&copy; 2026 John Balci</p></footer>
+</body>
+</html>
