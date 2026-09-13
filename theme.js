@@ -14,7 +14,7 @@
   }
 
   function updateTheme() {
-    applyTheme(preference || (systemTheme.matches ? 'dark' : 'light'));
+    applyTheme(preference || 'dark');
   }
 
   updateTheme();
