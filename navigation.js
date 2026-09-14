@@ -22,7 +22,7 @@ const SIDEBAR = {
     {
       title: 'Hardware',
       projects: [
-        { title: 'Project Six', href: 'projects/project-six.html' },
+        { title: 'Payload Interface Board', href: 'projects/payload-interface-board.html' },
       ],
     },
   ],
@@ -139,7 +139,7 @@ const SIDEBAR = {
   toc.append(title);
   const list = document.createElement('ol');
   toc.append(list);
-  const targets = [...article.querySelectorAll('h1, .scrapr-section, .project-detail > h2, .scrapr-end h2, .section-content > h3')];
+  const targets = [...article.querySelectorAll(article.dataset.tocSelector || 'h1, .scrapr-section, .project-detail > h2, .scrapr-end h2, .section-content > h3')];
   const entries = targets.filter(target => !target.hasAttribute('data-toc-skip')).map((target, index) => {
     if (!target.id) {
       const base = target.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70) || 'section';

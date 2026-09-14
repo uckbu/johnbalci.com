@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Payload Interface Board: an APExsat ground-test sensor daughterboard, covering STM32 acquisition, pressure and flow interfaces, Hall current sensing, Rogowski integration and PCB design decisions."><title>Payload Interface Board — John Balci</title><script src="../theme.js"></script><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="scrapr-showcase.css"><link rel="stylesheet" href="payload-interface-board.css"><script src="../navigation.js" defer></script><script src="payload-interface-board.js" defer></script>
+</head>
+<body class="scrapr-page pib-page">
+<header class="topbar"><a href="../index.html" class="logo">John Balci</a><nav aria-label="Primary navigation"><a href="../index.html#about">About</a><a href="../index.html#projects">Projects</a><a href="../index.html#research">Research</a><a href="../index.html#contact">Contact</a></nav>
+</header>
+<main class="scrapr-main">
+<article class="scrapr-study" data-toc-selector="[data-toc-entry]">
+<header class="scrapr-hero"><a class="scrapr-back" href="../index.html#projects">← All projects</a>
+<p class="scrapr-kicker">Hardware project · APExsat · Purdue CubeSat Lab</p>
+<h1>Payload Interface Board</h1>
+<p class="project-meta">KiCad · STM32 · Analog instrumentation · APExsat</p>
+</header>
+<section id="overview" class="scrapr-section pib-overview" data-toc-entry data-toc-label="Overview" aria-labelledby="overview-heading">
+<div class="section-marker"><h2 id="overview-heading">Overview</h2></div>
+<div class="section-content">
+<p>APExsat aims to fly a novel pulsed magnetoplasmadynamic thruster in a 6U CubeSat. This ground-test board brings the payload’s pressure, flow and current sensors onto one platform for bench characterization.</p>
+<p><strong>Requirements:</strong> four measurement paths, a 12 A continuous-current target, separation of the Hall primary from the low-voltage electronics, and a serviceable STM32 interface in a 65 × 95 mm, two-layer PCB.</p>
+<p><strong>On the board:</strong> a digital pressure sensor and external flow interface share I²C; a Hall sensor measures bidirectional current; a Rogowski integrator conditions changing-current signals. The Nucleo reads the channels and supplies the low-voltage rails.</p>
+<p><strong>In use:</strong> connect the sensors and Nucleo to the bench setup, acquire timestamped readings, and compare them with calibrated references. Acquisition firmware, calibration and thermal validation remain part of bring-up.</p>
+<div class="pib-carousel" data-carousel aria-roledescription="carousel" aria-label="Schematic capture"><h3 data-toc-skip>Schematic capture</h3><div class="pib-slides"><figure id="schematic-panel-0" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-0" tabindex="0"><a class="pib-slide-image" href="images/pib/schematic.svg" target="_blank" rel="noopener" aria-label="Open Main image at full size"><img src="images/pib/schematic.svg" alt="Complete schematic — controller, pressure, Hall current, flow and Rogowski conditioning." width="1200" height="840" fetchpriority="high"></a><figcaption>Complete schematic — controller, pressure, Hall current, flow and Rogowski conditioning.</figcaption></figure><figure id="schematic-panel-1" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-1" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/controller.svg" target="_blank" rel="noopener" aria-label="Open Controller &amp; power image at full size"><img src="images/pib/controller.svg" alt="NUCLEO-G431KB connections and local bulk capacitance on the 3.3 V and 5 V rails." width="1200" height="840" loading="lazy"></a><figcaption>NUCLEO-G431KB connections and local bulk capacitance on the 3.3 V and 5 V rails.</figcaption></figure><figure id="schematic-panel-2" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-2" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/pressure.svg" target="_blank" rel="noopener" aria-label="Open Pressure / I²C image at full size"><img src="images/pib/pressure.svg" alt="MS5837 pressure sensor, supply bypass and shared I²C pull-ups." width="1200" height="840" loading="lazy"></a><figcaption>MS5837 pressure sensor, supply bypass and shared I²C pull-ups.</figcaption></figure><figure id="schematic-panel-3" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-3" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/hall.svg" target="_blank" rel="noopener" aria-label="Open Hall current image at full size"><img src="images/pib/hall.svg" alt="ACS725 Hall sensor and the analog filter feeding PA0." width="1200" height="840" loading="lazy"></a><figcaption>ACS725 Hall sensor and the analog filter feeding PA0.</figcaption></figure><figure id="schematic-panel-4" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-4" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/flow.svg" target="_blank" rel="noopener" aria-label="Open Flow image at full size"><img src="images/pib/flow.svg" alt="External flow-sensor header, supply selector and VEXT input." width="1200" height="840" loading="lazy"></a><figcaption>External flow-sensor header, supply selector and VEXT input.</figcaption></figure><figure id="schematic-panel-5" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-5" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/rogowski.svg" target="_blank" rel="noopener" aria-label="Open Rogowski image at full size"><img src="images/pib/rogowski.svg" alt="Leaky integrator, buffered 1.65 V reference and analog filter feeding PA1." width="1200" height="840" loading="lazy"></a><figcaption>Leaky integrator, buffered 1.65 V reference and analog filter feeding PA1.</figcaption></figure></div><div class="pib-carousel-controls"><span class="pib-slide-count" aria-live="polite" aria-atomic="true">1 / 6</span><div class="pib-arrows"><button type="button" data-direction="-1" aria-label="Previous schematic capture image">←</button><button type="button" data-direction="1" aria-label="Next schematic capture image">→</button></div></div><div class="pib-carousel-tabs" role="tablist" aria-label="Schematic capture views"><button type="button" role="tab" id="schematic-tab-0" aria-controls="schematic-panel-0" aria-selected="true" tabindex="0">Main</button><button type="button" role="tab" id="schematic-tab-1" aria-controls="schematic-panel-1" aria-selected="false" tabindex="-1">Controller & power</button><button type="button" role="tab" id="schematic-tab-2" aria-controls="schematic-panel-2" aria-selected="false" tabindex="-1">Pressure / I²C</button><button type="button" role="tab" id="schematic-tab-3" aria-controls="schematic-panel-3" aria-selected="false" tabindex="-1">Hall current</button><button type="button" role="tab" id="schematic-tab-4" aria-controls="schematic-panel-4" aria-selected="false" tabindex="-1">Flow</button><button type="button" role="tab" id="schematic-tab-5" aria-controls="schematic-panel-5" aria-selected="false" tabindex="-1">Rogowski</button></div></div><div class="pib-carousel" data-carousel aria-roledescription="carousel" aria-label="PCB layout"><h3 data-toc-skip>PCB layout</h3><div class="pib-slides"><figure id="pcb-panel-0" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-0" tabindex="0"><a class="pib-slide-image" href="images/pib/pcb.svg" target="_blank" rel="noopener" aria-label="Open Board image at full size"><img src="images/pib/pcb.svg" alt="Combined copper, front silkscreen and outline — the low-voltage circuitry sits above the isolated current section." width="1200" height="840" fetchpriority="high"></a><figcaption>Combined copper, front silkscreen and outline — the low-voltage circuitry sits above the isolated current section.</figcaption></figure><figure id="pcb-panel-1" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-1" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/personal_board-F_Cu.svg" target="_blank" rel="noopener" aria-label="Open Front copper image at full size"><img src="images/pib/personal_board-F_Cu.svg" alt="Front copper (F.Cu) — sensor routing, component pads and broad primary-current pours." width="1200" height="840" loading="lazy"></a><figcaption>Front copper (F.Cu) — sensor routing, component pads and broad primary-current pours.</figcaption></figure><figure id="pcb-panel-2" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-2" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/personal_board-B_Cu.svg" target="_blank" rel="noopener" aria-label="Open Back copper image at full size"><img src="images/pib/personal_board-B_Cu.svg" alt="Back copper (B.Cu), viewed from above — ground return and primary-current copper on the second layer." width="1200" height="840" loading="lazy"></a><figcaption>Back copper (B.Cu), viewed from above — ground return and primary-current copper on the second layer.</figcaption></figure></div><div class="pib-carousel-controls"><span class="pib-slide-count" aria-live="polite" aria-atomic="true">1 / 3</span><div class="pib-arrows"><button type="button" data-direction="-1" aria-label="Previous pcb layout image">←</button><button type="button" data-direction="1" aria-label="Next pcb layout image">→</button></div></div><div class="pib-carousel-tabs" role="tablist" aria-label="PCB layout views"><button type="button" role="tab" id="pcb-tab-0" aria-controls="pcb-panel-0" aria-selected="true" tabindex="0">Board</button><button type="button" role="tab" id="pcb-tab-1" aria-controls="pcb-panel-1" aria-selected="false" tabindex="-1">Front copper</button><button type="button" role="tab" id="pcb-tab-2" aria-controls="pcb-panel-2" aria-selected="false" tabindex="-1">Back copper</button></div></div>
+</div></section>
+<section id="rationale" class="pib-rationale" data-toc-entry data-toc-label="Rationale" aria-labelledby="rationale-heading">
+<div class="pib-rationale-heading"><p class="scrapr-kicker">Design details</p><h2 id="rationale-heading">Rationale</h2><p>The circuit choices, layout tradeoffs and validation behind the board.</p></div>
+<section data-toc-entry id="architecture" class="scrapr-section" data-toc-label="Acquisition architecture" aria-labelledby="architecture-heading">
+<div class="section-marker">
+<h2 id="architecture-heading">Acquisition architecture</h2></div>
+<div class="section-content">
+<p>Digital sensors share an I²C bus. The two current channels reach separate ADC inputs after analog conditioning. Keeping those paths distinct accommodates both slowly varying measurements and pulse diagnostics without pretending that every sensor has the same bandwidth.</p>
+<div class="pib-paths" aria-label="Sensor signal paths">
+<div><strong>Pressure · U2</strong><span>MS5837 → shared I²C → PB7 / PA15</span></div>
+<div><strong>Flow · J1</strong><span>External digital LG16 → shared I²C → PB7 / PA15</span></div>
+<div><strong>Hall current · J2 / U3</strong><span>Series conductor → Hall output → 15.9 kHz RC → PA0</span></div>
+<div><strong>Rogowski · J4 / U4</strong><span>Floating coil → leaky integrator → 159 kHz RC → PA1</span></div>
+<div class="pib-host"><strong>NUCLEO-G431KB · U1</strong><span>Acquisition firmware → timestamped records → host computer</span></div></div>
+<h3>Why retain a development module?</h3>
+<p>The NUCLEO-G431KB supplies the existing STM32 platform, low-voltage rails and programming interface. Retaining it lets the daughterboard concentrate on sensor connections and analog behavior, while the removable module remains serviceable. A custom controller would also require power, programming and firmware integration work. The cost of modularity is board area, header connections and a socket-height constraint.</p>
+<p>PA0 reads Hall current and PA1 reads the integrator. The project assigns PB7 to SDA and PA15 to SCL; the fitted Nucleo’s SB2/SB3 routing and firmware pin configuration must agree with those assignments. USB provides the intended bench power/programming connection. Host logging still requires an acquisition application and a configured communication interface.</p>
+<h3>Power distribution</h3>
+<p>The pressure sensor, Hall sensor and dual op-amp use 3.3 V. The flow interface defaults to 5 V. C8 and C9 add 10 µF bulk capacitance to those rails, while C1, C2, C3 and C10 provide 100 nF bypassing at the individual loads. Bulk capacitance helps supply local demand; nearby bypass capacitors keep transient return loops short.</p>
+<p>The design uses the module’s power system rather than adding a daughterboard regulator. A complete worst-case power budget remains a bring-up item. There is no automatic arbitration between 5 V and the external flow supply, no dedicated on-board data storage, and no independent daughterboard power-protection controller. Calibration and records are intended for firmware or host storage.</p></div>
+</section>
+<section data-toc-entry id="pressure-flow" class="scrapr-section" data-toc-label="Pressure & flow interfaces" aria-labelledby="pressure-flow-heading">
+<div class="section-marker">
+<h2 id="pressure-flow-heading">Pressure & flow interfaces</h2></div>
+<div class="section-content">
+<h3>U2 · MS5837-02BA21 pressure sensor</h3>
+<p>The TE sensor, order code 20000979-00, integrates pressure conversion and a digital interface, so this channel needs no separate analog amplifier or ADC input. It is an absolute-pressure device in the 2 bar family. Its range and pressure-port arrangement must match the experiment; it is not a direct substitute for a high-pressure discharge transducer.</p>
+<p>C1 bypasses its supply. Firmware must read the calibration PROM, validate its CRC and apply the specified temperature compensation. A response at I²C address 0x76 only establishes communication, not calibrated pressure. The port also affects assembly: residue, coating or cleaning fluid can compromise the sensing interface.</p>
+<h3>R1 / R2 · one shared I²C bus</h3>
+<p>Two 4.7 kΩ resistors pull SDA and SCL up to 3.3 V. Sharing the bus saves controller pins and keeps the interface simple. Each asserted line draws about 0.70 mA through its pull-up. The resistance trades rise time against sink current; cable capacitance and any pull-ups inside the external sensor determine whether that choice works with the real harness. The planned starting bus rate is 100 kHz.</p>
+<h3>J1 / JP1 / J3 · selectable flow-sensor supply</h3>
+<p>Flow is measured off-board, through a five-position 2.54 mm header. The verification method names the LG16-043D; the design guide still calls for confirmation of the fitted variant, protocol and harness. J1 carries SDA, SCL, selected supply and ground, with pin 5 unconnected. An analog-output flow sensor cannot use that spare pin without a circuit change.</p>
+<p>JP1 defaults to a copper connection between pads 1–2, supplying 5 V. Its alternative position uses VEXT from J3. This accommodates a different low-voltage sensor supply without redesigning the interface, but selection is manual: the default bridge must be cut before pads 2–3 are joined. C10 bypasses the selected rail. The board has no level translator; choosing another supply does not change the 3.3 V logic interface.</p>
+</div>
+</section>
+<section data-toc-entry id="hall" class="scrapr-section" data-toc-label="Hall current sensing" aria-labelledby="hall-heading">
+<div class="section-marker">
+<h2 id="hall-heading">Hall current sensing</h2></div>
+<div class="section-content">
+<h3>U3 · ACS725KMATR-20AB-T</h3>
+<p>The Hall path measures current through an internal conductor while separating that conductor electrically from the low-voltage output. Revision C replaces the earlier small-package sensor with the wider ACS725KMA package. Its nominal ±20 A bidirectional range gives measurement headroom around the 12 A continuous design target; its 3.3 V supply and midpoint-centered output fit the controller’s analog domain.</p>
+<p>The selected sensitivity is 66 mV/A. At zero current the nominal output is 1.65 V. The package’s typical 0.85 mΩ conductor resistance implies approximately 0.122 W at 12 A using I²R. That calculation excludes PCB copper, terminals, solder joints and temperature-dependent resistance, so it does not establish the board’s thermal performance.</p>
+<div class="pib-equation"><span>Nominal transfer at 3.3 V</span><strong>V<sub>OUT</sub> = 1.65 V + (0.066 V/A) × I</strong><span>I = (V<sub>OUT</sub> − calibrated zero) / calibrated sensitivity</span></div>
+<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Primary current table">
+<table class="pib-table">
+<thead>
+<tr><th scope="col">Primary current</th><th scope="col">Nominal output</th><th scope="col">Ideal 12-bit code</th>
+</tr>
+</thead>
+<tbody>
+<tr><th scope="row">−12 A</th><td>0.858 V</td><td>1065</td>
+</tr>
+<tr><th scope="row">0 A</th><td>1.650 V</td><td>2048</td>
+</tr>
+<tr><th scope="row">+12 A</th><td>2.442 V</td><td>3031</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are calculated values, using code ≈ VOUT / 3.3 V × 4096. One code corresponds to about 12.2 mA; that is quantization, not accuracy. Offset, gain, noise and temperature require calibration, and firmware must use the replacement sensor’s sensitivity.</p>
+<h3>Two filtering stages</h3>
+<p>C2 supplies local bypassing. C11, a 1 nF C0G capacitor on the sensor’s FILTER pin, gives a nominal internal pole near 94 kHz with the documented typical 1.7 kΩ internal resistance. R7 = 1 kΩ and C6 = 10 nF then form a 15.9 kHz filter at PA0. The resistor also separates the sensor output from ADC sampling transients.</p>
+<p>The lower external pole reduces the useful Hall-channel bandwidth. This is appropriate to characterize as a supply-current channel, but it cannot be assumed to reproduce a fast discharge waveform. Neither the sensor range nor a changing ADC reading proves adequate pulse response. Sampling rate, acquisition time and the required measurement bandwidth must be established together.</p>
+<h3>The series path & isolation boundary</h3>
+<p>J2’s pins are the entry and exit of one series current path. IP_IN joins U3 pins 1–4; IP_OUT joins pins 5–8. Both pad banks connect directly to broad copper areas. Only this primary path has a designed isolation barrier; the flow, pressure, Rogowski electronics and host remain in the low-voltage domain.</p>
+<p>The design record lists a 565 V device-level reinforced working-voltage rating for U3. The proposed 400 V circuit remains provisional, and a component rating does not qualify the populated board, connectors, enclosure or wiring. The layout targets and pending acceptance work are therefore part of the design, not a claimed operating result.</p></div>
+</section>
+<section data-toc-entry id="rogowski" class="scrapr-section" data-toc-label="Rogowski integration & bias" aria-labelledby="rogowski-heading">
+<div class="section-marker">
+<h2 id="rogowski-heading">Rogowski integration & bias</h2></div>
+<div class="section-content">
+<h3>Why a second current channel?</h3>
+<p>A bare Rogowski coil produces a voltage proportional to the rate of change of current, rather than current itself. This makes it useful for changing-current diagnostics, but its output needs integration. U4A, half of the MCP6002T-I/SN dual op-amp, provides that function. Unlike the Hall channel, the coil path cannot measure steady DC.</p>
+<p>The single-supply circuit works around a 1.65 V reference so the ADC can observe deviations in either direction. R3 = 100 kΩ sets the input resistance; C4 = 100 nF supplies integrating feedback. R4 = 1 MΩ, in parallel with C4, provides a DC feedback path so offsets do not drive an ideal integrator indefinitely into saturation.</p>
+<div class="pib-equation"><span>Ideal small-signal transfer · output relative to VREF</span><strong>H(s) = −(R4/R3) / (1 + sR4C4)</strong><span>R3C4 = 10 ms · leak pole ≈ 1.59 Hz · low-frequency gain = −10</span></div>
+<p>Above the leak pole, within the useful amplifier and coil bandwidth, VOUT − VREF ≈ −M × I / (R3C4), where M is the coil’s mutual inductance. R4 also controls recovery after a pulse. The finite op-amp bandwidth, output swing, noise and offset keep this ideal model from describing every frequency or amplitude.</p>
+<h3>Why C0G, and why a dual amplifier?</h3>
+<p>C4 uses a larger 1206 C0G capacitor because its stability directly affects current scaling. A smaller high-permittivity ceramic would make capacitance more dependent on bias and temperature. The 1% input resistor and 5% capacitor already imply roughly ±6% first-order worst-case scale variation before coil and amplifier errors, making calibration essential.</p>
+<p>The second amplifier, U4B, buffers the midpoint. Equal 10 kΩ resistors R5 and R6 divide 3.3 V in half; C5 = 1 µF filters the divider. Their 5 kΩ equivalent source resistance gives a nominal 31.8 Hz bias-filter pole, while the divider draws about 165 µA. Buffering prevents signal loading from directly disturbing the divider. Opposing resistor tolerances alone can shift its midpoint by about 16.5 mV.</p>
+<p>J4 pin 2 returns the floating coil to this buffered VREF, not ground. The coil’s insulation is a separate requirement; the integrator does not create an isolation barrier. C3 bypasses the op-amp supply. R8 = 1 kΩ and C7 = 1 nF add a nominal 159 kHz ADC input pole, but the full channel bandwidth also depends on the coil and amplifier.</p>
+<h3>The unresolved gain decision</h3>
+<p>The actual coil sensitivity is not established in the source design. With an illustrative M = 100 nH, the retained integrator would produce only 120 µV for 12 A—about 0.15 of a nominal 12-bit ADC code. That example is not a prediction for the intended pulse current; it shows why the actual coil, peak current and pulse width must drive the final R3/C4 choice. Gain, clipping, droop, noise and pulse recovery remain validation items.</p>
+</div>
+</section>
+<section data-toc-entry id="layout" class="scrapr-section" data-toc-label="Layout, mechanics & assembly" aria-labelledby="layout-heading">
+<div class="section-marker">
+<h2 id="layout-heading">Layout, mechanics & assembly</h2></div>
+<div class="section-content">
+<p>The physical design separates the controller and sensor-conditioning area from the primary current conductor. The board grew from 65 × 60 mm to 65 × 95 mm to make room for current copper and the isolation boundary.</p>
+<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Layout decision table">
+<table class="pib-table">
+<thead>
+<tr><th scope="col">Layout decision</th><th scope="col">Reason & tradeoff</th>
+</tr>
+</thead>
+<tbody>
+<tr><th scope="row">Two copper layers; specified 2 oz outer copper; 1.6 mm FR4</th><td>Broad copper supports the 12 A thermal target without a multilayer stack. Copper weight must be specified in fabrication; current capacity remains a thermal test result.</td>
+</tr>
+<tr><th scope="row">IP_IN / IP_OUT pours on both sides</th><td>Stitching vias and all primary pads share the current path. Direct pad connections avoid narrow thermal-relief spokes, but large copper areas increase assembly heating demands.</td>
+</tr>
+<tr><th scope="row">Low-voltage ground kept outside the primary section</th><td>Provides the sensor circuitry with a common return while preserving the intended isolation boundary. Bypass placement and analog return routing remain important to noise performance.</td>
+</tr>
+<tr><th scope="row">24 × 1.5 mm nonplated slot beneath U3</th><td>Lengthens surface paths between primary and low-voltage areas. It is routed on Edge.Cuts and must be recognized as an internal cutout by the fabricator.</td>
+</tr>
+<tr><th scope="row">7 mm clearance; 8 mm creepage; 2 mm primary-to-edge spacing</th><td>Explicit custom rules make the chosen geometry checkable. They are layout targets, not a standards certification or a complete high-voltage acceptance.</td>
+</tr>
+<tr><th scope="row">Four 3.2 mm M3 nonplated holes</th><td>Controlled mounting locations with copper keepouts. The lower pair has enlarged keepouts for the nearby primary domain; metal hardware must fit the documented 7 mm diameter envelope.</td>
+</tr>
+<tr><th scope="row">Top-side SMD population</th><td>One-sided placement simplifies assembly and inspection. The lab separately fits the Nucleo and connectors, keeping the controller serviceable.</td>
+</tr>
+<tr><th scope="row">Five labeled schematic blocks and named nets</th><td>Power, pressure/I²C, flow, Hall and Rogowski paths are easier to trace. Visible reference designators connect the layout to the component register without crowding the silkscreen with every specification.</td>
+</tr>
+<tr><th scope="row">Project-local sensor footprints and exact connector parts</th><td>Pin mapping, drill sizes and package geometry follow the selected devices. A similar family name is insufficient for a drop-in substitution.</td>
+</tr>
+</tbody>
+</table></div>
+
+<h3>Connector choices</h3>
+<p>J2 is the Phoenix Contact 1731721, a 7.62 mm pitch terminal selected for the series-current interface. J3 and J4 use Phoenix Contact 1715721 terminals at 5.08 mm pitch for the external flow supply and coil input. Exact footprints and 1.3 mm drills tie the cable interfaces to purchasable parts. J1 retains a generic five-pin header footprint; its exact mating hardware remains open.</p>
+<p>The larger current terminal and removable module use more space, but make a bench instrument easier to wire and service. Fixture checks must include USB access, terminal screwdriver access, pressure plumbing, socket height and cable strain relief. The nonplated holes do not provide a chassis bond.</p>
+<h3>Dielectrics, footprints & manufacturing</h3>
+<p>All eight resistors are 0603, 1%, 0.1 W parts carrying signal or bias current. Reusing values simplifies the assembly population. X7R capacitors serve local bypassing and the Hall ADC filter; X5R serves bulk storage and midpoint filtering. Their effective capacitance can vary with bias. C0G is used for the integrator and the 1 nF filtering parts, where stable capacitance supports a more predictable transfer function.</p>
+<p>The assembly package specifies 22 SMD placements: eight resistors, eleven capacitors and three ICs. U1, J1–J4, the copper jumper and mounting features are excluded. Pressure-port handling and IC orientation need an assembly review, and the large primary copper needs adequate solder wetting. The archived fabrication package is a prototype design record; an order or assembled-board result is not established.</p></div>
+</section>
+<section data-toc-entry id="components" class="scrapr-section" data-toc-label="Complete component register" aria-labelledby="components-heading">
+<div class="section-marker">
+<h2 id="components-heading">Complete component register</h2></div>
+<div class="section-content">
+<p>Every electrical reference in the Revision C register is included below. The circuit sections explain the value choices and tradeoffs; the exact manufacturer part numbers make the population traceable. H1–H4 are mechanical mounting holes rather than purchased electrical components.</p>
+<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Reference table">
+<table class="pib-table">
+<thead>
+<tr><th scope="col">Reference</th><th scope="col">Value / device</th><th scope="col">Selected part</th><th scope="col">Circuit role</th>
+</tr>
+</thead>
+<tbody>
+<tr><th scope="row">C1</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Pressure supply bypass</td>
+</tr>
+<tr><th scope="row">C2</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Hall supply bypass</td>
+</tr>
+<tr><th scope="row">C3</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Op-amp supply bypass</td>
+</tr>
+<tr><th scope="row">C4</th><td>100 nF C0G</td><td>GRM31C5C1H104JA01L</td><td>Stable integration capacitor</td>
+</tr>
+<tr><th scope="row">C5</th><td>1 µF</td><td>CL10A105KB8NNNC</td><td>Midpoint divider filter</td>
+</tr>
+<tr><th scope="row">C6</th><td>10 nF</td><td>0603B103K500NT</td><td>Hall ADC shunt filter</td>
+</tr>
+<tr><th scope="row">C7</th><td>1 nF</td><td>C0603C102J5GACTU</td><td>Rogowski ADC shunt filter</td>
+</tr>
+<tr><th scope="row">C8</th><td>10 µF</td><td>CL21A106KAYNNNE</td><td>3.3 V bulk decoupling</td>
+</tr>
+<tr><th scope="row">C9</th><td>10 µF</td><td>CL21A106KAYNNNE</td><td>5 V bulk decoupling</td>
+</tr>
+<tr><th scope="row">C10</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Selected flow supply bypass</td>
+</tr>
+<tr><th scope="row">C11</th><td>1 nF</td><td>C0603C102J5GACTU</td><td>Hall internal FILTER capacitor</td>
+</tr>
+<tr><th scope="row">J1</th><td>FLOW 1x05</td><td>Exact header pending</td><td>External digital flow interface</td>
+</tr>
+<tr><th scope="row">J2</th><td>CURRENT SERIES 12A</td><td>1731721</td><td>Series primary-current terminal</td>
+</tr>
+<tr><th scope="row">J3</th><td>VEXT 2P</td><td>1715721</td><td>External flow supply terminal</td>
+</tr>
+<tr><th scope="row">J4</th><td>ROGOWSKI 2P</td><td>1715721</td><td>Floating coil / VREF terminal</td>
+</tr>
+<tr><th scope="row">JP1</th><td>5V / VEXT</td><td>PCB copper feature</td><td>Manual flow supply selector</td>
+</tr>
+<tr><th scope="row">R1</th><td>4.7 kΩ</td><td>0603WAF4701T5E</td><td>I²C SDA pull-up</td>
+</tr>
+<tr><th scope="row">R2</th><td>4.7 kΩ</td><td>0603WAF4701T5E</td><td>I²C SCL pull-up</td>
+</tr>
+<tr><th scope="row">R3</th><td>100 kΩ</td><td>0603WAF1003T5E</td><td>Integrator input resistance</td>
+</tr>
+<tr><th scope="row">R4</th><td>1 MΩ</td><td>0603WAF1004T5E</td><td>Integrator DC feedback / leak</td>
+</tr>
+<tr><th scope="row">R5</th><td>10 kΩ</td><td>0603WAF1002T5E</td><td>Upper midpoint divider</td>
+</tr>
+<tr><th scope="row">R6</th><td>10 kΩ</td><td>0603WAF1002T5E</td><td>Lower midpoint divider</td>
+</tr>
+<tr><th scope="row">R7</th><td>1 kΩ</td><td>0603WAF1001T5E</td><td>Hall ADC series filter</td>
+</tr>
+<tr><th scope="row">R8</th><td>1 kΩ</td><td>0603WAF1001T5E</td><td>Rogowski ADC series filter</td>
+</tr>
+<tr><th scope="row">U1</th><td>NUCLEO-G431KB</td><td>NUCLEO-G431KB</td><td>Removable controller module</td>
+</tr>
+<tr><th scope="row">U2</th><td>MS5837-02BA21</td><td>MS5837-02BA21</td><td>Absolute pressure measurement</td>
+</tr>
+<tr><th scope="row">U3</th><td>ACS725KMATR-20AB-T</td><td>ACS725KMATR-20AB-T</td><td>Isolated Hall current measurement</td>
+</tr>
+<tr><th scope="row">U4</th><td>MCP6002T-I/SN</td><td>MCP6002T-I/SN</td><td>Integrator and midpoint buffer</td>
+</tr>
+</tbody>
+</table></div></div>
+</section>
+<section data-toc-entry id="verification" class="scrapr-section" data-toc-label="Verification & remaining work" aria-labelledby="verification-heading">
+<div class="section-marker">
+<h2 id="verification-heading">Verification & remaining work</h2></div>
+<div class="section-content">
+<p class="section-lead">A consistent CAD design is a starting point for an instrument. Calibration and measured response establish what it can report.</p>
+<p>The archived 13 September 2026 Revision C checks report zero electrical-rule violations, zero PCB-rule violations, zero unconnected items and zero schematic-parity issues. The supplied schematic matches that recorded revision, but the PCB file has since changed. Those archived results are therefore evidence for the recorded snapshot, not an unconditional pass for every later layout.</p>
+<h3>How the board is intended to be verified</h3>
+<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Measurement table">
+<table class="pib-table">
+<thead>
+<tr><th scope="col">Measurement</th><th scope="col">Planned comparison</th><th scope="col">What it establishes</th>
+</tr>
+</thead>
+<tbody>
+<tr><th scope="row">Flow and delivered mass</th><td>Timed gravimetric collection, with density and timing accounted for</td><td>Compare both steady flow and integrated mass. The companion method assigns 8%; no achieved accuracy is reported.</td>
+</tr>
+<tr><th scope="row">Hall current</th><td>Independent current reference across several positive and negative operating points</td><td>Fit zero and sensitivity; verify residuals on separate data. Test 12 A temperature rise under the intended fixture conditions.</td>
+</tr>
+<tr><th scope="row">Pressure</th><td>Traceable absolute-pressure reference within the sensor range</td><td>Verify compensation, offset, drift and repeatability. The method assigns 5% to the listed health metrics.</td>
+</tr>
+<tr><th scope="row">Rogowski / pulse diagnostics</th><td>Synchronized digitizer and independent current probe</td><td>Characterize gain, polarity, bandwidth, clipping and recovery using the actual coil and pulse.</td>
+</tr>
+<tr><th scope="row">Payload input power</th><td>P31U telemetry compared with a calibrated power analyzer</td><td>The method assigns 1% to this separate power measurement. The daughterboard’s Hall channel is a cross-check, not proof of the allocation.</td>
+</tr>
+<tr><th scope="row">Mission performance</th><td>Combine sensor evidence with independent impulse and mission inputs</td><td>The documented targets are 2% impulse-bit error and 10% each for specific impulse and efficiency. These are system targets, not board specifications.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The proposed method separates calibration data from verification data, uses multiple points and repeated runs, and includes reference uncertainty, timing, drift and resolution. Its acceptance rule combines residual bias with expanded uncertainty rather than comparing only a fitted curve to its own calibration points.</p>
+<h3>Firmware is part of the measurement chain</h3>
+<p>Acquisition needs correct pin routing, sensor commands and CRC handling, pressure compensation, calibrated ADC conversion and sampling times appropriate to the RC networks. Timestamps belong at acquisition, not at USB arrival. Records should preserve raw codes, engineering units, calibration identifiers and flags for stale reads, communication failures or clipping. A tested acquisition application is not included in this hardware revision.</p>
+<h3>What remains open</h3>
+<p>The next evidence is the fitted flow interface and coil specification, complete power budget, fixture fit, assembly review, low-voltage bring-up, independent calibration, pulse response and continuous-current thermal measurements. The provisional high-voltage use needs its own environment and insulation review. The commercial development module and sensors also have no demonstrated radiation qualification; flight electronics are a separate design effort.</p>
+</div>
+</section>
+<section id="design-record" class="scrapr-section" data-toc-label="Design record" aria-labelledby="design-record-heading">
+<div class="section-marker">
+<h2 id="design-record-heading">Design record</h2></div>
+<div class="section-content">
+<p>This case study is based on the supplied <em>personal_board</em> KiCad project, its Revision C component register, the <em>Sensor Daughterboard Design and Operating Guide</em> dated 13 September 2026, and the <em>T3.PAY.TEST.7 Daughterboard Verification Method</em>, Revision 2, dated 14 September 2026. Nominal circuit calculations are explanatory models; the verification method describes proposed tests.</p>
+<p>The central design tradeoff is a serviceable, shared acquisition platform with different signal paths for different sensors. Digital conversion simplifies pressure and flow acquisition, the Hall sensor supports bidirectional current measurement, and the analog integrator makes a bare coil readable by a single-supply ADC. The remaining work is to establish each channel’s usable range, bandwidth and uncertainty with the actual sensors.</p></div>
+</section>
+</section>
+<footer class="scrapr-end"><a href="../index.html#projects">← Return to project index</a>
+</footer>
+</article>
+</main>
+<footer class="site-footer">
+<p>&copy; 2026 John Balci</p>
+</footer>
+</body></html>
