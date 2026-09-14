@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PCM Map Generator engineering case study: IRIG-106 Chapter 4 grid dimensioning, periodic commutation, and a backtracking CSP solver that lays out telemetry frames.">
+  <title>PCM Map Generator — John Balci</title>
+  <script src="../theme.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="scrapr-showcase.css">
+  <link rel="stylesheet" href="pcm-showcase.css">
+  <script src="../navigation.js" defer></script>
+  <script src="pcm-case-study.js" defer></script>
+  <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body class="scrapr-page pcm-page">
+<header class="topbar">
+  <a href="../index.html" class="logo">John Balci</a>
+  <nav aria-label="Primary navigation"><a href="../index.html#about">About</a><a href="../index.html#projects">Projects</a><a href="../index.html#research">Research</a><a href="../index.html#contact">Contact</a></nav>
+</header>
+<main class="scrapr-main">
+<article class="scrapr-study">
+
+  <header class="scrapr-hero">
+    <a class="scrapr-back" href="../index.html#projects">← All projects</a>
+    <div class="scrapr-hero-grid">
+      <div>
+        <p class="scrapr-kicker">Software project</p>
+        <h1>PCM&nbsp;Map Generator</h1>
+        <p class="scrapr-deck">Telemetry frame layout as a constrained optimization problem.</p>
+        <p class="scrapr-summary">Flight test instrumentation engineers lay out PCM telemetry frames by hand: a grid of measurement words that has to satisfy IRIG-106 Chapter 4, hit every channel’s sample rate, and keep every sample evenly spaced in time. This tool can be interpreted as an automatic solver to the previously manual process that all telemetry engineers would have to undergo.</p>
+        <p class="project-meta">Python · Constraint satisfaction · Tkinter · openpyxl</p>
+      </div>
+      <div class="scrapr-hero-aside">
+        <dl>
+          <div><dt>Role</dt><dd>Software &amp; Instrumentation Intern</dd></div>
+          <div><dt>Org</dt><dd>Naval Test Wing Atlantic, written for Advanced Systems Group, hired via ASRC Federal TRMCi</dd></div>
+          <div><dt>Timeline</dt><dd>Summer 2026</dd></div>
+          <div><dt>Focus</dt><dd>Optimization · CSP · Tooling</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <figure class="scrapr-hero-visual">
+      <div class="visual-stage">
+        <div class="hero-frame-wrap">
+          <div id="hero-frame"></div>
+          <div class="hero-frame-caption">
+            <span><b>SF</b> sub-frame ID</span>
+            <span><b>F1 / F2</b> frame sync</span>
+            <span><b>colour</b> one measurement group</span>
+            <span><b>8 minor</b> × <b>32 words</b></span>
+          </div>
+        </div>
+      </div>
+    </figure>
+
+    <nav class="scrapr-index" aria-label="Case study sections">
+      <a href="#premise"><span>01</span>The problem</a>
+      <a href="#frame"><span>02</span>Frame anatomy</a>
+      <a href="#commutation"><span>03</span>Commutation</a>
+      <a href="#dimensioning"><span>04</span>Dimensioning</a>
+      <a href="#architecture"><span>05</span>Architecture</a>
+      <a href="#solver"><span>06</span>The CSP solver</a>
+      <a href="#limits"><span>07</span>Failure &amp; cost</a>
+    </nav>
+  </header>
+
+  <!-- ============================ 01 ============================ -->
+  <section id="premise" class="scrapr-section scrapr-intro">
+    <div class="section-marker"><span>01</span><p>Theoretical foundations</p></div>
+    <div class="section-content">
+      <p class="scrapr-pullquote">Fundamentally two issues that hide behind 'one' problem.</p>
+      <div class="prose-columns">
+        <p>A PCM telemetry stream is a fixed, endlessly repeating rectangle of words. Instrumentation engineers decide the rectangle’s shape and then decide which sensor lands in which cell. Traditionally done by hand for a realistic aircraft instrumentation list, depending on the project size is generally a 20–40 hour exercise in bookkeeping. A mistake surfacing on the actual range can cost literal millions if it delays a flight test.</p>
+        <p>The task decomposes cleanly into two phases that need very different algorithms. The first is a bounded optimization search over grid shapes, and the second is a constraint satisfaction problem over the cells of the winning grid. </p>
+      </div>
+
+      <p class="scrapr-thesis">Given \(G\) measurement groups, each with a channel count \(c_i\) and a minimum sample rate \(s_i\),a target bit rate, and a word width \(w\), you must now find the grid \((M, W)\) that carries every channel within IRIG-106 limits and maximises a composite quality score; then assign every measurement word a periodically spaced set of cells inside it.</p>
+
+      <h3 data-toc-label="Two-phase optimization">Grid Dimensioning</h3>
+      <p>If you've read carefully, you know this is Phase 1. To begin, choose the tuple \((M, W)\): \(M\) minor frames per major frame, \(W\) words per minor frame. The search is bounded on both axes by the standard, and the objective is the implied bit rate staying under target while a weighted quality score is maximised.</p>
+      <div class="equation-card">
+        <span class="equation-label">Implied bit rate</span>
+        <div class="equation">\[B_{\mathrm{implied}} = f_{\mathrm{major}} \cdot w \cdot W \cdot M \;\le\; B_{\mathrm{target}}\]</div>
+        <div class="equation-legend"><span>\(4 \le M \le 256\)</span><span>\(wW \le 8192\) bits</span><span>\(W \le 1024\)</span><span>\(f_{\mathrm{major}}\) major frame rate (Hz)</span></div>
+      </div>
+
+      <h3 data-toc-skip>Grid Word Placement</h3>
+      <p>With \((M, W)\) fixed, read the grid as <em>(rows, columns)</em> and place every individual measurement word in a cell \((r, c)\) such that the following four things hold at once:</p>
+      <div class="tradeoff-grid" aria-label="Placement constraints">
+        <article><span>01</span><h3>Periodic spacing</h3><p>Every measurement’s samples are evenly spaced in the row dimension (sub-commutation) and the column dimension (super-commutation). Remember, this 2D grid is read into a one-dimensional PCM stream of data. This means that a recovered signal without periodic spacing of data words is unreadable.</p></article>
+        <article><span>02</span><h3>Contiguous extended reads</h3><p>A data block wider than \(w\) bits spills into extended-read companions, which must sit in the columns immediately after their parent word. The block cannot be split.</p></article>
+        <article><span>03</span><h3>Overhead is inviolable</h3><p>The SFID word in column 0 and the FS1/FS2 sync pattern in columns \(W-2\) and \(W-1\) are never overwritten by data. A decoder that loses them loses frame lock.</p></article>
+        <article><span>04</span><h3>No undersampling</h3><p>Rounding to satisfy periodicity may only ever push a measurement’s delivered rate <em>up</em>. Delivering fewer samples than requested is a correctness failure, not a quality tradeoff.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 02 ============================ -->
+  <section id="frame" class="scrapr-section">
+    <div class="section-marker"><span>02</span><p>IRIG-106 Chapter 4</p></div>
+    <div class="section-content">
+      <p class="section-lead">IRIG Standard 106 is the telemetry transmission standard used across aerospace, flight test and defense ranges. Chapter 4 defines the structure of the PCM stream itself.</p>
+      <p>A <em>major frame</em> is the fundamental repeating unit of the problem. It is the entire grid. It consists of \(M\) minor frames (rows), each carrying \(W\) words of \(w\) bits (columns). Three words in every minor frame are reserved overhead, leaving \(W - 3\) for measurement data.</p>
+
+      <div class="frame-ribbon" id="frame-ribbon"></div>
+
+      <div class="failure-table-wrap">
+        <table class="failure-table">
+          <colgroup><col style="width:15%"><col style="width:20%"><col style="width:65%"></colgroup>
+          <thead><tr><th>Word</th><th>Column position</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><th>SFID</th><td>0 (first)</td><td>Sub-frame ID counter. Identifies which minor frame within the major frame is currently being transmitted — it is how a decoder knows which row it is reading.</td></tr>
+            <tr><th>FS1</th><td>\(W-2\)</td><td>First half of the frame synchronization pattern.</td></tr>
+            <tr><th>FS2</th><td>\(W-1\)</td><td>Second half of the frame synchronization pattern.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The major frame rate \(f_{\mathrm{major}}\) is how many complete major frames go out per second. This is calculated with the bitrate, bits per word, words per minor frame, and minor frames per major frame.</p>
+      <p> Realisitcally, these are all buzzwords to non-instrumentation engineers. Just remember that a minor frame is a row, and every row is the same length. This means that each word per minor frame is a column.</p>
+      <div class="equation-pair">
+        <div class="equation-card compact"><span class="equation-label">Frame rate from bit rate</span><div class="equation">\[f_{\mathrm{major}} = \frac{B}{w \cdot W \cdot M}\]</div></div>
+        <div class="equation-card compact"><span class="equation-label">Overhead efficiency</span><div class="equation">\[S_{\mathrm{eff}} = \frac{W-3}{W}\]</div></div>
+      </div>
+
+      <h3>Hard constraints</h3>
+      <p>Every candidate grid is checked against Chapter 4 before it is allowed to compete. A candidate that violates any of these is marked invalid and excluded from selection entirely. These standards are universal across ranges, sites, and projects, so all hardware and software are built to adhere to them.</p>
+      <div class="failure-table-wrap">
+        <table class="failure-table">
+          <colgroup><col style="width:25%"><col style="width:13%"><col style="width:18%"><col style="width:44%"></colgroup>
+          <thead><tr><th>Constraint</th><th>Min</th><th>Max</th><th>Codified constant</th></tr></thead>
+          <tbody>
+            <tr><th>Bit rate</th><td>10 bps</td><td>10,000,000 bps</td><td><code>MIN_BIT_RATE_BPS</code>, <code>MAX_BIT_RATE_BPS</code></td></tr>
+            <tr><th>Words per minor frame</th><td>—</td><td>1,024</td><td><code>MAX_WORDS_PER_MINOR_FRAME</code></td></tr>
+            <tr><th>Bits per minor frame</th><td>—</td><td>8,192</td><td><code>MAX_BITS_PER_MINOR_FRAME</code></td></tr>
+            <tr><th>Minor frames per major</th><td>4</td><td>256</td><td><code>MAX_MINOR_FRAMES_PER_MAJOR</code></td></tr>
+            <tr><th>Bits per word</th><td>4</td><td>32</td><td><code>MIN_WORD_BITS</code>, <code>MAX_WORD_BITS</code></td></tr>
+            <tr><th>Sync pattern</th><td>16 bits</td><td>33 bits</td><td><code>MIN_SYNC_BITS</code>, <code>MAX_SYNC_BITS</code></td></tr>
+            <tr><th>Overhead words</th><td>3 (fixed)</td><td>—</td><td><code>MIN_OVERHEAD_WORDS</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pcm-lab" id="frame-lab">
+        <div class="lab-heading">
+          <div><p class="scrapr-kicker">Interactive · grid dimensioning</p><h3>Shape a major frame against the standard</h3></div>
+          <output id="frame-headline" aria-live="polite">—</output>
+        </div>
+        <div class="pcm-lab-body">
+          <figure class="pcm-figure">
+            <div class="pcm-grid"></div>
+            <div class="pcm-legend">
+              <span><i style="--swatch: var(--pcm-sfid)"></i>SFID</span>
+              <span><i style="--swatch: var(--pcm-sync)"></i>FS1 / FS2</span>
+              <span><i style="--swatch: color-mix(in srgb, var(--pcm-s0) 30%, transparent)"></i>available data words</span>
+            </div>
+          </figure>
+          <div class="pcm-controls">
+            <label for="frame-minor"><span>Minor frames per major · M</span><output id="frame-minor-value">24</output></label>
+            <input id="frame-minor" type="range" min="0" max="6" step="1" value="6">
+            <label for="frame-words"><span>Words per minor frame · W</span><output id="frame-words-value">32</output></label>
+            <input id="frame-words" type="range" min="0" max="6" step="1" value="4">
+            <label for="frame-bits"><span>Bits per word · w</span><output id="frame-bits-value">16 bits</output></label>
+            <input id="frame-bits" type="range" min="0" max="6" step="1" value="3">
+            <label for="frame-rate"><span>Major frame rate · f_major</span><output id="frame-rate-value">20 Hz</output></label>
+            <input id="frame-rate" type="range" min="1" max="400" step="1" value="20">
+            <div class="pcm-readout">
+              <p><span>Data cells per major frame</span><b id="frame-out-cells">—</b></p>
+              <p><span>Bits per minor frame</span><b id="frame-out-bitsminor">—</b></p>
+              <p><span>Overhead efficiency</span><b id="frame-out-eff">—</b></p>
+              <p><span>Grid balance</span><b id="frame-out-balance">—</b></p>
+              <p><span>Minor frame rate</span><b id="frame-out-minorrate">—</b></p>
+              <p><span>Major frame period</span><b id="frame-out-period">—</b></p>
+            </div>
+          </div>
+        </div>
+        <div class="pcm-lab-foot">
+          <div class="pcm-badges" id="frame-badges" aria-live="polite"></div>
+          <div class="pcm-readout"><p><span>validate_grid()</span><b id="frame-verdict">—</b></p></div>
+        </div>
+      </div>
+      <p>As you can see, pushing \(W\) up improves overhead efficiency (the case in which more data words exist per overhead words). </p>
+        <p>Three reserved words out of 1,024 costs almost nothing, out of 8 it costs 38% of the link. But \(w \cdot W\) runs into the 8,192-bit ceiling quickly, and a grid that is very wide and very short scores badly on balance. The optimum is somewhere in the middle, which is exactly why the tool searches instead of guessing.</p>
+      <p>Hopefully the clarity in the difficulty of this problem is more apparent now. However, this is still only one-half of the solution.</p>
+      </div>
+  </section>
+
+  <!-- ============================ 03 ============================ -->
+  <section id="commutation" class="scrapr-section">
+    <div class="section-marker"><span>03</span><p>Commutation &amp; periodicity</p></div>
+    <div class="section-content">
+      <p class="section-lead">Measurements enter the grid through three commutation modes, and each imposes a different periodicity constraint. Periodicity is the concept of spacing a particular data word evenly throughout any repetition in a column or row.</p>
+
+      <h3 data-toc-label="Commutation patterns">Sub-commutation</h3>
+      <p>When a measurement needs fewer than \(M\) samples per major frame, which in practice is almost always, it appears in a subset of minor frames at even row spacing:</p>
+      <div class="equation-card compact"><span class="equation-label">Row period</span><div class="equation">\[\text{row_period} = \frac{M}{\text{samples_per_major}}, \qquad M \bmod \text{samples_per_major} = 0\]</div></div>
+      <p>If \(M\) is not divisible by the sample count the spacing cannot be even, and the stream physically cannot emit the data in that pattern, since, again, this grid simply is a representation of a 1-dimensional pulse-code-modulation stream (refer to animation). A measurement sampled 8 times in a 24-row grid appears in every third row: 0, 3, 6, 9, 12, 15, 18, 21.</p>
+
+      <h3 data-toc-skip>Super-commutation</h3>
+      <p>When a measurement needs more than \(M\) samples per major frame it has to appear several times <em>within</em> a minor frame, again evenly spaced, the same word repeated across the row at a fixed column pitch:</p>
+      <div class="equation-pair">
+        <div class="equation-card compact"><span class="equation-label">Samples per minor frame</span><div class="equation">\[\text{spm} = \frac{\text{samples_per_major}}{M}\]</div></div>
+        <div class="equation-card compact"><span class="equation-label">Column period</span><div class="equation">\[\text{col_period} = \frac{W}{\text{spm}}, \quad W \bmod \text{spm} = 0\]</div></div>
+      </div>
+      <p>A measurement sampled 48 times in a 24-row grid appears twice per minor frame, at columns separated by \(W/2\).</p>
+      
+      <p>In the third mode, the measurement appears exactly once per minor frame, in every row, with no column constraint at all. Time words behave this way, and rarely you will find a case where you want another word to do so as well. Sometimes, you want bus data or voice words to do this (though voice words tend to have a higher required sample rate).</p>
+
+      <div class="equation-card">
+        <span class="equation-label">The placement invariant</span>
+        <div class="equation">\[c_{j+1} - c_j = \frac{W}{k} \quad \forall j \in [0,\,k-2], \qquad W - c_{k-1} + c_0 = \frac{W}{k}\]</div>
+        <div class="equation-legend"><span>\(k\) samples per minor frame</span><span>\(c_0 \ldots c_{k-1}\) occupied columns in row \(r\)</span><span>second identity is the wrap-around gap</span></div>
+      </div>
+      <p>The invariant is strict, and the wrap-around term is the part that is easy to miss: the gap from the last placement in a row back around to the first placement in the next row must equal the same period. Otherwise the sample interval stutters once per row.</p>
+
+      <div class="pcm-lab" id="commutation-lab">
+        <div class="lab-heading">
+          <div><p class="scrapr-kicker">Interactive · decompose_samples()</p><h3>Watch a rate become a placement pattern</h3></div>
+          <output id="comm-headline" aria-live="polite">—</output>
+        </div>
+        <div class="pcm-lab-body">
+          <figure class="pcm-figure">
+            <div class="pcm-grid"></div>
+            <div class="pcm-legend">
+              <span><i style="--swatch: var(--pcm-sfid)"></i>SFID</span>
+              <span><i style="--swatch: var(--pcm-sync)"></i>FS1 / FS2</span>
+              <span><i style="--swatch: var(--pcm-s0)"></i>measurement M1</span>
+              <span><i style="--swatch: var(--pcm-bad)"></i>collides with overhead</span>
+            </div>
+            <figcaption>Ask for a sample rate; the decomposition picks the rows and the per-row repetition that satisfy it periodically. Drag the column offset to see why some offsets are unusable.</figcaption>
+          </figure>
+          <div class="pcm-controls">
+            <label for="comm-minor"><span>Minor frames · M</span><output id="comm-minor-value">M = 12</output></label>
+            <input id="comm-minor" type="range" min="0" max="5" step="1" value="3">
+            <label for="comm-words"><span>Words per minor frame · W</span><output id="comm-words-value">W = 16</output></label>
+            <input id="comm-words" type="range" min="0" max="4" step="1" value="2">
+            <label for="comm-samples"><span>Requested samples per major</span><output id="comm-samples-value">—</output></label>
+            <input id="comm-samples" type="range" min="1" max="48" step="1" value="18">
+            <label for="comm-offset"><span>Column offset</span><output id="comm-offset-value">col 0</output></label>
+            <input id="comm-offset" type="range" min="0" max="15" step="1" value="1">
+            <div class="pcm-readout">
+              <p><span>Mode</span><b id="comm-mode">—</b></p>
+              <p><span>Decomposition path</span><b id="comm-path">—</b></p>
+              <p><span>Rows used</span><b id="comm-rows">—</b></p>
+              <p><span>Samples per minor</span><b id="comm-spm">—</b></p>
+              <p><span>Delivered vs requested</span><b id="comm-delivered">—</b></p>
+              <p><span>Effective oversample</span><b id="comm-oversample">—</b></p>
+              <p><span>Overhead collisions</span><b id="comm-collisions">—</b></p>
+              <p><span>Row divisibility</span><b id="comm-rowcheck">—</b></p>
+              <p><span>Column divisibility</span><b id="comm-colcheck">—</b></p>
+            </div>
+          </div>
+        </div>
+        <div class="pcm-lab-foot">
+          <div class="pcm-readout"><p><span>Invariant</span><b id="comm-invariant">—</b></p></div>
+        </div>
+      </div>
+
+      <h3>The oversampling constraint</h3>
+      <p>Analog measurements carry an anti-aliasing filter, and the filter imposes an oversampling factor on top of the rate the customer asked for. The algorithm applies it by multiplying the requested samples-per-second by an <code>OVERSAMPLING_FACTOR</code> the engineer supplies.</p>
+      <p>Digital sources bypass this because their stated rate <em>is</em> their actual rate. An analog vibration channel can end up demanding an order of magnitude more grid capacity than the requirement from the customer may suggest, while a digitised voice channel demands exactly what it says and no more. </p>
+      <div class="pcm-defs">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 04 ============================ -->
+  <section id="dimensioning" class="scrapr-section">
+    <div class="section-marker"><span>04</span><p>Dimensioning &amp; scoring</p></div>
+    <div class="section-content">
+      <p>The optimal <code>words_per_minor</code> depends on how many samples each super-commutated group needs per minor frame. But that per-minor sample count depends on <code>words_per_minor</code>, because <code>samples_per_minor</code> must divide <code>words_per_minor</code> evenly for the column spacing to be periodic. </p>
+      <p>Well... that poses a problem, since neither can be chosen first. My resolution is a two-pass allocation.</p>
+
+      <h3 data-toc-label="Two-pass allocation">Pass 1: Size the grid and ignore the columns</h3>
+      <p>The first pass deliberately drops the column-divisibility constraint so a width can be chosen at all. <code>_choose_actual_samples_per_major()</code> is called without <code>words_per_minor</code>, so it returns the minimum valid sample count: the smallest value at or above the requirement that divides <code>minor_frames</code>, or is a multiple of it.</p>
+      <p>*note, the following blocks of code are NOT the actual code, but rather just examples so you can see what an implementation may look like.</p>
+      <div class="code-file"><div class="code-file-bar"><span>grid_solver.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>for group in groups:
+    factor = get_sampling_factor(getattr(group, 'input_type', 'frequency_interest'))
+    effective_minimum = group.minimum_sps_each * factor
+    needed = ceil(effective_minimum / reqs.major_frame_rate)
+
+    actual = _choose_actual_samples_per_major(needed, minor_frames)
+    # ↑ Pass 1: no words_per_minor argument — column-divisibility unconstrained
+
+    pass1_actuals.append(actual)
+    er_count = getattr(group, 'extended_read_count', 0)
+    total_data_words_p1 += group.count * actual * (1 + er_count)</code></pre></div>
+
+      <div class="code-file"><div class="code-file-bar"><span>_choose_actual_samples_per_major.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>def _choose_actual_samples_per_major(needed, minor_frames, words_per_minor=None):
+    if needed &lt;= 0:
+        return 1
+
+    if needed &lt;= minor_frames:
+        # Sub-comm: find smallest count >= needed that divides minor_frames
+        for candidate in range(needed, minor_frames + 1):
+            if minor_frames % candidate == 0:
+                return candidate
+        return minor_frames  # worst case: once per minor frame
+
+    # Super-comm: ceil(needed / minor_frames) samples per minor frame
+    spm = ceil(needed / minor_frames)
+
+    # If words_per_minor is known, round spm up to nearest divisor of W
+    if words_per_minor is not None and spm &gt; 1 and words_per_minor % spm != 0:
+        for candidate_spm in range(spm + 1, words_per_minor + 1):
+            if words_per_minor % candidate_spm == 0:
+                spm = candidate_spm
+                break
+        else:
+            spm = words_per_minor  # worst case: entire row
+
+    return spm * minor_frames</code></pre></div>
+
+      <h3 data-toc-skip>Pass 2: Re-allocate with column divisibility active</h3>
+      <p>With a width in hand, every group is re-allocated, this time passing <code>words_per_minor</code> through. Rounding <code>samples_per_major</code> up to the nearest divisor of \(W\) can only increase the sample count, which can only increase total data words — so Pass 2 can retroactively invalidate the width Pass 1 chose.</p>
+      <div class="code-split">
+        <div class="code-file"><div class="code-file-bar"><span>pass_two.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>for group in groups:
+    actual = _choose_actual_samples_per_major(
+        needed,
+        minor_frames,
+        words_per_minor,   # ← column-divisibility active
+    )</code></pre></div>
+        <div class="code-file"><div class="code-file-bar"><span>capacity_bump.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>data_per_minor_needed = ceil(total_data_words / minor_frames)
+
+if data_per_minor_needed + overhead_per_minor &gt; words_per_minor:
+    # Pass-2 rounding blew past chosen width — bump to next preferred size
+    words_per_minor = _choose_preferred_words(
+        data_per_minor_needed + overhead_per_minor,
+    )
+    if words_per_minor is None:
+        return None  # Exceeds IRIG limit</code></pre></div>
+      </div>
+
+      <h3>The scoring function</h3>
+      <p>Dimensioning admits many valid solutions, so candidates are ranked by a weighted composite score. The weights encode what a good grid actually means to an instrumentation engineer, not what is mathematically tidy.</p>
+      <div class="equation-card">
+        <span class="equation-label">Composite quality score</span>
+        <div class="equation">\[S = 0.35\,S_{\mathrm{mult}} + 0.20\,S_{\mathrm{spare}} + 0.10\,S_{\mathrm{div}} + 0.10\,S_{\mathrm{eff}} + 0.15\,S_{\mathrm{bal}} - 0.5\,V_{\mathrm{spacing}}\]</div>
+      </div>
+      <div class="failure-table-wrap">
+        <table class="failure-table">
+          <colgroup><col style="width:24%"><col style="width:10%"><col style="width:36%"><col style="width:30%"></colgroup>
+          <thead><tr><th>Component</th><th>Symbol</th><th>Formula</th><th>Optimising for</th></tr></thead>
+          <tbody>
+            <tr><th>Oversampling multiplier</th><td>\(S_{\mathrm{mult}}\)</td><td>\(1 - \frac{1}{\alpha},\ \alpha = \frac{f_{\mathrm{actual}}}{f_{\mathrm{theoretical}}}\)</td><td>Signal quality headroom</td></tr>
+            <tr><th>Spare capacity</th><td>\(S_{\mathrm{spare}}\)</td><td>\(\max(0,\ 1 - \lvert r_{\mathrm{spare}} - 0.20 \rvert)\)</td><td>~20% spare for future growth</td></tr>
+            <tr><th>Divisibility</th><td>\(S_{\mathrm{div}}\)</td><td>\(\min\!\left(\frac{d(M)}{16},\ 1\right)\)</td><td>Flexible sub-comm placement</td></tr>
+            <tr><th>Overhead efficiency</th><td>\(S_{\mathrm{eff}}\)</td><td>\(\frac{W-3}{W}\)</td><td>Bandwidth utilisation</td></tr>
+            <tr><th>Grid balance</th><td>\(S_{\mathrm{bal}}\)</td><td>\(\frac{\min(M,W)}{\max(M,W)}\)</td><td>Avoiding elongated grids</td></tr>
+            <tr><th>Spacing violations</th><td>\(V_{\mathrm{spacing}}\)</td><td>Count of groups with non-periodic placement</td><td>Hard penalty per violation</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>\(d(n)\) is the divisor count — \(d(24) = 8\), since 24 is divisible by 1, 2, 3, 4, 6, 8, 12 and 24. A highly divisible \(M\) gives the placement phase far more legal row periods to work with, which is why it earns its own term.</p>
+      <p>The multiplier score uses the asymptote \(1 - 1/\alpha\) deliberately. At \(\alpha = 1\) it scores 0, with corresponds to no oversampling at all. At \(\alpha = 2\) it scores 0.5. It approaches 1.0 but never reaches it, so the function rewards oversampling while giving sharply diminishing returns for extremity. That is the desired behaviour: 4× oversampling is much better than 1×, and 40× is barely better than 4× while costing ten times the bandwidth.</p>
+
+      <div class="pcm-lab" id="score-lab">
+        <div class="lab-heading">
+          <div><p class="scrapr-kicker">Interactive · _score_candidate()</p><h3>Weight a candidate grid</h3></div>
+          <output id="score-headline" aria-live="polite">—</output>
+        </div>
+        <div class="pcm-lab-body">
+          <figure class="pcm-figure">
+            <div class="pcm-weights" id="score-weights"></div>
+            <figcaption id="score-note">Bars show each component’s <em>weighted</em> contribution, scaled against the 0.35 maximum any single term can reach.</figcaption>
+          </figure>
+          <div class="pcm-controls">
+            <label for="score-minor"><span>Minor frames · M</span><output id="score-minor-value">M = 24</output></label>
+            <input id="score-minor" type="range" min="0" max="16" step="1" value="5">
+            <label for="score-words"><span>Words per minor frame · W</span><output id="score-words-value">W = 32</output></label>
+            <input id="score-words" type="range" min="0" max="12" step="1" value="3">
+            <label for="score-alpha"><span>Oversampling ratio · α</span><output id="score-alpha-value">α = 2.0×</output></label>
+            <input id="score-alpha" type="range" min="10" max="120" step="1" value="20">
+            <label for="score-spare"><span>Spare capacity · r_spare</span><output id="score-spare-value">20%</output></label>
+            <input id="score-spare" type="range" min="0" max="60" step="1" value="20">
+            <label for="score-violations"><span>Spacing violations</span><output id="score-violations-value">0</output></label>
+            <input id="score-violations" type="range" min="0" max="3" step="1" value="0">
+          </div>
+        </div>
+      </div>
+      <p>The weights sum to 0.90, not 1.00, and that 10% gap is load-bearing. A single spacing violation costs 0.5 — more than the entire balance and divisibility terms combined. No amount of elegance elsewhere can rescue a candidate that cannot place its groups periodically, which is exactly the ordering an engineer would want.</p>
+
+      <div class="code-file"><div class="code-file-bar"><span>score_candidate.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>score = (
+    0.35 * multiplier_score
+    + 0.20 * spare_score
+    + 0.10 * divisor_score
+    + 0.10 * overhead_efficiency
+    + 0.15 * balance_score
+    - spacing_penalty
+)
+return round(score, 6)</code></pre></div>
+      <p>The <code>round(score, 6)</code> is put in place to get rid of comparison errors due to floating-point inprecision. Candidates are later sorted by score, and two functionally identical scores that differ in the last floating-point bit can sort differently across Python versions. This tool ships to offline laptops that cannot easily be upgraded, so a version-dependent tie-break would surface as two engineers on two machines getting two different maps from identical inputs.</p>
+      <p>dang hardware constraints!</p>
+      <h3>Candidate enumeration</h3>
+      <p>The search is brute force with a deliberate expansion step.</p>
+      <div class="code-file"><div class="code-file-bar"><span>enumerate_candidates.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>def _enumerate_candidates(groups, target_bit_rate, bits_per_word,
+                         overhead_per_minor, time_words_per_minor):
+    reqs = compute_aggregate_requirements(groups)
+    candidates = []
+
+    for minor_frames in CANDIDATE_MINOR_FRAMES:      # 20 values
+        # Build minimum-width baseline
+        baseline = _build_candidate(groups, reqs, minor_frames, ...)
+        if baseline is None:
+            continue
+        baseline.score = _score_candidate(baseline, target_bit_rate)
+        candidates.append(baseline)
+
+        # Explore 3 wider configurations (for grid balance)
+        wider_sizes = _choose_preferred_words_multi(
+            baseline.words_per_minor + 1, max_extras=3
+        )
+        for wpm in wider_sizes:
+            candidate = _build_candidate(..., words_per_minor_override=wpm)
+            if candidate is not None:
+                candidate.score = _score_candidate(candidate, target_bit_rate)
+                candidates.append(candidate)
+
+    return candidates</code></pre></div>
+      <p>The space is at most 20 minor-frame counts × (1 baseline + 3 wider) = 80 candidates, each built in \(O(G)\). Ultimately, a very reasonable time complexity.</p>
+    </div>
+  </section>
+
+  <!-- ============================ 05 ============================ -->
+  <section id="architecture" class="scrapr-section">
+    <div class="section-marker"><span>05</span><p>Architecture &amp; data flow</p></div>
+    <div class="section-content">
+      <p class="section-lead">One button — “Generate PCM map and export” — fans out into seven stages. Validation happens early, the expensive CSP happens last, and every stage has a single well-defined output.</p>
+      <div class="pcm-pipeline" id="pcm-pipeline">
+        <div class="pcm-stages" role="tablist" aria-label="Pipeline stages" aria-orientation="vertical"></div>
+        <div class="pcm-stage-panel" id="pcm-stage-panel" role="tabpanel" tabindex="0"></div>
+      </div>
+      <p>Stage 3 runs the entire candidate enumeration once at the 10 Mbps ceiling purely to discover the <em>minimum</em> feasible bit rate, then adds the operator’s spare margin to set the real target. It is a full extra pass over the search space, which is spent to convert “pick a bit rate then hope and pray" into “here is the floor, here is your margin, here is the request you take to the range.”</p>
+
+  
+    </div>
+  </section>
+
+  <!-- ============================ 06 ============================ -->
+  <section id="solver" class="scrapr-section">
+    <div class="section-marker"><span>06</span><p>The CSP solver</p></div>
+    <div class="section-content">
+      <p class="section-lead">Backtracking is a depth-first search over partial assignments: build a solution one measurement at a time, and when a later choice hits a dead end, undo the most recent choice and try the next option instead.</p>
+
+      <h3 data-toc-label="Solver pipeline">Step 1: sample decomposition</h3>
+      <p><code>decompose_samples()</code> turns a total sample count into a placement shape <code>(rows_used, samples_per_minor, row_period)</code> satisfying three properties: never undersample, even row spacing, and even column spacing. Three fast paths handle the common cases before an exhaustive search is needed.</p>
+      <div class="code-file"><div class="code-file-bar"><span>decompose_samples.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>def decompose_samples(actual_samples, rows, cols):
+    # Fast path 1: pure sub-comm
+    if actual_samples &lt;= rows and rows % actual_samples == 0:
+        return actual_samples, 1, rows // actual_samples
+
+    # Fast path 2: pure super-comm (spm divides cols)
+    if actual_samples &gt;= rows and actual_samples % rows == 0:
+        spm = actual_samples // rows
+        if spm == 1 or (cols % spm == 0 and cols // spm &gt;= 1):
+            return rows, spm, 1
+
+    # Exact decomposition search
+    for rows_used in range(min(actual_samples, rows), 0, -1):
+        if rows % rows_used != 0:
+            continue
+        if actual_samples % rows_used != 0:
+            continue
+        spm = actual_samples // rows_used
+        if spm &gt; 1 and cols % spm != 0:
+            continue
+        return rows_used, spm, rows // rows_used
+
+    # Round-up fallback: smallest spm divisor of cols >= ceil(actual/rows)
+    min_spm = (actual_samples + rows - 1) // rows
+    for spm in _col_divisors(cols):
+        if spm &lt; min_spm:
+            continue
+        if cols // spm &lt; 1:
+            continue
+        return rows, spm, 1
+
+    raise ValueError(f"Cannot decompose {actual_samples} ...")</code></pre></div>
+      <p>This solution finds the smallest samples-per-minor that both divides the column count and meets the minimum. It raises the oversampling factor above what was asked for every time, but it guarantees periodic placement. This effectively happens at least once to every measurement. Before I figured this out, I would generate nothing but broken maps.</p>
+
+      <h3 data-toc-skip>Step 2: Grouping extended-read words</h3>
+      <p>A bus word wider than \(w\) bits is emitted as a parent plus companions. They are identified by regex and fused into a single indivisible placement unit before the solver ever sees them.</p>
+      <div class="code-file"><div class="code-file-bar"><span>er_grouping.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>_ER_PATTERN = re.compile(r"^(.+?)_ER(\d*)$")
+
+for m in measurements:
+    match = _ER_PATTERN.match(m.name)
+    if match:
+        parent = match.group(1)
+        if parent in by_name:
+            er_groups.setdefault(parent, []).append(m.name)
+
+# Sort: _ER before _ER1 before _ER2 (by length then lexicographic)
+for parent, companions in er_groups.items():
+    companions.sort(key=lambda n: (len(n), n))</code></pre></div>
+      <p>A parent <code>M1</code> with companions <code>M1_ER</code> and <code>M1_ER2</code> becomes one <code>PlacementSpec</code> of width 3 with <code>labels = [M1, M1_ER, M1_ER2]</code>. During placement the block occupies three consecutive columns and cannot be split, which makes it one of the most constrained things in the grid.</p>
+      <p> Still, its a necessity, since you cannot place an extended-read on a 12bit/word system thats 36 bits after the initial read. You'd be concatenating random bits to the end of your measurement.</p>
+
+      <h3 data-toc-skip>Step 3: backtracking with forward checking</h3>
+      <div class="code-file"><div class="code-file-bar"><span>backtrack.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>def _backtrack(specs, index, grid, placements, deadline):
+    if index == len(specs):
+        return True                       # All placed
+
+    if time.time() &gt; deadline:
+        return False                      # Timeout → greedy fallback
+
+    spec = specs[index]
+    candidates = _enumerate_offsets(spec, grid)
+
+    for row_off, col_off in candidates:
+        cells = generate_cells(spec, row_off, col_off, ...)
+        if cells is None:
+            continue
+        if not all(grid.is_free(r, c) for r, c, _ in cells):
+            continue
+
+        # Place all cells
+        for r, c, label in cells:
+            grid.place(r, c, label)
+        placements[index] = cells
+
+        # Forward check: verify all remaining specs have >= 1 valid offset
+        if index + 1 &lt; len(specs):
+            if not _forward_check(specs[index + 1:], grid):
+                for r, c, _ in cells:     # Undo and try next candidate
+                    grid.unplace(r, c)
+                placements[index] = []
+                continue
+
+        if _backtrack(specs, index + 1, grid, placements, deadline):
+            return True
+
+        # Undo
+        for r, c, _ in cells:
+            grid.unplace(r, c)
+        placements[index] = []
+
+    return False</code></pre></div>
+
+      <p>When the solver backtracks from level \(k\) to level \(k-1\) it must restore the grid to exactly the state it was in before the level \(k-1\) choice. That is why <code>PeriodicGrid</code> exposes both <code>place()</code> and <code>unplace()</code>. Together they form a reversible state machine, and, naturally, you'd want an exact reversal with the sort of constraints that come with PCM telemetry.</p>
+      <p>A greedy placer takes each measurement’s first valid offset and never looks back. That fails as soon as measurements compete for the same cells: accelerometer A1 wants columns 1 and 25 in every row, A2 wants the same columns at the same rate, and once A1 has them A2 is stuck shuffling into whatever is left, which is possibly nothing. Backtracking can undo A1 and move it to column 2, freeing column 1 for A2.</p>
+      <p> So, practically, the ability to reconsider makes the search <em>complete</em> because it finds a valid arrangement whenever one exists.</p>
+
+      <div class="pcm-lab" id="solver-lab">
+        <div class="lab-heading">
+          <div><p class="scrapr-kicker">Interactive · place_periodic()</p><h3>Trace the search, offset by offset</h3></div>
+          <output class="caption" id="solver-total" aria-live="polite">—</output>
+        </div>
+        <div class="pcm-solver-body">
+          <figure class="pcm-figure">
+            <div class="pcm-grid"></div>
+            <div class="pcm-narration" id="solver-narration" aria-live="polite"></div>
+            <div class="pcm-scrub">
+              <label for="solver-scrub"><span>Scrub the trace</span><span id="solver-scrub-label">event 0</span></label>
+              <input id="solver-scrub" type="range" min="0" max="1" step="1" value="0">
+            </div>
+            <div class="pcm-counters">
+              <div><b id="solver-steps">0</b><span>offsets tried</span></div>
+              <div><b id="solver-placed">0</b><span>specs placed</span></div>
+              <div><b id="solver-pruned">0</b><span>forward-check prunes</span></div>
+              <div><b id="solver-undone">0</b><span>placements undone</span></div>
+            </div>
+            <figcaption>A real run of the solver on a 6 × 16 grid with six specs, replayed event by event. The trace is generated in your browser by the same algorithm shown above — nothing here is pre-recorded.</figcaption>
+          </figure>
+          <div class="pcm-controls">
+            <div class="pcm-spec-rail" id="solver-rail"></div>
+            <div class="pcm-transport">
+              <button type="button" id="solver-play" aria-pressed="false" aria-label="Play the trace" title="Play"><svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M4.2 2.3 11.6 7 4.2 11.7Z"/></svg></button>
+              <button type="button" id="solver-step" aria-label="Step forward one event" title="Step one event"><svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M3.2 2.6 9 7 3.2 11.4Z"/><rect x="9.7" y="2.6" width="1.8" height="8.8" rx=".7"/></svg></button>
+              <button type="button" id="solver-end" aria-label="Skip to the end of the trace" title="Skip to end"><svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M2 2.8 6.1 7 2 11.2Z"/><path d="M6.3 2.8 10.4 7 6.3 11.2Z"/><rect x="10.9" y="2.8" width="1.7" height="8.4" rx=".7"/></svg></button>
+              <button type="button" id="solver-reset" aria-label="Reset the trace to the start" title="Reset"><svg class="is-stroked" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="1.6 4.5 1.6 10.4 7.5 10.4"/><path d="M4.1 15a9 9 0 1 0 2.1-9.4L1.6 10.4"/></svg></button>
+            </div>
+            <label class="lab-check"><input id="solver-fc" type="checkbox" checked><span>Forward checking <b>enabled</b></span></label>
+          </div>
+        </div>
+        <div class="pcm-lab-foot">
+          <div class="pcm-readout pcm-compare"><p><span>Forward checking, measured</span></p><p id="solver-compare"></p></div>
+        </div>
+      </div>
+
+      <h3>Three enhancements over naive backtracking</h3>
+      <p>The implementation adds three things that turn a theoretically exponential algorithm into a practical one.</p>
+      <div class="strategy-stack">
+        <article>
+          <div class="strategy-number">01</div>
+          <div><h3>Variable ordering of the most-constrained first</h3><p><code>compute_placement_specs()</code> sorts specs by <code>total_placements</code> descending. This is the MRV heuristic: placing the most constrained variable first maximises the pruning effect for everything after it. In practice, high-rate super-commutated accelerometers filling dozens of cells go before low-rate sub-commutated pressures filling a handful. Time words go last because they have no periodicity requirement, so they can take whatever is left.</p></div>
+        </article>
+        <article>
+          <div class="strategy-number">02</div>
+          <div><h3>Forward checking leading to early dead-end detection</h3><p>After each placement, <code>_forward_check()</code> scans every remaining unplaced spec and verifies it still has at least one valid offset. If any future spec has zero options the branch is already doomed, so the solver undoes immediately rather than exploring a subtree that cannot succeed. Without it the solver might place ten specs, discover on the eleventh that it is blocked, and unwind all ten. With it, spec eleven’s doom is caught right after the placement that caused it, which is usually spec two or three.</p></div>
+        </article>
+        <article>
+          <div class="strategy-number">03</div>
+          <div><h3>Deadline timeout... which hopefully never happens!</h3><p>A ten-second wall-clock deadline is checked at the top of every recursive call. If the backtracker cannot finish in time (which realisitically happens only for literally impossibly constrained grids)it aborts, the grid resets via <code>PeriodicGrid.create()</code>, and returns an error.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ 07 ============================ -->
+  <section id="limits" class="scrapr-section">
+    <div class="section-marker"><span>07</span><p>Failure modes &amp; cost</p></div>
+    <div class="section-content">
+      <p class="section-lead">Every failure mode has a named detection point and a defined recovery. Two of them are recoveries; the rest are deliberate refusals to produce a wrong map.</p>
+      <div class="failure-table-wrap">
+        <table class="failure-table">
+          <colgroup><col style="width:16%"><col style="width:25%"><col style="width:27%"><col style="width:32%"></colgroup>
+          <thead><tr><th>Failure mode</th><th>Trigger condition</th><th>Detection point</th><th>Recovery</th></tr></thead>
+          <tbody>
+            <tr><th>No valid grid</th><td>All candidates exceed the target bit rate or violate IRIG limits</td><td><code>select_best_grid()</code></td><td><code>ValueError</code> reporting the minimum required bit rate</td></tr>
+            <tr><th>Pass-2 capacity blowout</th><td>Column-divisibility rounding pushes data demand past the Pass-1 width</td><td><code>_build_candidate()</code></td><td>Auto-bump to the next preferred size; reject if an override was exceeded</td></tr>
+            <tr><th>Placement timeout</th><td>Backtracking exceeds 10 seconds</td><td><code>_backtrack()</code></td><td>Greedy first-fit fallback</td></tr>
+            <tr><th>Placement infeasible</th><td>Grid too small for all measurements</td><td><code>place_periodic()</code></td><td><code>ValueError</code> — the operator must increase spare bit rate</td></tr>
+            <tr><th>Non-periodic decomposition</th><td><code>actual_samples</code> not decomposable with periodic column spacing</td><td><code>decompose_samples()</code></td><td><code>ValueError</code> — indicates a solver bug; should never fire if dimensioning did its job</td></tr>
+            <tr><th>IRIG constraint violation</th><td>Grid dimensions exceed Chapter 4 limits</td><td><code>validate_grid()</code></td><td>Candidate marked invalid and excluded from selection</td></tr>
+            <tr><th>Bus data ER overflow</th><td>Bus data bits &gt; word size × available columns</td><td><code>gui.py:_get_groups()</code></td><td>Validation warning raised before the solve starts</td></tr>
+            <tr><th>Zero or negative SPS</th><td>Operator enters an invalid sample rate</td><td><code>compute_aggregate_requirements()</code></td><td><code>ValueError</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="edge-notes">
+      </div>
+
+      <h3 data-toc-label="Performance">Performance</h3>
+      <p>Complexity is bounded everywhere except the solver, and the solver is bounded by wall clock rather than by proof.</p>
+      <div class="latency-table-wrap">
+        <table class="latency-table">
+          <colgroup><col style="width:19%"><col style="width:28%"><col style="width:34%"><col style="width:19%"></colgroup>
+          <thead><tr><th>Phase</th><th>Function</th><th>Complexity</th><th>Practical runtime</th></tr></thead>
+          <tbody>
+            <tr><th>Aggregate requirements</th><td><code>compute_aggregate_requirements()</code></td><td>\(O(G)\)</td><td>&lt; 1 µs</td></tr>
+            <tr><th>Candidate enumeration</th><td><code>_enumerate_candidates()</code></td><td>\(O(20 \times 4 \times G) = O(G)\)</td><td>&lt; 1 ms</td></tr>
+            <tr><th>Single candidate build</th><td><code>_build_candidate()</code></td><td>\(O(G)\), up to 3 passes</td><td>&lt; 50 µs</td></tr>
+            <tr><th>Scoring</th><td><code>_score_candidate()</code></td><td>\(O(\sqrt{M})\) for <code>_count_divisors</code></td><td>&lt; 1 µs</td></tr>
+            <tr><th>Total grid selection</th><td><code>select_best_grid()</code></td><td>\(O(G)\)</td><td>&lt; 5 ms</td></tr>
+            <tr><th>Placement spec computation</th><td><code>compute_placement_specs()</code></td><td>\(O(N)\), \(N\) = flat measurements</td><td>&lt; 1 ms</td></tr>
+            <tr><th>Offset enumeration</th><td><code>_enumerate_offsets()</code></td><td>\(O(\text{row\_period} \times \text{col\_period}) \le O(M \times W)\)</td><td>&lt; 1 ms per spec</td></tr>
+            <tr class="latency-emphasis"><th>Backtracking solver</th><td><code>_backtrack()</code></td><td>Worst case exponential; practical bounded by deadline</td><td>&lt; 10 s (timeout)</td></tr>
+            <tr><th>Greedy fallback</th><td><code>_greedy_place()</code></td><td>\(O(N \times K)\), \(K\) = max offsets</td><td>&lt; 100 ms</td></tr>
+            <tr class="latency-total"><th>Excel export</th><td><code>export_pcm_workbook()</code></td><td>\(O(M \times W)\) cell writes</td><td>&lt; 500 ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 data-toc-skip>Where performance actually matters</h3>
+      <p>Exactly one place: the inner loop of the backtracker.</p>
+      <div class="code-file"><div class="code-file-bar"><span>hot_loop.py</span><button class="copy-code" type="button">Copy</button></div><pre><code>for row_off, col_off in candidates:
+    cells = generate_cells(...)                          # ← allocation-heavy
+    if cells is None:
+        continue
+    if not all(grid.is_free(r, c) for r, c, _ in cells):  # ← O(cells) checks
+        continue
+
+    for r, c, label in cells:
+        grid.place(r, c, label)                          # ← 2 array writes
+
+    # ... forward check ...
+
+    for r, c, _ in cells:
+        grid.unplace(r, c)                               # ← 2 array writes</code></pre></div>
+      <p><code>generate_cells()</code> allocates a fresh list of tuples on every call. For a super-commutated measurement on a 24×48 grid with <code>spm=2</code> that is 48 <code>(int, int, str)</code> tuples per call, and a tight loop trying dozens of offsets generates thousands of short-lived allocations that pressure CPython’s small-object allocator.</p>
+      <p>While this fix is known, I didn't have time to implement. Since this is being run completely locally on one machine at a time, though, it doesn't really matter... and I'm really just nitpicking for specifics right now.</p>
+    </div>
+  </section>
+
+  <footer class="scrapr-end">
+    <div><h2>What I learned</h2></div>
+    <p>While the search was difficult, the harder part was finding out what constituted a 'better' grid. I mean, I didn't even know what a grid was before I got into this! Speaking to several engineers and having to get an idea of what the scoring weights should prioritize, i.e. the refusal to ever undersample, the choice to fail loudly rather than return a wrong map, etc. all had to be made while I was still understanding the principles and technology that guide PCM telemetry. While, of course, the technical difficulty was of major importance in this project, as I had never worked on a CSP project this in-depth aside from a silly sudoku solver, I'd like to say that most of my professional development came from the setting I programmed in (a secure environment that had an innumerable amount of restrictions), as well as working alongside engineers much more senior than I am to understand the requirements for the whole thing.</p>
+    <p>I'd be very happy to do it again. So much of my professional development has come from solving actual problems in real software engineering environments, and I can't wait for the next opportunity to stretch myself unbelievably thin until I find my way through.</p>
+    <a href="../index.html#projects">← Return to project index</a>
+  </footer>
+</article>
+</main>
+<footer class="site-footer"><p>&copy; 2026 John Balci</p></footer>
+</body>
+</html>

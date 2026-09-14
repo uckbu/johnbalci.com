@@ -1,3 +1,15 @@
 .DS_Store
 dist/
 tmp/
+
+# Local OpenAI/Codex and Claude tooling metadata and instructions
+.openai/
+.codex/
+.claude/
+.agents/
+AGENTS.md
+AGENTS.override.md
+CLAUDE.md
+CLAUDE.local.md
+.claude.json
+.claude.json.*

@@ -1,0 +1,293 @@
+/*
+ * PCM Map Generator — components specific to this case study.
+ *
+ * The page reuses the shared case-study chrome: the structural rules live in
+ * style.css (.scrapr-section, .code-file, .cosine-lab, .failure-table, …) and
+ * scrapr-showcase.css re-tunes them to the portfolio's calm theme. Only the
+ * pieces that exist nowhere else — the frame grids, the score meter, the
+ * pipeline rail and the solver visualiser — are defined here.
+ */
+.pcm-page {
+  --pcm-sfid: #6d8fb5;
+  --pcm-sync: #9b86b8;
+  --pcm-empty: color-mix(in srgb, var(--text) 8%, transparent);
+  --pcm-s0: #3f7cb8;
+  --pcm-s1: #b0703c;
+  --pcm-s2: #4f9271;
+  --pcm-s3: #a1568a;
+  --pcm-s4: #6f66b4;
+  --pcm-s5: #8a7739;
+  --pcm-ok: #2f8f63;
+  --pcm-bad: #c05353;
+  --pcm-warn: #b08637;
+}
+:root[data-theme="dark"] .pcm-page {
+  --pcm-sfid: #7fa3c9;
+  --pcm-sync: #ad98ca;
+  --pcm-ok: #63b98d;
+  --pcm-bad: #e08585;
+  --pcm-warn: #d3ab5c;
+}
+
+/* ---- Hero ribbon ------------------------------------------------------ */
+.pcm-page .scrapr-hero-visual {
+  margin-top: 40px;
+  min-height: 0;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.pcm-page .visual-stage {
+  display: block;
+  min-height: 0;
+  padding: 26px clamp(18px, 4vw, 36px) 22px;
+  background-image: none;
+}
+.hero-frame-wrap { display: grid; gap: 14px; }
+.hero-frame-wrap svg { display: block; width: 100%; height: auto; }
+.hero-frame-caption { display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--muted); font-family: inherit; font-size: 12.5px; line-height: 1.5; }
+.hero-frame-caption b { color: var(--text); font-weight: 600; }
+
+/* ---- Shared lab shell ------------------------------------------------- */
+.pcm-lab { margin: 32px 0 40px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.pcm-lab .lab-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+.pcm-lab .lab-heading h3 { margin: 0; font-size: 21px; line-height: 1.4; letter-spacing: -.02em; }
+.pcm-lab .lab-heading > output { min-width: 96px; text-align: right; color: var(--text); font-family: inherit; font-weight: 650; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+.pcm-lab .lab-heading > output.caption { min-width: 0; color: var(--muted); font-family: inherit; font-weight: 500; font-size: 13px; line-height: 1.5; font-variant-numeric: tabular-nums; letter-spacing: normal; }
+.pcm-lab-body { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, .8fr); }
+.pcm-lab-body.stacked { grid-template-columns: 1fr; }
+.pcm-figure { margin: 0; padding: 22px; border-right: 1px solid var(--border); min-width: 0; }
+.pcm-lab-body.stacked .pcm-figure { border-right: 0; border-bottom: 1px solid var(--border); }
+.pcm-figure > .pcm-grid > svg { display: block; width: 100%; height: auto; }
+.pcm-figure figcaption { margin-top: 14px; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+.pcm-controls { padding: 22px; min-width: 0; }
+.pcm-controls > label:not(.lab-check) { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 14px 0 6px; font-size: 13px; font-weight: 600; }
+.pcm-controls > label:first-child { margin-top: 0; }
+.pcm-controls output { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+.pcm-controls input[type="range"] { width: 100%; margin: 0; accent-color: var(--accent); }
+.pcm-controls select { width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font-size: 13px; }
+.pcm-controls .lab-check { display: flex; align-items: center; gap: 12px; margin-top: 18px; padding: 13px 15px; border: 1px solid var(--border); border-top: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 14.5px; cursor: pointer; transition: background .15s, border-color .15s; }
+.pcm-controls .lab-check:hover { background: var(--hover); }
+.pcm-controls .lab-check input { flex: none; width: 19px; height: 19px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.pcm-controls .lab-check:has(input:checked) { border-color: var(--accent); }
+.pcm-controls .lab-check b { color: var(--accent); }
+.pcm-controls .lab-check:not(:has(input:checked)) b { color: var(--muted); }
+
+/* A full-width strip under both columns. The checklist and the verdict have no
+   reason to live in the narrow control column, where they stretched it far past
+   the figure and left a dead half-page beside the grid. */
+.pcm-lab-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; padding: 16px 24px; border-top: 1px solid var(--border); }
+.pcm-lab-foot > .pcm-badges { flex: 1 1 540px; grid-template-columns: repeat(auto-fit, minmax(212px, 1fr)); gap: 9px 26px; margin-top: 0; padding-top: 0; border-top: 0; }
+.pcm-lab-foot > .pcm-readout { flex: 0 1 auto; margin-top: 0; padding-top: 0; border-top: 0; }
+.pcm-lab-foot > .pcm-readout:only-child { flex: 1 1 100%; }
+.pcm-lab-foot > .pcm-readout p { margin: 0; gap: 16px; }
+
+/* ---- Readouts, badges, legend ---------------------------------------- */
+.pcm-readout { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border); }
+.pcm-readout p { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin: 7px 0; font-size: 13px; }
+.pcm-readout span { color: var(--muted); }
+.pcm-readout b { font-family: inherit; font-weight: 600; font-size: 13.5px; line-height: 1.4; font-variant-numeric: tabular-nums; text-align: right; }
+.pcm-readout b.is-ok { color: var(--pcm-ok); }
+.pcm-readout b.is-bad { color: var(--pcm-bad); }
+.pcm-readout b.is-warn { color: var(--pcm-warn); }
+
+.pcm-readout.pcm-compare p { display: block; }
+.pcm-readout.pcm-compare p + p { margin-top: 8px; color: var(--muted); font-size: 12.5px; line-height: 1.7; }
+.pcm-readout.pcm-compare b { color: var(--text); font-family: inherit; font-weight: 650; font-size: 13px; line-height: 1.7; font-variant-numeric: tabular-nums; }
+
+.pcm-badges { display: grid; gap: 7px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+.pcm-badge { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; align-items: baseline; gap: 9px; font-size: 12.5px; line-height: 1.5; }
+.pcm-badge i { font-style: normal; font-weight: 700; }
+.pcm-badge b { font-family: inherit; font-weight: 500; font-size: 12.5px; line-height: 1.5; font-variant-numeric: tabular-nums; color: var(--muted); }
+.pcm-badge.pass i { color: var(--pcm-ok); }
+.pcm-badge.fail i { color: var(--pcm-bad); }
+.pcm-badge.fail span { color: var(--pcm-bad); }
+
+.pcm-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 16px; font-size: 12px; color: var(--muted); }
+.pcm-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.pcm-legend i { width: 11px; height: 11px; border-radius: 2px; background: var(--swatch, var(--pcm-empty)); border: 1px solid color-mix(in srgb, var(--text) 18%, transparent); }
+
+/* ---- Serialisation figure: grid → wire -------------------------------- */
+.frame-ribbon { margin: 28px 0; padding: 22px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; }
+.pcm-stream-stage { overflow-x: auto; }
+.pcm-stream-stage > svg { display: block; min-width: 760px; width: 100%; height: auto; }
+.pcm-stream-bar { display: flex; align-items: center; gap: 16px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.pcm-stream-bar p { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+.pcm-stream-play { flex: none; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--text); cursor: pointer; transition: background .15s, border-color .15s; }
+.pcm-stream-play svg { width: 14px; height: 14px; fill: currentColor; }
+.pcm-stream-play:hover { background: var(--hover); border-color: var(--accent); }
+.pcm-stream-play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* This figure is a diagram, not a terminal: labels take the page's own face
+   and only the bit pattern stays monospaced, where alignment actually helps. */
+.pcm-stream-figure .pcm-axis-title { font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: .005em; fill: var(--muted); }
+.pcm-stream-figure .pcm-axis-text { font-family: inherit; font-size: 11px; font-weight: 400; letter-spacing: normal; fill: var(--muted); }
+.pcm-stream-figure .pcm-cell-text { font-family: inherit; font-size: 10.5px; font-weight: 600; letter-spacing: .01em; }
+.pcm-stream-figure .pcm-bits { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .04em; fill: var(--text); }
+
+/* The read head, the tether that drops a word onto the wire, and the wire. */
+.pcm-readhead { fill: none; stroke: var(--accent); stroke-width: 2; }
+.pcm-tether { stroke: var(--accent); stroke-width: 1.25; stroke-dasharray: 3 5; opacity: .45; }
+.pcm-wire-head { stroke: var(--accent); stroke-width: 1.5; opacity: .75; }
+.pcm-wire-label { fill: var(--accent); }
+.pcm-frame-mark { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 4; opacity: .65; }
+.pcm-frame-mark-label { fill: var(--muted); }
+.pcm-wave { stroke: var(--text); stroke-width: 1.6; stroke-linejoin: miter; }
+.pcm-wave.is-gap { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 3 4; }
+.pcm-wave-axis { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 5; }
+.pcm-clock-dot { fill: var(--accent); }
+.pcm-stream-caption { fill: var(--muted); }
+
+/* ---- Score meter ------------------------------------------------------ */
+.pcm-weights { display: grid; gap: 11px; margin: 0; }
+.pcm-weight { display: grid; grid-template-columns: 140px minmax(0, 1fr) 84px; align-items: center; gap: 14px; font-size: 13px; }
+.pcm-weight > span:first-child { color: var(--muted); }
+.pcm-track { position: relative; height: 10px; border-radius: 999px; background: var(--pcm-empty); overflow: hidden; }
+.pcm-track i { position: absolute; inset: 0 auto 0 0; display: block; width: 0; border-radius: 999px; background: var(--bar, var(--accent)); transition: width .25s ease; }
+.pcm-weight b { text-align: right; font-family: inherit; font-weight: 600; font-size: 13.5px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.pcm-weight.penalty .pcm-track i { background: var(--pcm-bad); }
+.pcm-weight.total { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 13px; }
+.pcm-weight.total > span:first-child, .pcm-weight.total b { color: var(--text); font-weight: 700; }
+
+/* ---- Architecture pipeline ------------------------------------------- */
+.pcm-pipeline { display: grid; grid-template-columns: minmax(240px, .85fr) minmax(0, 1.4fr); gap: 0; margin: 30px 0 36px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.pcm-stages { display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+.pcm-stage { display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: baseline; gap: 12px; padding: 15px 18px; border: 0; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); text-align: left; font-size: 14px; }
+.pcm-stage:last-child { border-bottom: 0; }
+.pcm-stage em { font-style: normal; color: var(--muted); font: 600 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.pcm-stage span { font-weight: 500; }
+.pcm-stage small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.5; }
+.pcm-stage:hover { background: var(--hover); }
+.pcm-stage[aria-selected="true"] { background: var(--hover); box-shadow: inset 3px 0 0 var(--accent); }
+.pcm-stage-panel { padding: 24px; min-width: 0; }
+.pcm-stage-panel h4 { margin: 0 0 4px; font-size: 18px; letter-spacing: -.01em; }
+.pcm-stage-panel > p { margin: 0 0 16px; max-width: 62ch; color: var(--muted); font-size: 14.5px; line-height: 1.7; }
+.pcm-stage-panel ul { margin: 0; padding-left: 18px; display: grid; gap: 7px; font-size: 13.5px; line-height: 1.6; }
+.pcm-stage-panel li code { padding: 1px 5px; border-radius: 4px; background: var(--hover); font-size: 12.5px; }
+.pcm-stage-io { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); }
+.pcm-stage-io b { padding: 4px 8px; border: 1px solid var(--border); border-radius: 5px; color: var(--text); font-weight: 500; }
+
+/* ---- Solver visualiser ------------------------------------------------ */
+.pcm-solver-body { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, .8fr); }
+/* The status text runs from one line to three depending on the event. Reserve
+   the tallest case up front: letting it grow re-flows the figure column, which
+   drives the row height, which resizes the whole lab mid-playback. */
+.pcm-narration { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 12px; margin-top: 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); font-family: inherit; font-size: 13px; line-height: 1.65; min-height: calc(var(--narration-lines, 3) * 1.65em + 26px); }
+.pcm-narration em { font-style: normal; margin-top: 1px; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; background: var(--hover); color: var(--muted); white-space: nowrap; }
+.pcm-narration.place em { background: color-mix(in srgb, var(--pcm-ok) 22%, transparent); color: var(--pcm-ok); }
+.pcm-narration.blocked em, .pcm-narration.reject em { background: color-mix(in srgb, var(--pcm-warn) 22%, transparent); color: var(--pcm-warn); }
+.pcm-narration.prune em, .pcm-narration.undo em { background: color-mix(in srgb, var(--pcm-bad) 20%, transparent); color: var(--pcm-bad); }
+.pcm-narration.done em { background: color-mix(in srgb, var(--accent) 20%, transparent); color: var(--accent); }
+.pcm-narration p { margin: 0; color: var(--muted); }
+.pcm-narration p b { color: var(--text); font: 600 12.5px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+.pcm-spec-rail { display: grid; gap: 6px; margin-top: 4px; }
+.pcm-spec { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12.5px; opacity: .55; transition: opacity .2s; }
+.pcm-spec i { width: 10px; height: 10px; border-radius: 2px; background: var(--swatch); }
+.pcm-spec b { font-family: inherit; font-weight: 650; font-size: 13px; line-height: 1.4; letter-spacing: .01em; }
+.pcm-spec small { display: block; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcm-spec u { white-space: nowrap; }
+.pcm-spec u { text-decoration: none; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+.pcm-spec.is-placed { opacity: 1; }
+.pcm-spec.is-active { opacity: 1; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.pcm-spec.is-placed u { color: var(--pcm-ok); }
+
+.pcm-counters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin-top: 18px; background: var(--border); border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
+.pcm-counters div { padding: 11px 12px; background: var(--panel); }
+.pcm-counters b { display: block; font-family: inherit; font-weight: 650; font-size: 21px; line-height: 1.2; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.pcm-counters span { color: var(--muted); font-size: 11.5px; }
+
+.pcm-transport { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.pcm-transport button { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); color: var(--text); cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.pcm-transport button svg { width: 15px; height: 15px; fill: currentColor; }
+.pcm-transport button svg.is-stroked { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.pcm-transport button:hover { background: var(--hover); border-color: var(--accent); color: var(--accent); }
+.pcm-transport button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pcm-transport button[aria-pressed="true"] { background: var(--hover); border-color: var(--accent); color: var(--accent); }
+.pcm-scrub { margin-top: 14px; }
+.pcm-scrub label { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 6px; font-size: 12.5px; color: var(--muted); }
+.pcm-scrub input { width: 100%; margin: 0; accent-color: var(--accent); }
+
+/* ---- Grid cell chrome (SVG) ------------------------------------------- */
+.pcm-cell { stroke: var(--bg); stroke-width: 1; }
+.pcm-cell-text { fill: #fff; font-family: inherit; font-weight: 650; font-size: 9px; line-height: 1; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.pcm-axis-text { fill: var(--muted); font-family: inherit; font-weight: 500; font-size: 9.5px; line-height: 1; font-variant-numeric: tabular-nums; }
+.pcm-axis-title { fill: var(--muted); font-family: inherit; font-weight: 600; font-size: 10.5px; line-height: 1; letter-spacing: .02em; }
+.pcm-trial { fill: none; stroke: var(--accent); stroke-width: 2; }
+.pcm-trial.is-bad { stroke: var(--pcm-bad); }
+
+.pcm-figure > .pcm-counters { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 16px; }
+.pcm-figure > .pcm-counters div { padding: 10px 12px; }
+.pcm-lab-foot > .pcm-compare { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+.pcm-lab-foot > .pcm-compare p { margin: 0 !important; }
+.pcm-lab-foot > .pcm-compare p:first-child { flex: none; }
+.pcm-lab-foot > .pcm-compare p + p { flex: 1 1 340px; }
+
+/* ---- Tables -----------------------------------------------------------
+   style.css hands the first three columns 24% + 38% + 38% = 100%, which was
+   written for its three-column tables. Four of the five tables here have a
+   fourth column, and it was being squeezed into whatever was left over — i.e.
+   nothing. Each table declares its own <colgroup> instead. */
+.pcm-page .failure-table tbody th,
+.pcm-page .latency-table tbody th,
+.pcm-page .failure-table tbody td:nth-child(2),
+.pcm-page .failure-table tbody td:nth-child(3) { width: auto; }
+.pcm-page .failure-table, .pcm-page .latency-table { table-layout: fixed; }
+.pcm-page .failure-table td, .pcm-page .latency-table td,
+.pcm-page .failure-table th, .pcm-page .latency-table th { overflow-wrap: break-word; }
+
+/* ---- Measure ----------------------------------------------------------
+   Every figure on this page runs the full width of the content column, but the
+   prose inherited five different caps (746, 766, 860, 1000, 1080px) from the
+   two stylesheets underneath. The ragged right edge is what made the text look
+   walled off next to the graphics, so the body settles on one measure, set wide
+   enough to sit close to the figures and leaded to stay readable there. */
+.pcm-page { --pcm-prose: 940px; }
+.pcm-page .section-content > p,
+.pcm-page .section-lead,
+.pcm-page .scrapr-thesis,
+.pcm-page .pcm-note,
+.pcm-page .scrapr-end > p { max-width: var(--pcm-prose) !important; }
+.pcm-page .section-content > p { font-size: 17px; line-height: 1.8; }
+.pcm-page .section-lead { font-size: 19px !important; line-height: 1.7 !important; }
+
+/* Two real columns instead of one narrow block: the same words fill the whole
+   column while each line stays around 70 characters. */
+.pcm-page .prose-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 52px; max-width: none; }
+.pcm-page .prose-columns p { margin: 0; font-size: 17px; line-height: 1.8; }
+.pcm-page .prose-columns p + p { margin-top: 0; }
+@media (max-width: 900px) {
+  .pcm-page .prose-columns { grid-template-columns: 1fr; gap: 0; }
+  .pcm-page .prose-columns p + p { margin-top: 18px; }
+}
+
+/* ---- Prose helpers ---------------------------------------------------- */
+.pcm-note { margin: 22px 0 !important; padding: 14px 18px; border-left: 2px solid var(--accent); background: var(--panel); border-radius: 0 6px 6px 0; color: var(--muted); font-size: 15px !important; line-height: 1.7 !important; }
+.pcm-note b { color: var(--text); }
+.pcm-defs { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 26px 0; }
+.pcm-defs div { padding: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; }
+.pcm-defs dt { font-family: inherit; font-weight: 650; font-size: 13.5px; line-height: 1.4; }
+.pcm-defs dd { margin: 7px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+.pcm-unavailable { display: inline-block; padding: 9px 12px; border: 1px dashed var(--border); border-radius: 6px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+@media (max-width: 1100px) {
+  .pcm-narration { --narration-lines: 4; }
+  .pcm-lab-body, .pcm-solver-body, .pcm-pipeline { grid-template-columns: 1fr; }
+  .pcm-figure { border-right: 0; border-bottom: 1px solid var(--border); }
+  .pcm-stages { border-right: 0; border-bottom: 1px solid var(--border); }
+}
+@media (max-width: 760px) {
+  .pcm-narration { --narration-lines: 6; }
+  .pcm-figure > .pcm-counters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pcm-lab .lab-heading { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .pcm-lab .lab-heading > output { text-align: left; font-size: 30px; }
+  .pcm-weight { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .pcm-track { grid-column: 1 / -1; }
+  .pcm-counters { grid-template-columns: 1fr 1fr; }
+  .pcm-stream-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pcm-track i { transition: none; }
+}
