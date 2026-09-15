@@ -16,55 +16,40 @@
 
 
   <script src="navigation.js" defer></script>
+  <script src="landing.js" defer></script>
 </head>
 
-<body>
+<body class="landing-page">
 <header class="topbar">
   <a href="index.html" class="logo">John Balci</a>
   <nav aria-label="Primary navigation">
     <a href="index.html#about">About</a>
-    <a href="index.html#projects">Projects</a>
-    <a href="index.html#research">Research</a>
     <a href="index.html#contact">Contact</a>
   </nav>
 </header>
 
 <main>
   <section id="about" class="hero">
-    <div class="hero-text">
-      <h1>John Balci</h1>
-
-      <p class="tagline">
-        ee & swe @ purdue
-      </p>
-
-      <p class="bio">I'm an ee student at Purdue with a particular love for software engineering.
-         I build hardware and software across many solving paths, semantic search, CV, embedded systems, and more. For a clearer image, take a look at some of my projects.
-         </p>
-      <p class="education-summary">B.S. Electrical Engineering · Expected May 2028</p>
-
-      <p class="about-links">
-        Purdue University · West Lafayette, IN
-        &nbsp;·&nbsp;
-        <a href="mailto:ebalci@purdue.edu">Email</a>
-        &nbsp;·&nbsp;
-        <a
-          href="https://www.linkedin.com/in/john-balci-0733a9265"
-          target="_blank"
-          rel="noopener"
-        >
-          LinkedIn
-        </a>
-        &nbsp;·&nbsp;
-        <a
-          href="https://github.com/uckbu"
-          target="_blank"
-          rel="noopener"
-        >
-          GitHub
-        </a>
-      </p>
+    <div class="hero-intro">
+      <div class="hero-text">
+        <p class="tagline" data-reveal>ee &amp; swe @ purdue</p>
+        <h1 data-reveal>John Balci</h1>
+        <p class="bio" data-reveal>I'm an electrical engineering student at Purdue with a love for software. I build across hardware and software—from embedded systems to semantic search.</p>
+        <p class="education-summary" data-reveal>B.S. Electrical Engineering · Expected May 2028<br>West Lafayette, IN</p>
+        <p class="about-links" data-reveal>
+          <a href="mailto:ebalci@purdue.edu">Email</a>
+          <a href="https://www.linkedin.com/in/john-balci-0733a9265" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/uckbu" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+      <figure class="hero-photo">
+        <img src="assets/john-balci.jpg" alt="John Balci wearing glasses" width="1200" height="1600" fetchpriority="high">
+      </figure>
     </div>
+    <a class="project-scroll" href="#projects" data-reveal>
+      <span>Scroll to explore my projects</span>
+      <span class="scroll-arrow" aria-hidden="true">↓</span>
+    </a>
   </section>
 
   <section id="projects" class="projects">

@@ -11,6 +11,7 @@
  */
 const SIDEBAR = {
   home: 'index.html',
+  blog: 'blog.html',
   groups: [
     {
       title: 'Software',
@@ -42,6 +43,7 @@ const SIDEBAR = {
   <div class="sidebar-content">
     <label class="search-box"><span aria-hidden="true">⌕</span><input id="project-search" type="search" placeholder="Quick search…" aria-label="Search projects" aria-keyshortcuts="Control+k Meta+k"><kbd aria-hidden="true">⌘K</kbd></label>
     <a class="sidebar-home" href="${url(SIDEBAR.home)}"><span aria-hidden="true">⌂</span> Home</a>
+    <a class="sidebar-home sidebar-blog" href="${url(SIDEBAR.blog)}"><span aria-hidden="true">≡</span> Blog</a>
     ${SIDEBAR.groups.map(group).join('')}
     <p id="search-empty" role="status" hidden>No projects found.</p>
   </div>
@@ -101,6 +103,12 @@ const SIDEBAR = {
     });
     empty.hidden = links.some((link) => !link.hidden);
   });
+  const blogLink = document.createElement('a');
+  blogLink.href = url(SIDEBAR.blog);
+  blogLink.textContent = 'Blog';
+  if (location.pathname.endsWith('/blog.html') || location.pathname.endsWith('/blog-post.html')) blogLink.setAttribute('aria-current', 'page');
+  document.querySelector('.topbar nav').prepend(blogLink);
+
   const resume = document.createElement('details');
   resume.className = 'resume-dropdown';
   resume.innerHTML = `<summary class="resume-button">Resume <span class="resume-caret" aria-hidden="true"></span></summary><div class="resume-options"><a href="${url('resumes/John_Balci_Resume_SWE.pdf')}" target="_blank" rel="noopener" aria-label="SWE resume (opens PDF in a new tab)">SWE</a><a href="${url('resumes/John_Balci_Resume_EE.pdf')}" target="_blank" rel="noopener" aria-label="EE resume (opens PDF in a new tab)">EE</a></div>`;
@@ -119,7 +127,7 @@ const SIDEBAR = {
   const current = location.pathname;
   document.querySelectorAll('.sidebar a').forEach((link) => {
     const path = new URL(link.href).pathname;
-    if (path === current || (link.classList.contains('sidebar-home') && current.endsWith('/'))) {
+    if (path === current || (link.classList.contains('sidebar-blog') && current.endsWith('/blog-post.html')) || (link.classList.contains('sidebar-home') && current.endsWith('/'))) {
       link.setAttribute('aria-current', 'page');
     }
   });

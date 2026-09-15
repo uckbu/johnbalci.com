@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="John Balci’s blog.">
+  <title>Blog — John Balci</title>
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="blog.css">
+  <script src="navigation.js" defer></script>
+  <script src="blog.js" type="module"></script>
+</head>
+<body class="blog-page">
+<header class="topbar">
+  <a href="index.html" class="logo">John Balci</a>
+  <nav aria-label="Primary navigation">
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+</header>
+<main class="blog-main">
+  <header class="blog-heading"><h1>Blog</h1></header>
+  <p class="blog-empty">No posts yet.</p>
+  <ol class="blog-list" aria-label="Blog posts"></ol>
+  <template id="blog-row-template">
+    <li class="blog-row">
+      <div class="blog-row-heading">
+        <a class="blog-title"></a>
+        <span class="blog-word-count"></span>
+        <time></time>
+        <button class="blog-expand" type="button" aria-expanded="false"><span aria-hidden="true">+</span></button>
+      </div>
+      <div class="blog-description" inert><div><p></p></div></div>
+    </li>
+  </template>
+</main>
+<footer><p>&copy; 2026 John Balci</p></footer>
+</body>
+</html>
