@@ -48,3 +48,7 @@
 @media (prefers-reduced-motion: reduce) {
   .blog-description, .blog-expand span { transition: none; }
 }
+
+.blog-heading { text-align: center; }
+.blog-row.is-empty-post .blog-description p { min-height: 96px; }
+.blog-article.is-empty-post { min-height: 55vh; }

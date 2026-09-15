@@ -1,7 +1,7 @@
 import { posts } from './blog-posts.js';
 
 const words = post => [post.title, ...post.sections.flatMap(section => [section.title, ...section.paragraphs])].join(' ').trim().split(/\s+/u).filter(Boolean).length;
-const dateLabel = date => new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));
+const dateLabel = date => date ? new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`)) : '';
 const list = document.querySelector('.blog-list');
 if (list) {
   document.querySelector('.blog-empty').hidden = posts.length > 0;
@@ -9,18 +9,20 @@ if (list) {
   [...posts].sort((a, b) => b.date.localeCompare(a.date)).forEach((post, index) => {
     const row = template.content.firstElementChild.cloneNode(true);
     const title = row.querySelector('.blog-title');
-    title.textContent = post.title;
+    title.textContent = post.title || 'Untitled';
     title.href = `blog-post.html?post=${encodeURIComponent(post.slug)}`;
     row.querySelector('.blog-word-count').textContent = `(${words(post)} words)`;
     const time = row.querySelector('time');
     time.dateTime = post.date;
     time.textContent = dateLabel(post.date);
+    time.hidden = !post.date;
+    row.classList.toggle('is-empty-post', !post.title && !post.description);
     const description = row.querySelector('.blog-description');
     description.id = `blog-description-${index}`;
     description.querySelector('p').textContent = post.description;
     const button = row.querySelector('button');
     button.setAttribute('aria-controls', description.id);
-    button.setAttribute('aria-label', `Show description for ${post.title}`);
+    button.setAttribute('aria-label', `Show description for ${post.title || 'Untitled'}`);
     let hovered = false;
     let focused = false;
     let pinned = false;
@@ -29,7 +31,7 @@ if (list) {
       row.classList.toggle('is-open', expanded);
       description.inert = !expanded;
       button.setAttribute('aria-expanded', String(expanded));
-      button.setAttribute('aria-label', `${expanded ? 'Hide' : 'Show'} description for ${post.title}`);
+      button.setAttribute('aria-label', `${expanded ? 'Hide' : 'Show'} description for ${post.title || 'Untitled'}`);
     };
     row.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovered = true; update(); } });
     row.addEventListener('pointerleave', () => { hovered = false; update(); });
@@ -49,17 +51,18 @@ if (list) {
 } else {
   const post = posts.find(post => post.slug === new URLSearchParams(location.search).get('post'));
   if (post) {
-    document.title = `${post.title} — John Balci`;
+    document.title = `${post.title || 'Untitled'} — John Balci`;
     document.querySelector('.blog-empty').remove();
     const main = document.querySelector('main');
     const article = document.createElement('article');
     article.className = 'blog-article';
+    article.classList.toggle('is-empty-post', !post.sections.length);
     const heading = document.createElement('h1');
     heading.id = 'post-title';
-    heading.textContent = post.title;
+    heading.textContent = post.title || 'Untitled';
     const metadata = document.createElement('p');
     metadata.className = 'blog-post-meta';
-    metadata.textContent = `${dateLabel(post.date)} · ${words(post)} words`;
+    metadata.textContent = [dateLabel(post.date), `${words(post)} words`].filter(Boolean).join(' · ');
     article.append(heading, metadata);
     const toc = document.createElement('nav');
     toc.className = 'project-toc blog-toc';

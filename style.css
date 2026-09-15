@@ -516,3 +516,8 @@ body main.project-layout { display: grid; grid-template-columns: minmax(0, 1fr) 
 @media (prefers-reduced-motion: reduce) {
   .landing-page .reveal { opacity: 1; transition: none; }
 }
+
+.topbar nav > .interests-nav { position: absolute; left: 50%; transform: translateX(-50%); }
+@media (max-width: 760px) {
+  .topbar nav > .interests-nav { position: static; transform: none; margin-right: auto; }
+}
