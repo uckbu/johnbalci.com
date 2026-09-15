@@ -1,6 +1,4 @@
 .blog-main { max-width: 1400px; min-height: calc(100svh - 150px); padding-block: 64px; }
-.blog-heading { padding-bottom: 24px; border-bottom: 1px solid var(--border); }
-.blog-heading h1 { margin: 0; font-size: 36px; line-height: 1.2; letter-spacing: -.035em; }
 .blog-empty { margin: 28px 0; color: var(--muted); font-size: 16px; }
 .blog-list { list-style: none; margin: 20px 0 0; padding: 0; }
 .blog-row { border-bottom: 1px dotted var(--muted); }
@@ -49,6 +47,5 @@
   .blog-description, .blog-expand span { transition: none; }
 }
 
-.blog-heading { text-align: center; }
 .blog-row.is-empty-post .blog-description p { min-height: 96px; }
 .blog-article.is-empty-post { min-height: 55vh; }

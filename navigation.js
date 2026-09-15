@@ -43,7 +43,7 @@ const SIDEBAR = {
   <div class="sidebar-content">
     <label class="search-box"><span aria-hidden="true">⌕</span><input id="project-search" type="search" placeholder="Quick search…" aria-label="Search projects" aria-keyshortcuts="Control+k Meta+k"><kbd aria-hidden="true">⌘K</kbd></label>
     <a class="sidebar-home" href="${url(SIDEBAR.home)}"><span aria-hidden="true">⌂</span> Home</a>
-    <a class="sidebar-home sidebar-blog" href="${url(SIDEBAR.blog)}"><span aria-hidden="true">≡</span> Interests</a>
+    <a class="sidebar-home sidebar-blog" href="${url(SIDEBAR.blog)}"><span aria-hidden="true">≡</span> Blog</a>
     ${SIDEBAR.groups.map(group).join('')}
     <p id="search-empty" role="status" hidden>No projects found.</p>
   </div>
@@ -105,8 +105,7 @@ const SIDEBAR = {
   });
   const blogLink = document.createElement('a');
   blogLink.href = url(SIDEBAR.blog);
-  blogLink.textContent = 'Interests';
-  blogLink.className = 'interests-nav';
+  blogLink.textContent = 'Blog';
   if (location.pathname.endsWith('/blog.html') || location.pathname.endsWith('/blog-post.html')) blogLink.setAttribute('aria-current', 'page');
   document.querySelector('.topbar nav').prepend(blogLink);
 
