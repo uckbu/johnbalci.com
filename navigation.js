@@ -24,6 +24,7 @@ const SIDEBAR = {
       title: 'Hardware',
       projects: [
         { title: 'Payload Interface Board', href: 'projects/payload-interface-board.html' },
+        { title: 'Accumulator PCB', href: 'projects/accumulator-pcb.html' },
       ],
     },
   ],

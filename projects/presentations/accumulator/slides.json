@@ -1,0 +1,1173 @@
+{
+  "title": "PDR presentation",
+  "slides": [
+    {
+      "src": "slide-001.webp",
+      "alt": "Slide 1: APEx Mission Preliminary Design Review 12/10/2025"
+    },
+    {
+      "src": "slide-002.webp",
+      "alt": "Slide 2: 2 Topic Start End Duration Program Overview 9:00 9:15 15 min Mission Overview 9:15 10:00 45 min Experiment Overview 10:00 10:15 15 min Orbit Analysis 10:15 10:30 15 min Spacecraft Overview 10:30 11:00 30 min Payload Subsystem 11:00 11:30 30 min Thruster Demonstration 11:30 12:00 "
+    },
+    {
+      "src": "slide-003.webp",
+      "alt": "Slide 3: Program Overview Presenter: Nick Babusis"
+    },
+    {
+      "src": "slide-004.webp",
+      "alt": "Slide 4: 4 Team Introduction CubeSat Lab \u2013 the satellite designers \uf0a7 Multidisciplinary course providing hands-on experience with satellite design \uf0a7 Typically 20-30 students, with many returning for 2+ semesters \uf0a7 Participated in NS-11 with the FLaC-Sat laser communication and micropropuls"
+    },
+    {
+      "src": "slide-005.webp",
+      "alt": "Slide 5: 5 Team Introduction Electric Propulsion and Plasma Lab (EPPL) - the payload designers \uf0a7 Research laboratory specializing in novel electric propulsion devices \uf0a7 Multiple vacuum chambers for testing EP thrusters \uf0a7 Microwave, optical, and electronic plasma diagnostic capabilities Ha"
+    },
+    {
+      "src": "slide-006.webp",
+      "alt": "Slide 6: 6 Team Organization"
+    },
+    {
+      "src": "slide-007.webp",
+      "alt": "Slide 7: 7 Program Status Subsystem Component Design Status Procurement Status Unit Testing Status Integration Status EPS Distribution Board In Progress Not Started Not Started Not Started Batteery Complete Complete In Progress Not Started Solar Arrays In Progress Not Started Not Started "
+    },
+    {
+      "src": "slide-008.webp",
+      "alt": "Slide 8: 8 Program Status Subsystem Component Design Status Procurement Status Unit Testing Status Integration Status CDH OBC In Progress Not Started Not Started Not Started STRUC Frame Complete In Progress Not Started Not Started Payload Housing Complete In Progress Not Started Not Start"
+    },
+    {
+      "src": "slide-009.webp",
+      "alt": "Slide 9: Mission Overview Presenter: Nick Babusis"
+    },
+    {
+      "src": "slide-010.webp",
+      "alt": "Slide 10: 10 Primary propulsion system trade is electric propulsion (EP) vs chemical propulsion (CP) Electric Propulsion: \uf0a7 Pros: High specificc impulse \uf0a7 Cons: Low thrust, power required Chemical Propulsion: \uf0a7 Pros: High thrust, littlle/no power required \uf0a7 Cons: Low specificc impulse Disa"
+    },
+    {
+      "src": "slide-011.webp",
+      "alt": "Slide 11: 11 Dual-mode propulsion system: High-thrust (chemical) and high-specificc impulse (electric) \"modes\" fed from common propellant tank \uf0a7 Allows high-impulse missions with maneuverability, expanding possible mission CONOPS \uf0a7 Reduces cost and inert mass of hybrid systems (especially "
+    },
+    {
+      "src": "slide-012.webp",
+      "alt": "Slide 12: 12 \uf0a7 EP mode use cases: orbit raising, orbit maintenance, end-of-life disposal \uf0a7 CP mode use cases: short notice orbit changes (collision avoidance, overflyy time-sensitive target), time-limited maneuvers (capture burns, rendezvous, formation flyying) Missions with mass and/or ti"
+    },
+    {
+      "src": "slide-013.webp",
+      "alt": "Slide 13: 13 25kg (12U) CubeSat with 7kg payload, TLI to LLO mission (2 km/s \u0394V, 3 day transfer) \uf0a7 8N/200s monopropellant thruster \uf0a7 4mN/1000s electrospray thruster Dual-Mode Propulsion Example Mission J. L. Rovey et al., \u201cReview of multimode space propulsion, \u201d Progress in Aerospace Scien"
+    },
+    {
+      "src": "slide-014.webp",
+      "alt": "Slide 14: 14 GPDM: NASA mission testing dual-mode propulsion system on 6U CubeSat in LEO \uf0a7 Chemical mode: 1x monopropellant thruster \uf0a7 Electric mode: 4x electrospray thrusters \uf0a7 Electrospray thrusters efficiency reduced from 1200s -> ~700s when adapted to chemical propellant \uf0a7 Additional i"
+    },
+    {
+      "src": "slide-015.webp",
+      "alt": "Slide 15: 15 ASCENT Propellant ASCENT: Advanced SpaceCraft Energetic Non-Toxic \uf0a7 Chemical propellant similar to hydrazine developed by AFRL \uf0a7 Advantages as both CP and EP propellant: \uf0a7 Higher density than hydrazine \uf0a7 Reduced toxicity \uf0a7 Higher theoretical specificc impulse for CP \uf0a7 Low vapo"
+    },
+    {
+      "src": "slide-016.webp",
+      "alt": "Slide 16: 16 Electric thruster being developed by the EPPL designed with dual-mode integration as the goal \uf0a7 Operates on ASCENT chemical propellant \uf0a7 Improved performance relative to GPDM electric mode Electromagnetic thruster (accelerates entire plasma instead of just ions) \uf0a7 No neutraliz"
+    },
+    {
+      "src": "slide-017.webp",
+      "alt": "Slide 17: 17 Electromagnetic Thrruster Background Magnetoplasmadynamic (MPD) Thruster \uf0a7 High-current DC arc discharge creates strong Lorentz force, accelerating plasma \uf0a7 Typically injects gaseous propellant \uf0a7 High thrust density and performance \uf0a7 Very high power required for efficcient ope"
+    },
+    {
+      "src": "slide-018.webp",
+      "alt": "Slide 18: 18 Existing Electromagnetic Propulsion Systems Pulsed Plasma Thruster: \uf0a7 High-current pulsed arc discharge creates strong Lorentz force, accelerating plasma \uf0a7 Operates like a railgun with a plasma \u201cbullet\u201d \uf0a7 Typically uses ablative solid propellant \uf0a7 Efficcient operation even at "
+    },
+    {
+      "src": "slide-019.webp",
+      "alt": "Slide 19: 19 \uf0a7 Pulsed arc discharge with MPD-like geometry and plasma properties Method of operation: 1. Liquid ASCENT propellant passively injected via capillary action through porous (\"frittled\") glass disk, creating thin surface ficlm 2. Ignition discharge vaporizes surface ficlm 3. Inc"
+    },
+    {
+      "src": "slide-020.webp",
+      "alt": "Slide 20: 20 \uf0a7 High th ust d\u0007nsity \uf0a7 Int\u0007 m\u0007diat\u0007 p\u0007 fo manc\u0007 \uf0a7 Low pow\u0007 /th\u0007 mal \u0007qui \u0007m\u0007nts \uf0a7 La g\u0007 th ottlling ang\u0007 \uf0a7 Several design innovations \uf0a7 Coaxial geometry reduces ohmic heating \uf0a7 Fritteed glass disc provides passive and reliable propellant feed \uf0a7 Low cathode erosion rate due to"
+    },
+    {
+      "src": "slide-021.webp",
+      "alt": "Slide 21: 21 PMPD Prototype Performance Performance Target Prototype Therust (1 Hz) 0.3 mN 0.297 mN Specificc Impulse ~3000 s 2851 s Power 10 W 30.4 W Total Efficciency ~40% 13.6% Total Impulse 5 kN*s 0.594 kN*s Theruster Plume Cross-Section of Thrruster Prototype"
+    },
+    {
+      "src": "slide-022.webp",
+      "alt": "Slide 22: 22 \"Verify the performance of an ASCENT-propelled PMPD propulsion system in the LEO environment in order to provide a currently unavailable, fliight-qualifieed electric thruster ready for dual-mode integration, and ultimately to advance ASCENT-based dual-mode propulsion for CubeS"
+    },
+    {
+      "src": "slide-023.webp",
+      "alt": "Slide 23: 23 Why Space? \uf0a7 Some phenomena affeecting system performance cannot be feasibly recreated in ground testing \uf0a7 Microgravity, long-duration thermal cycling/exposure to hard vacuum, chemical environment \uf0a7 Testing in actual use case provides the most reliable verificcation of perform"
+    },
+    {
+      "src": "slide-024.webp",
+      "alt": "Slide 24: 24 Stakeholder Motivations"
+    },
+    {
+      "src": "slide-025.webp",
+      "alt": "Slide 25: 25 Mission Objectives MO.1: D\u0007t\u0007 min\u0007 th\u0007 k\u0007y p\u0007 fo manc\u0007 m\u0007t ics of th\u0007 PMPD syst\u0007m in LEO including impuls\u0007 bit, sp\u0007cificc impuls\u0007, and \u0007fficci\u0007ncy of pow\u0007 to th ust conv\u0007 sion by p\u0007 fo ming an o bit aising o low\u0007 ing man\u0007uv\u0007 . Minimum Success Criteria \u2022 MSC.1: The APEx mission"
+    },
+    {
+      "src": "slide-026.webp",
+      "alt": "Slide 26: 26 Mission Objectives MO.2: R\u0007co d th\u0007 p opulsion syst\u0007m h\u0007alth m\u0007t ics du ing th ust\u0007 op\u0007 ation in LEO including av\u0007 ag\u0007 pow\u0007 consumption, p op\u0007llant inj\u0007cto t\u0007mp\u0007 atu \u0007, cu \u0007nt/voltag\u0007 wav\u0007fo ms fo th\u0007 main discha g\u0007 ci cuit, and p\u0007ak voltag\u0007 and cu \u0007nt fo th\u0007 ignit\u0007 ci cuit. F"
+    },
+    {
+      "src": "slide-027.webp",
+      "alt": "Slide 27: 27 Mission Objectives MO.3: D\u0007monst at\u0007 that th\u0007 PMPD th ust\u0007 \u0007mains op\u0007 abl\u0007 afte\u0007 at l\u0007ast 3 kN*s [TBR] total impuls\u0007 to th\u0007 spac\u0007c afte. Full Success Criteria \u2022 FSC.5: The APEx mission shall satisfy T1.FSC.1 at two points during the mission with at least 3 kN*s [TBR] total imp"
+    },
+    {
+      "src": "slide-028.webp",
+      "alt": "Slide 28: 28 Mission Objectives MO.4: D\u0007monst at\u0007 compatibility of th\u0007 PMPD f\u0007\u0007d syst\u0007m input with th\u0007 output of th\u0007 compact p \u0007ssu \u0007 \u0007gulato us\u0007d on th\u0007 GPDM mission. Full Success Criteria \u2022 FSC.6: The APEx mission shall demonstrate operation of the PMPD using unconditioned ASCENT at a pr"
+    },
+    {
+      "src": "slide-029.webp",
+      "alt": "Slide 29: Earth LEO 450 km 455 km Launch + Deployment Detumble + Systems Check Experiment Period Passive Deorbit >1 day 1 month 8 months Potential Mission Extension 0-13 months 1-5 years CONOPS \u2013 Mission Timeline"
+    },
+    {
+      "src": "slide-030.webp",
+      "alt": "Slide 30: 30 Mission Systems"
+    },
+    {
+      "src": "slide-031.webp",
+      "alt": "Slide 31: Experiment Overview Presenters: Aksel Veak"
+    },
+    {
+      "src": "slide-032.webp",
+      "alt": "Slide 32: Experiment Timeline \u2013 24-Hour Orbit Raising Maneuver"
+    },
+    {
+      "src": "slide-033.webp",
+      "alt": "Slide 33: 33 Scientificc Data Products Parameter Formula Sensors Used Delta V \u2022 GPS position/NORAD published two-line- elements: Average Power Consumption \u2022 Payload input voltage sensor: \u2022 Payload input Hall current sensor: Impulse Bit \u2022 Mass floow rate sensor: \u2022 Ground orbit determination"
+    },
+    {
+      "src": "slide-034.webp",
+      "alt": "Slide 34: 34 Error Budget \u25cf Calculated total error by treating the uncertainty of sensor data as independent randomly distributed random variables and combining the uncertainties \u25cf Commercial sensors can meet uncertainty for all measurements except mass flow rate \u25cf We hope to calibrate our"
+    },
+    {
+      "src": "slide-035.webp",
+      "alt": "Slide 35: 35 \uf0a7 GPS method: 1. Measure GPS position over n orbits 2. Fit points to elliptical orbit 3. Estimate mean anomaly of ficrst and last positions 4. Calculate orbit period \uf0a7 NORAD TLE method: 1. Use published TLE's to determine mean anomaly afteer n orbits 2. Calculate orbit period "
+    },
+    {
+      "src": "slide-036.webp",
+      "alt": "Slide 36: Orbit Analysis Presenters: Cole Blocher"
+    },
+    {
+      "src": "slide-037.webp",
+      "alt": "Slide 37: 37 Acceptable Orbital Parameters \uf0a7 Altitude: \uf0a7 Lower bound of 410 (Non-SSO) or 420 (SSO) km for acceptably small drag \uf0a7 Upper bound of 480 (Non-SSO), or 495 (SSO) for passive de-orbit in <5 years \uf0a7 Inclination: >41\u00b0for ground station visibility \uf0a7 Eccentricity: ~0"
+    },
+    {
+      "src": "slide-038.webp",
+      "alt": "Slide 38: 38 Effeect of Drag During Mission Case Average F10.7 (SFU) Average Ap (Geomagneti c Index) Worst, SSO 300 30 Worst, Non-SSO 220 30 Expected, SSO 70 5 Expected, Non-SSO 55 5 Environmental conditions: \uf0a7 Orbit decay modelled by MATLAB script, verifieed with STK \uf0a7 Atmospheric Model f"
+    },
+    {
+      "src": "slide-039.webp",
+      "alt": "Slide 39: 39 Solar Cycle \uf0a7 Expect low solar cycle in our expected launch window \uf0a7 Geomagnetic Conditions tend to follow solar, so low Ap index can also be expected"
+    },
+    {
+      "src": "slide-040.webp",
+      "alt": "Slide 40: 40 \uf0a7 Required to deorbit within 5 years of mission completion \uf0a7 Expected average conditions over the 5 year span (near solar min): Upper Bound Reasoning Case Average F10.7 (SFU) Average Ap (Geomagneti c Index) Expected, SSO 100 15 Expected, Non-SSO 80 15"
+    },
+    {
+      "src": "slide-041.webp",
+      "alt": "Slide 41: 41 Atmospheric Drag Assumptions Cd 2.2 Frontal Area (m^2) .02 Prototype performance assumed for thruster force Assumed prograde tracking while thrusting"
+    },
+    {
+      "src": "slide-042.webp",
+      "alt": "Slide 42: 42 \uf0a7 Thre drag force must be on average less than 2% of nominal thruster force in expected conditions over its duty cycle \uf0a7 .098 mN thruster on a 67% duty cycle, so drag force in expected conditions must be <1.3\u00b5N \uf0a7 Thris occurs at 420 km altitude in SSO, and 410 km in non-SSO \uf0a7 "
+    },
+    {
+      "src": "slide-043.webp",
+      "alt": "Slide 43: 43 Acceptable Launch Providers \uf0a7 RocketLab and Astra offeer very specificc orbits with dedicated launches (Expensive) \uf0a7 Required orbit is too low for SpaceX or other rideshares (510 km minimum) (Cheaper) \uf0a7 Investigating other options to raise the maximum allowable altitude to all"
+    },
+    {
+      "src": "slide-044.webp",
+      "alt": "Slide 44: 44 \uf0a7 When averaged over more than a day, F10.7 will average 200 at worst \uf0a7 When averaged over a more than two weeks, Ap will average 20 at worst \uf0a7 Our worst case scenarios will only occur for a few days in a row at most \uf0a7 Averages as high as our worst case do not occur during low"
+    },
+    {
+      "src": "slide-045.webp",
+      "alt": "Slide 45: 45 \uf0a7 Air density estimation uncertainty is extremely high during geomagnetic storms and sun activity (standard deviation of error 100+%), likely would cause a delay of the experiment due to uncertain results \uf0a7 In standard conditions, the standard deviation of the error for NRLMSI"
+    },
+    {
+      "src": "slide-046.webp",
+      "alt": "Slide 46: 46 \uf0a7 Solar pressure force is on the order of 10^-7 Newtons: 0.1% of nominal thruster force \uf0a7 J2 perturbations force is on the order of 10^-6 Newtons: 1% of nominal thruster force \uf0a7 J2 perturbation needs to be accounted for during experiment (very low uncertainty) Other Perturbati"
+    },
+    {
+      "src": "slide-047.webp",
+      "alt": "Slide 47: Appendix"
+    },
+    {
+      "src": "slide-048.webp",
+      "alt": "Slide 48: 48 \uf0a7 Australian Space Weather Agency. Satellite Orbital Decay Calculations. IPS Radio and Space Services, Bureau of Meteorology, Sydney, NSW, Australia. (2010). \uf0a7 List, Meike, Bremer, Stefanie, Rievers, Benny, Selig, Hanns, Modelling of Solar Radiation Pressure Effeects: Paramete"
+    },
+    {
+      "src": "slide-049.webp",
+      "alt": "Slide 49: Spacecraft Overview Presenters: Josh Williams"
+    },
+    {
+      "src": "slide-050.webp",
+      "alt": "Slide 50: 50 Driving System Requirements ID Requirement T2.SAT.2 Thee satellite shall be capable of ficring the PMPD thruster when commanded by the ground station at variable pulse rates. T2.SAT.3 Thee satellite shall be capable of stopping operation of the PMPD thruster when commanded by "
+    },
+    {
+      "src": "slide-051.webp",
+      "alt": "Slide 51: 51 Spacecraft Summary \uf0a7 Form Factor: 6U \uf0a7 Attitude Determination: GPS Transceiver, Fine Sun Sensor, Earth Horizon Sensor, Magnetometer \uf0a7 Attitude Control: Reaction Wheels & Magnetorquers \uf0a7 Communication: 1W UHF Transceiver, Turnstile Antenna \uf0a7 Energy Storage: 6U fixed + 3U deploy"
+    },
+    {
+      "src": "slide-052.webp",
+      "alt": "Slide 52: 52 CAD Model 3U Deployable Panel6U Fixed Panel 2U Antenna GNSS Antenna +X+Y +Z +X +Y +Z"
+    },
+    {
+      "src": "slide-053.webp",
+      "alt": "Slide 53: 53 System Block Diagram"
+    },
+    {
+      "src": "slide-054.webp",
+      "alt": "Slide 54: 54 System Testing FlatSat/Engineering Model Tests Test Name/Category Test Summary Requirements Communication Tests Link Budget Test Verify the link budget can be met in any orientation with minimum link margin of 6 dB T3.COMMS.6, T3.COMMS.12 Uplink/Downlink Orientation Test Verif"
+    },
+    {
+      "src": "slide-055.webp",
+      "alt": "Slide 55: 55 System Testing FlatSat/Engineering Model Tests Other FlatSat Tests Component Health Monitoring Test Verify the satellite receives/monitors health information from hardware including temperature, current, and voltage T2.SAT.60 Current and Voltage Measurement Test Verify the sat"
+    },
+    {
+      "src": "slide-056.webp",
+      "alt": "Slide 56: 56 System Testing System Design Tests Fastener/Assembly Tests Thereaded Fastener and Back- Out Inspection Verify that threader fasteners are secured with proper torque and back-out protection T2.SAT.31, T2.SAT.34 Four Bolt Joining Inspection Verify that at least four bolts are us"
+    },
+    {
+      "src": "slide-057.webp",
+      "alt": "Slide 57: 57 System Testing System Design Tests Mechanism Design Tests Stowed Component Friction Inspection Verify that friction is not used as the primary method to secure any stowed components T2.SAT.26 Material Tests Welded Joint & Cast Metallic Part Inspection Verify that no welded joi"
+    },
+    {
+      "src": "slide-058.webp",
+      "alt": "Slide 58: 58 System Testing System Design Tests Inhibit Tests Independent Inhibit Inspection Verify that all satellite inhibits function independently T2.SAT.52 Installation Inhibit Demonstration Verify that the satellite includes an installation inhibit that alone can keep the satellite p"
+    },
+    {
+      "src": "slide-059.webp",
+      "alt": "Slide 59: 59 System Testing System Design Tests Other System-Level Design Tests CubeSat Design Specificcation Inspection Verify that the satellite conforms to the Cal Poly CubeSat Design Specificcation T2.SAT.16 Fracture Control Inspection Verify that the satellite is designed in accordanc"
+    },
+    {
+      "src": "slide-060.webp",
+      "alt": "Slide 60: 60 System Testing Environmental Tests Theruster EMI Shielding Test Verify that the rest of the satellite is shielded from electromagnetic interference produced by the thruster T2.SAT.11, T2.SAT.12, T2.SAT.59 Vibration Test Verify that the satellite can survive the launch vibratio"
+    },
+    {
+      "src": "slide-061.webp",
+      "alt": "Slide 61: Appendix"
+    },
+    {
+      "src": "slide-062.webp",
+      "alt": "Slide 62: 62 All System Requirements ID Requirement T2.SAT.2 Thee satellite shall be capable of ficring the PMPD thruster when commanded by the ground station at variable pulse rates. T2.SAT.3 Thee satellite shall be capable of stopping operation of the PMPD thruster when commanded by the "
+    },
+    {
+      "src": "slide-063.webp",
+      "alt": "Slide 63: 63 All System Requirements ID Requirement T2.SAT.9 Thee satellite shall be capable of storing at least 24 hours [TBR] of thruster performance data. T2.SAT.10 Thee satellite shall be capable of an average data downlink rate of 33.2 kb/s T2.SAT.11 Thee satellite shall shield the PM"
+    },
+    {
+      "src": "slide-064.webp",
+      "alt": "Slide 64: Payload Subsystem Aksel Veak, Aleks Ratkovic, Arthur Prudius, Pranav Krishnamoorthy, John Balci"
+    },
+    {
+      "src": "slide-065.webp",
+      "alt": "Slide 65: 65 Driving Requirements ID Requirement T3.PAY.1 Propellant shall stay within 193.15K - 310K to prevent glassing or substantial evaporation T3.PAY.2 All components of the payload subsystem which are in contact with AF-315E shall be made of compatible materials T3.PAY.3 Thee spacec"
+    },
+    {
+      "src": "slide-066.webp",
+      "alt": "Slide 66: Payload Block Diagram"
+    },
+    {
+      "src": "slide-067.webp",
+      "alt": "Slide 67: 67 P&ID"
+    },
+    {
+      "src": "slide-068.webp",
+      "alt": "Slide 68: 68 Propellant Tank Design Property Value Dimensions 8.0 x 8.2 x 8.4 (cm^3) Material Delrin (ASCENT Compatible) Material Max Yield Stress 70 (MPa) Accounted Factor of Safety (Internal Stress MPa) 4 Presence of Bladder Yes Initial Pressurization 14.7\u00b11 (psia) Presence of Pressure R"
+    },
+    {
+      "src": "slide-069.webp",
+      "alt": "Slide 69: 69 Accumulator Design Property Value Dimensions 2.0 x 2.0 x 1.0 (cm^3) Material Delrin (ASCENT Compatible) Material Max Yield Stress 70 (MPa) Accounted Factor of Safety (Internal Stress MPa) 4 Presence of Diaphragm Yes Presence of Propellant Feed Valve Yes Presence of Isolation V"
+    },
+    {
+      "src": "slide-070.webp",
+      "alt": "Slide 70: 70 Design Propellant Feed: Flow Sensor Property Value Min Flow Rate 0.01 (\u00b5l/min) Max Flow Rate (ul/min) 1.5 (\u00b5l/min) Uncertainty 10% Repeatability 1% Temperature 10-50 ( \u00b0C)) Typical Operating Voltage 5 (V) Typical Operating Current 6.8 (mA) Max Operating Pressure 200 (bar) Conn"
+    },
+    {
+      "src": "slide-071.webp",
+      "alt": "Slide 71: 71 Design Propellant Feed: Isolation/Tank/Accumulator Valves ValvesProperty Value Operating Delta Pressure 45 (psig) Operating Temperature 40 \u2013 120 ( \u00b0F)) or 4 \u2013 49 (\u00b0C)) Storage Conditions - Temperature: -40 \u2013 175 ( \u00b0F)) or -40 \u2013 80 (\u00b0C)) - Relative Humidity: 85% Max, Non-Conden"
+    },
+    {
+      "src": "slide-072.webp",
+      "alt": "Slide 72: 72 Design Voltage and Current Sensors Property Value Resolution 16 bit Sampling Rate 1 Msps Input Voltage Range 1.8 V Supply Current 2.4 mA Property Value Resolution Analog Maximum Frequency 5 MHz Uncertainty 5.7% (2.5% without lifetime e ffeects) Supply Current 30 mA MCP3311 31 "
+    },
+    {
+      "src": "slide-073.webp",
+      "alt": "Slide 73: 73 Measurement Schematics \uf0a7 1000:1 capacitively coupled voltage divider for measuring high voltage waveforms \uf0a7 Hall effeect sensor for measuring current pulse \uf0a7 High speed ADCs to measure waveforms and store them digitally"
+    },
+    {
+      "src": "slide-074.webp",
+      "alt": "Slide 74: 74 Fall 2025 completed tasks: Goal: Redesign igniter to improve thruster efficciency (decoupled igniter to eliminate heating/evaporation loss) \uf0a7 Preliminary characterization of thruster performance \uf0a7 Improved reliability of thruster ignition from <50% to ~98% \uf0a7 Deep-dive on ignit"
+    },
+    {
+      "src": "slide-075.webp",
+      "alt": "Slide 75: 75 PAY Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective PAY_Test_1 T3.PAY.1 Propellant Heater Test Theis test will verify that the heater can maintain the propellant temperature within the expected range. Theermal simulations and TVAC testing will ensure th"
+    },
+    {
+      "src": "slide-076.webp",
+      "alt": "Slide 76: 76 PAY Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective PAY_Test_4 T3.PAY.4 Discharge Waveform Measurement Test Theis test will verify that the payload control board can measure the required mission data. Theis test will verify that the waveforms measured b"
+    },
+    {
+      "src": "slide-077.webp",
+      "alt": "Slide 77: 77 PAY Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective PAY_Test_7 T3.PAY.7 Propulsion Systems Standard Verificcation Theis test will verify that the propulsion systems has been engineered in accordance with the AFSCPMAN standard. Additional manual testing "
+    },
+    {
+      "src": "slide-078.webp",
+      "alt": "Slide 78: 78 PAY Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective PAY_Test_10 T3.PAY.11 Propellant Fill/Drain Port Inspection Theis test checks that a ficll/drain port is present. Theis can be done by visually checking the propellant feed system for a ficll/drain por"
+    },
+    {
+      "src": "slide-079.webp",
+      "alt": "Slide 79: 79 PAY Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective PAY_Test_14 T3.PAY.15 Tank Pressurization Inspection Theis inspection will verify that the tank is pressurized to the correct pressure. Theis can be done by inspecting the measured pressure of the tank"
+    },
+    {
+      "src": "slide-080.webp",
+      "alt": "Slide 80: 80 Schedule Payload Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 Thrruster Preliminary EMI Characterization PIB Charging and V/I Sensors Operational 24-hour Feed System Demonstration Preliminary Fly-able Thrruster Manufactured Preliminary Fly-able Feed System Ma"
+    },
+    {
+      "src": "slide-081.webp",
+      "alt": "Slide 81: Appendix"
+    },
+    {
+      "src": "slide-082.webp",
+      "alt": "Slide 82: 82 Payload Requirements All Payload Requirements ID Requirement T3.PAY.1 Propellant shall stay within 193.15K - 310K to prevent glassing or autoignition T3.PAY.2 All components of the payload subsystem which are in contact with AF-315E shall be made of compatible materials T3.PAY"
+    },
+    {
+      "src": "slide-083.webp",
+      "alt": "Slide 83: 83 Payload Requirements Continued All Payload Requirements ID Requirement T3.PAY.10 Thee anode temperature shall be measured to within an uncertainty of [TBD] T3.PAY.11 Thee payload shall include a ficll/drain port for propellant T3.PAY.12 Thee thrust axis shall point towards the"
+    },
+    {
+      "src": "slide-084.webp",
+      "alt": "Slide 84: 84 Tank Dimension Justifitcations"
+    },
+    {
+      "src": "slide-085.webp",
+      "alt": "Slide 85: 85 Accumulator Dimension Justifitcations"
+    },
+    {
+      "src": "slide-086.webp",
+      "alt": "Slide 86: 86 Error Budget \uf0a7 Calculated total error by treating the uncertainty of sensor data as independent randomly distributed random variables and combining the uncertainties \uf0a7 Thre uncertainty of our ficnal data products are slightly above our requirements, but it is mostly driven by "
+    },
+    {
+      "src": "slide-087.webp",
+      "alt": "Slide 87: Thrruster Demonstration Presenters: Nick Babusis"
+    },
+    {
+      "src": "slide-088.webp",
+      "alt": "Slide 88: Electrical Power SubsystemPresenters: Toe Lyan, Harun Ugur, Gregg Hallman"
+    },
+    {
+      "src": "slide-089.webp",
+      "alt": "Slide 89: 89 Driving Requirements ID Requirement T3.EPS.1 Thee EPS shall be capable of providing enough power to detumble the satellite and operate at a thruster duty cycle of >50%. T3.EPS.2 Thee EPS shall be able to deplete all sources of stored energy as outlined in NASA- STD-8719.14. T3"
+    },
+    {
+      "src": "slide-090.webp",
+      "alt": "Slide 90: 90 Power Budget \uf0a7 6U ficxed and 3U Deployable solar panels, producing 30 W maximum \uf0a7 Performance at 500km orbit, non-SSO \uf0a7 86 W*hr ba tteery with 25% DoD \uf0a7 55% Theruster duty cycle \u00a7 Two primary mission modes \u00a7 Standby (green) \u00a7 Experiment (red) \uf0a7 Power Budget \uf0a7 Power positive wh"
+    },
+    {
+      "src": "slide-091.webp",
+      "alt": "Slide 91: 91 \uf0a7 Five orbit modes \uf0a7 16.9 W power draw from thruster \uf0a7 CDH \u2013 On-board Computer \uf0a7 COM \u2013 Radio TX and RX \uf0a7 GNC \u2013 Reaction Wheel, GPS, Magnetorquer Power Budget Breakdown Orbit Mode CDH COM GNC EPS/ Heaters Thruster Deployment 1.09 W 1.21 W 3.53 W 3.19 W 0 W Detumbling 1.09 W 1.2"
+    },
+    {
+      "src": "slide-092.webp",
+      "alt": "Slide 92: 92 Block Diagram"
+    },
+    {
+      "src": "slide-093.webp",
+      "alt": "Slide 93: 93 \u2022 UNP-provided inhibit architecture assumed \u2022 Batteery internal inhibit used for Q6 \u2022 Work in progress Inhibit Design"
+    },
+    {
+      "src": "slide-094.webp",
+      "alt": "Slide 94: 94 \u2022 86 W*hr batteery capacity (4S2P cell arrangement) \u2022 30 W Maximum solar power generation \u2022 10.1 W Average solar power generation (prograde) \u2022 Voltage outputs \u2022 3.3 V \u2013 GNC, CDH, COM \u2022 5 V \u2013 GNC, CDH \u2022 Direct batteery output to PAY (Not yet implemented) Performance Specs & CAD"
+    },
+    {
+      "src": "slide-095.webp",
+      "alt": "Slide 95: 95 GOMSpace NanoPower BPX \u2022 1-year-old batteery used for testing \u2022 Internal heater (6 W) Batteery Property Value Dimensions 93 x 86 x 41 mm Mass 500 g Capacity 86 W*hr; 6.0 A*Hr Confieguration 4S-2P Voltage 14.4 V (Series Confieguration) Operating Temperature -40 C to 85 C Flight"
+    },
+    {
+      "src": "slide-096.webp",
+      "alt": "Slide 96: 96 Power Distribution Board Property Value Dimensions 89.3 x 92.9 x 15.3 mm Mass 100 g Operating Temperature -40 C to 85 C Power Capacity 30 W Power Buses 3.3 V (5 A) and 5 V (4 A) Flight Heritage Y es GOMSpace NanoPower P31u \u2022 No external buck converters required (17 V limit) \u2022 "
+    },
+    {
+      "src": "slide-097.webp",
+      "alt": "Slide 97: 97 NanoPower MSP B-4-4 MK 2 \u2022 Two external temperature sensors and two coarse sun sensors Solar Array Property Value Mass 453 g Max Power 19.2 W String Confieguration 4 strings of 4 cells in series Voltage per String 9.6 V Current per String 0.5 A Connection to P31u Split into tw"
+    },
+    {
+      "src": "slide-098.webp",
+      "alt": "Slide 98: 98 NanoPower DSP (90 degrees) \u2022 Burn wire release \u2022 Redundancy release mechanism Solar Array Property Value Mass 390 g Max Power 14.4 W String Confieguration 3 strings of 4 cells in series Voltage per String 9.6 V Current per String 0.5 A Connection to P31u Combined into one chan"
+    },
+    {
+      "src": "slide-099.webp",
+      "alt": "Slide 99: 99 Design & Testing Status Component Design Status Procurement Status Unit Testing Status Integration Status Power Distribution Board Complete Complete Not Started Not Started Batteery Complete Complete In Progress Not Started 6U Fixed Solar Panel Complete Not Started Not Started"
+    },
+    {
+      "src": "slide-100.webp",
+      "alt": "Slide 100: 100 EPS Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective EPS_Test_1 T3.EPS.1 Power Generation Verificcation Theis test will verify that the EPS subsystem receives enough power from the solar arrays to remain power positive while tumbling and have >50% thrus"
+    },
+    {
+      "src": "slide-101.webp",
+      "alt": "Slide 101: 101 EPS Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective EPS_Test_6 T3.EPS.6, T3.EPS.7, T3.EPS.8 Overcurrent Handing Inspection Theis inspection verifices that batteery protection circuits have overcurrent protection, detection, and logging. Verify with pro"
+    },
+    {
+      "src": "slide-102.webp",
+      "alt": "Slide 102: 102 Schedule EPS Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 PDR Design Updates Test Battpery Charge/Discharge Cycle Unit Testing Inhibit Testing Flat-Sat Testing Solar Array Purchasing + Lead Time"
+    },
+    {
+      "src": "slide-103.webp",
+      "alt": "Slide 103: Appendix"
+    },
+    {
+      "src": "slide-104.webp",
+      "alt": "Slide 104: 104 EPS Requirements All Requirements - EPS ID Requirement T3.EPS.1 Thee EPS shall be capable of providing the required power in each mode as specificed in the power budget. T3.EPS.2 Thee EPS shall be able to deplete all sources of stored energy as outlined in NASA-STD-8719.14. T"
+    },
+    {
+      "src": "slide-105.webp",
+      "alt": "Slide 105: 105 EPS Requirements All Requirements - EPS ID Requirement T3.EPS.9 Thee EPS shall be compatible with providing 3.3 V and 5 V to each subsystem. T3.EPS.10 Thee EPS shall be subjected to handling protocols outlined in NASA-STD-8739.4. T3.EPS.11 Thee Remove Before Flight (RBF)/Inst"
+    },
+    {
+      "src": "slide-106.webp",
+      "alt": "Slide 106: 106 EPS Requirements All Requirements - EPS ID Requirement T3.EPS.17 Batteeries should be selected from the Underwriters Laboratory (UL) approved list. T3.EPS.18 Battery capacity should be less than or equal to 80 W-hr."
+    },
+    {
+      "src": "slide-107.webp",
+      "alt": "Slide 107: 107 EPS Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective EPS_Test_9 T3.EPS.12 Power On Indication Inspection Theis inspection will verify that a visual indication of whether the satellite is powered on is present. Verify this with inspection of the EPS desi"
+    },
+    {
+      "src": "slide-108.webp",
+      "alt": "Slide 108: 108 EPS Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective EPS_Test_13 T3.EPS.17 Batteery Type Inspection Theis inspection will verify that the batteery is a batteery approved by UL/UNP. Inspect the batteery datasheet to ensure it is UL approved. EPS_Test_4 T"
+    },
+    {
+      "src": "slide-109.webp",
+      "alt": "Slide 109: 109 Duty Cycles by Component OBC Radio TX Radio RX Reaction Wheel GPS Magnetorq uer Sun Sensor EPS Heaters Thruster Deploymen t 100% 0.42% 100% 0% 100% 50% 50% 100% 40% 0% Detumbling 100% 0.42% 100% 0% 100% 100% 100% 100% 40% 0% Standby 100% 0.42% 100% 5% 100% 10% 100% 100% 40% 0"
+    },
+    {
+      "src": "slide-110.webp",
+      "alt": "Slide 110: 110 Full Power Budget"
+    },
+    {
+      "src": "slide-111.webp",
+      "alt": "Slide 111: Communication SubsystemPresenters: Jacob Jannottla, Karthikeya Batlanki"
+    },
+    {
+      "src": "slide-112.webp",
+      "alt": "Slide 112: 112 Driving Requirements ID Requirement T3.COMMS.1 Thee Communications Subsystem shall receive commands from the ground. T3.COMMS.2 Thee Communications Subsystem shall send data to the ground. T3.COMMS.3 Thee Communications Subsystem shall transmit at a rate of 9600 bps. T3.COMMS"
+    },
+    {
+      "src": "slide-113.webp",
+      "alt": "Slide 113: 113 Block Diagram Notes: Interfaces between pre- integrated COTS transceiver components are not shown, internal sub-components are included for completeness"
+    },
+    {
+      "src": "slide-114.webp",
+      "alt": "Slide 114: 114 Link Budget- Orbit and Transmitteer Inputs Metrics Values Units Description Elevation Angle 10 deg Altitude of Satellite 550 km Transmittper power 1 W Frequency 0.437 GHz Transmittper Gain -7 dBi GomSpace Ant6f 95% probability for being above -7 db for both circular polarizat"
+    },
+    {
+      "src": "slide-115.webp",
+      "alt": "Slide 115: 115 Link Budget- Link Margins Computation Bit Rate 9600 bps Eb/No Available 29.1 dB Eb/No Required 11 dB LINK MARGIN 18.11 dB Required LINK MARGIN 6 dB Downlink Bit Rate 9600 bps Eb/N0 Available 39.7 dB Eb/N0 Required 11 dB LINK MARGIN 28.66 dB Required LINK MARGIN 6 dB Uplink As"
+    },
+    {
+      "src": "slide-116.webp",
+      "alt": "Slide 116: 116 Ground Station Development Plan \u2022 Use existing UHF station at Purdue Data Products \u2022 Satellite telemetry \u2022 Experiment data \u2022 Satellite health metrics Data Tools \u2022 Data stored in server at ground station \u2022 Data processing handled by MATLAB processing script Design Features \u2022 T"
+    },
+    {
+      "src": "slide-117.webp",
+      "alt": "Slide 117: 117 Ground Station Block Diagram Computer Terminal Node Controller Radio RX: Low Noise Amplifieer Rotator 23 dB M2INC 436CP42UG Yagi (X4) Hardware: AlfaSpid BigRAS Software: ROT2Prog, GPredict Beko HPP-432 Low Noise Amplifieer 23 dB Beko HLV-550 Linear Amplifieer 550 W Kantronics"
+    },
+    {
+      "src": "slide-118.webp",
+      "alt": "Slide 118: 118 Gomspace AX100 Transceiver Specifications Advanced high performance narrow-band transceiver for UHF and VHF Data rates from 0.1 kbps to 38.4 kbps Transmittper with adjustable 24 to 30 dBm output power at > 45 % PAE RF parameters are fully confiegurable on-orbit. E.g. carrier "
+    },
+    {
+      "src": "slide-119.webp",
+      "alt": "Slide 119: 119 Transceiver GomSpace AX100 GomSpace AX100 placed on the Nanodock"
+    },
+    {
+      "src": "slide-120.webp",
+      "alt": "Slide 120: 120 Transceiver GomSpace Nanodock DMC3 Specifications Enables PC104-compatibility for the transceiver.5 Allows UART, I2C connections Can support up to 4 daughterboards (two daughterboard slots used for the transceiver). Other 2 slots can be used for future purposes. Mass: 51 gram"
+    },
+    {
+      "src": "slide-121.webp",
+      "alt": "Slide 121: Antenna 121 Interfaces Pins / Description Function Power & Deployment (GSRB) Burn_GND \u00d72, Burn_VDD \u00d72, GND, GSSB_VCC, GSSB_SCL, GSSB_SDA Burn resistors for antenna deployment + I\u00b2C bus supply and signals Digital Bus I\u00b2C SDA/SCL, 3.3 V I\u00b2C interface for deployment status & board t"
+    },
+    {
+      "src": "slide-122.webp",
+      "alt": "Slide 122: 122 Antenna deployment mechanism \uf022 A small mechanical limit switch on the release board detects when the antennas have deployed. \u2022 Thre four antennas are grouped into two pairs: \u2022 Two antennas are tied together on one side of the mounting bracket. \u2022 Thee other two are tied togeth"
+    },
+    {
+      "src": "slide-123.webp",
+      "alt": "Slide 123: 123 GomSpace ANT6f Omnidirectional behavior \uf022 Thre picture shows an antenna that produces RHCP at 435 MHz. \uf022 Thre colored 3D shape is the radiation pattpern, which only shows where the antenna radiates more or less strongly. \uf022 Even though the strength changes with direction, the "
+    },
+    {
+      "src": "slide-124.webp",
+      "alt": "Slide 124: 124 COM Subsystem CAD Back and front views of the stowed antenna"
+    },
+    {
+      "src": "slide-125.webp",
+      "alt": "Slide 125: 125 COM Subsystem CAD Side and front views of the deployed antenna"
+    },
+    {
+      "src": "slide-126.webp",
+      "alt": "Slide 126: 126 Complete operation procedure 1. Satellite Launch & Activation \u2022 Once the satellite is deployed, its onboard transceiver becomes active. \u2022 Begins transmittiing beacon signals and telemetry packets. \u2022 Satellite enters orbit and communication becomes possible only during passes "
+    },
+    {
+      "src": "slide-127.webp",
+      "alt": "Slide 127: 127 Complete operation procedure 3. Tracking & Pass Prediction \u2022 GPredict loads the satellite's TLE (Two-Line Elements). \u2022 Calculates future passes and generates the acquisition of signal (AOS) time , maximum elevation and loss of signal (LOS) time \u2022 When the satellite is about t"
+    },
+    {
+      "src": "slide-128.webp",
+      "alt": "Slide 128: 128 Complete operation procedure 4. Communication During the Satellite Pass As the satellite moves across the sky: \u2022 Antennas continuously track its position. \u2022 Ground station receives AX.25 telemetry packets, beacon frames, and data. \u2022 If authorized, the station can send uplink "
+    },
+    {
+      "src": "slide-129.webp",
+      "alt": "Slide 129: 129 Ground station operations Fig 1: Ground station monitors along with radio, ampli ficer and terminal node controller Fig. 2 & 3: Gpredict and its instances"
+    },
+    {
+      "src": "slide-130.webp",
+      "alt": "Slide 130: 130 Design & Testing Status Component Design Status Procurement Status Unit Testing Status Integration Status Transceiver Complete Not Started Not Started Not Started Antenna Complete Not Started Not Started Not Started"
+    },
+    {
+      "src": "slide-131.webp",
+      "alt": "Slide 131: 131 COM Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective COM_Test_1 T3.COMMS.1, T3.COMMS.4 COM Command Receiving Test Theis test will verify that command sent by the ground station are received by the COM subsystem at the intended rate. Successfully uplink "
+    },
+    {
+      "src": "slide-132.webp",
+      "alt": "Slide 132: 132 COM Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective COM_Test_3 T3.COMMS.5 Transceiver Modulation Inspection Theis inspection will verify that the transceiver uses the intended modulation so the satellite is able to communicate with the ground station. "
+    },
+    {
+      "src": "slide-133.webp",
+      "alt": "Slide 133: 133 COM Subsystem Test Plan Test ID Associated Requirement Test Name Objective COM_Test_7 T3.COMMS.10, T3.COMMS.11 CDH Regulatory Compliance Theis inspection will verify that the COM subsystem is compliant with the Regulatory Compliance Document. Complete Regulatory Compliance Do"
+    },
+    {
+      "src": "slide-134.webp",
+      "alt": "Slide 134: 134 Schedule COM Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 PDR Design Updates Purchasing + Shipping Unit Testing Flat-Sat Testing Establish Wireless Connection to GSE Simulated Communication Testing"
+    },
+    {
+      "src": "slide-135.webp",
+      "alt": "Slide 135: Appendix"
+    },
+    {
+      "src": "slide-136.webp",
+      "alt": "Slide 136: 136 4 X M2INC 436CP42UG Yagi antennas in a quad array \u2022 Beam width 11 degrees \u2022 Gain ~23dB \u2022 Frequency: 430- 438 MHz \u2022 Size 5 x 5 x 18 feet \u2022 AlfaSpid BigRAS rotator with ROT2Prog controller and custom motor driver under linux command Electronics \u2022 Icom IC-810H Radio \u2022 Kantronics"
+    },
+    {
+      "src": "slide-137.webp",
+      "alt": "Slide 137: 137 COMM Requirements All Requirements - Communication ID Requirement T3.COMMS.1 The Communications Subsystem shall receive commands from the ground. T3.COMMS.2 The Communications Subsystem shall send data to the ground. T3.COMMS.3 The Communications Subsystem shall transmit at a"
+    },
+    {
+      "src": "slide-138.webp",
+      "alt": "Slide 138: 138 COMM Requirements All Requirements - Communication ID Requirement T3.COMMS.9 Thee Communications Subsystem shall operate at a frequency between 420 MHz - 450 MHz T3.COMMS.10 Thee Communications Subsystem shall comply with 47 CFR Part 5, documented in the Regulatory Compliance"
+    },
+    {
+      "src": "slide-139.webp",
+      "alt": "Slide 139: Guidance, Navigation, and Control Subsystem Presenters: Mattlhew Huffeman, Ellis Goldman, Ian Orbeck, Gabriel Oliger"
+    },
+    {
+      "src": "slide-140.webp",
+      "alt": "Slide 140: 140 Driving Requirements ID Requirement T3.GNC.1 Thee ADCS module shall provide 3-axis control. T3.GNC.2 Thee GPS module shall operate at velocities up to 8 km/s. T3.GNC.3 Thee ADCS module shall provide an average magnetic dipole moment of at least 0.4 A\u22c5m2 while detumbling. T3.G"
+    },
+    {
+      "src": "slide-141.webp",
+      "alt": "Slide 141: 141 Design Overview GNC System Components Component Quantity CubeComputer 1 CW0057 CubeWheel 4 CR0004 CubeTorquer 3 CubeMag Deployable 1 CubeMag Compact 1 CubeSense Sun (FSS) 1 Coarse Sun Sensors (CSS) 10 CubeSense Earth 1 TW 1332 GNSS Patch 1 OEM719 Receiver 1 TW 1332 GNSS Patch"
+    },
+    {
+      "src": "slide-142.webp",
+      "alt": "Slide 142: 142 Design Overview"
+    },
+    {
+      "src": "slide-143.webp",
+      "alt": "Slide 143: 143 CubeADCS (CubeComputer) Core Stack \u2013 PC104 Variant Mass: 250 [g] - Does not include sensors/actuators/harnessing. Moments of Inertia: [g\u22c5mm2] - Ixx = 1379+80 \u00b1 15% - Iyy = 1389/ / 0 \u00b1 15% - Izz = 24+97+4 \u00b1 15% System Features: - CubeComputer (Inside) - CubeDoor - Fitteed Main"
+    },
+    {
+      "src": "slide-144.webp",
+      "alt": "Slide 144: 144 CW0057 (4x) - Pyramid Configguration Reaction Wheels Performance Specifications: Max Tilt Angle [deg] Max Momentum [mN\u22c5m\u22c5s] Max Torque [mN\u22c5m] 26.565 \u00b19.5 @10,000 rpm \u00b12.0 @10,000 rpm Mass: 105 [g] - Total mass of 420 [g] for all 4 wheels. Inertia around COM: [g*mm2] - Ixx = 1"
+    },
+    {
+      "src": "slide-145.webp",
+      "alt": "Slide 145: 145 CW0057P - Pyramid Specifigcations Reaction Wheels Dimensions: A (mm) B (mm) 73.90\u00b10.5 43.27 \u00b10.3 Mass: 470 [g] Inertia around COM: [g\u22c5mm2] - Ixx = 2249208 \u00b1 10% - Iyy = 2249208 \u00b1 10% - Izz = 3/ 09311 \u00b1 10% Assembly: - CubeSpace will stack the reaction wheels in a non-isolated"
+    },
+    {
+      "src": "slide-146.webp",
+      "alt": "Slide 146: 146 CR0004 (3x) - XYZ Orthogonal Magnetorquers Mass: 23 [g] - Total mass of 69 [g] for all 3 magnetorquers. Dimensions: A (mm ) B (mm ) C (mm) D (mm) E (mm ) F (mm) G (mm) H (mm) K (mm) M (mm) 59.0 57.0 \u00b1 0.2 10.5 \u00b1 0.1 9.0 4.0 53.0 \u00b10.1 1.75 \u00b10 .05 M1.6x0.35 THRU 36.0 \u00b10.05 M1.6"
+    },
+    {
+      "src": "slide-147.webp",
+      "alt": "Slide 147: 147 Deployable CubeMag (1x), Compact CubeMag (1x) Magnetometers Mass: 16 [g] \u00b1 5% DEPLOYABLE COMPACT Mass: 6 [g] \u00b1 5% Dimensions: 17W x 6.5H x 82L [mm] - Height with protrusion is 9.5 [mm] Dimensions: 24W x 7.8H x 24L [mm] Performance Specifications: Performance Specifications: N"
+    },
+    {
+      "src": "slide-148.webp",
+      "alt": "Slide 148: 148 DEPLOYABLE COMPACT Moments of Inertia: [g\u22c5mm2] - Ixx = 134 \u00b1 10% - Iyy = 212 \u00b1 10% - Izz = 122 \u00b1 10% Moments of Inertia (Deployed): [g\u22c5mm2] - Ixx = 129810 \u00b1 10% - Iyy = 119800 \u00b1 10% - Izz = 239880 \u00b1 10% Moments of Inertia (Stowed): [g\u22c5mm2] - Ixx = 31/ \u00b1 10% - Iyy = 8310 \u00b1 10%"
+    },
+    {
+      "src": "slide-149.webp",
+      "alt": "Slide 149: 149 CubeSense Sun (1x) Fine Sun Sensor Mass: 15.0 \u00b1 5% [g] - Excludes harness mass. Moments of Inertia: [g\u22c5mm2] - Ixx = +55 \u00b1 10% - Iyy = +04 \u00b1 10% - Izz = 720 \u00b1 10% Front View Back View Dimensions: 35W x 22H x 24L [mm] Performance Specifications: Accuracy [\u00b0] Max Slew Rate [\u00b0/s]"
+    },
+    {
+      "src": "slide-150.webp",
+      "alt": "Slide 150: 150 CubeSense Earth (1x) Earth Horizon Sensor Mass: 18.0 \u00b1 5% [g] - Excludes harness mass. Dimensions: 35W x 24H x 20L [mm] Moments of Inertia: [g\u22c5mm2] - Ixx = 1081 \u00b1 10% - Iyy = 852 \u00b1 10% - Izz = 1000 \u00b1 10% Performance Specifications: Accuracy [\u00b0] Max Slew Rate [\u00b0/s] Detection F"
+    },
+    {
+      "src": "slide-151.webp",
+      "alt": "Slide 151: 151 OEM719H-DDN-LNN-TMN-H (1x) GPS Receiver Mass: 31 [g] Dimensions: 46 x 71 x 11 [mm] Physical & Electrical Specifications: Input Voltage [VDC] Power Consumption [W] Output Voltage [VDC] Max Current [mA] 3.3\u00b15% 1.3 5.0\u00b15% 200 Receiver Performance: - Dual Constellation, Dual Freq"
+    },
+    {
+      "src": "slide-152.webp",
+      "alt": "Slide 152: 152 TW1332 (1x) - GPS L1 Antenna with Pre-Filter GPS Antenna Mass: 50 [g] Dimensions: 35dia x 7.25 [mm] Antenna Specifications: - SAW Pre-Filter \u2192 LNA Stage 1 \u2192 SAW Filter \u2192 LNA Stage 2 Polarizatio n Bandwidth [dB] Antenna Gain [dBic] Covered Frequency Bands RHCP 1 4.5 GPS L1, GL"
+    },
+    {
+      "src": "slide-153.webp",
+      "alt": "Slide 153: 153 Quootes & Lead Times GNC System Bill of Materials Component Quaantity Price Per Unit (USD) Total Cost (USD) CubeComputer 1 21,000 21,000 CW0057 CubeWheel 4 7,220 28,800 CR0004 CubeTorquer 3 830 2,490 CubeMag Deployable 1 3,500 *Integrated into CubeComputer N/A CubeMag Compact"
+    },
+    {
+      "src": "slide-154.webp",
+      "alt": "Slide 154: 154 Pointing Budget Fine Sun sensor: Earth Horizon sensor: Given chosen Reaction wheels: CW0057 *Sigma jittper value refers to actuator balancing. (JOSS 2017) **Sigma Control refers to residual attpitude error control. (Pong 2018) Gaussian Conversion Assumed: Perfect Gaussian Dis"
+    },
+    {
+      "src": "slide-155.webp",
+      "alt": "Slide 155: 155 Design & Testing Status Component Design Status Procurement Status Unit Testing Status Integration Status IMU Complete In Progress Not Started Not Started Reaction Wheels Complete In Progress Not Started Not Started Magnetorquers Complete In Progress Not Started Not Started D"
+    },
+    {
+      "src": "slide-156.webp",
+      "alt": "Slide 156: 156 GNC Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective GNC_Test_1 T3.GNC.1 3-Axis Control Inspection Theis inspection will verify that the ADCS module is able to provide 3-axis control. Inspect module/component datasheet for 3 axes control capabilities. G"
+    },
+    {
+      "src": "slide-157.webp",
+      "alt": "Slide 157: 157 GNC Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective GNC_Test_4 T3.GNC.4 ADCS Module Pointing Accuracy Verificcation Theis test will verify the pointing accuracy of the ADCS module and ensure it is 1.0\u00b0 or lower in all 3 axes. Mount the ADCS module and "
+    },
+    {
+      "src": "slide-158.webp",
+      "alt": "Slide 158: 158 GNC Subsystem Test Plan Test ID Associated Requiremen t Test Name Objective GNC_Test_6 T3.GNC.6 ADCS Module Torque Verificcation Theis test will measure the torque provided by the reaction wheels and magnetorquers in each of the three axes to conficrm analysis. Use a torque s"
+    },
+    {
+      "src": "slide-159.webp",
+      "alt": "Slide 159: 159 Requirement Verifigcation Verify Control Axes Performance \uf0a7 Verify functionality and performance of CR0004 magnetorquers \u2022 Test magnetorquers with Gauss meter test to verify magnetorquer dipole strength of at least 0.4 A\u22c5m2 \uf0a7 Test CW0057 rotational parameters \u2022 Perform spin-u"
+    },
+    {
+      "src": "slide-160.webp",
+      "alt": "Slide 160: 160 Requirement Verifigcation cont. Verify ADCS Pointing Accuracy and Knowledge \uf0a7 Mount module on the air bearing table in Spaceflyight Project Lab and compare estimated attlitude to actual attlitude at diffeering module orientations \u00a7 Command module to change from initial attlit"
+    },
+    {
+      "src": "slide-161.webp",
+      "alt": "Slide 161: 161 Components CubeComputer \u2013 IMU \u2022 Verify communication with OBC is reliable and accurate CW0057 CubeWheel - Reaction Wheels \u2022 Verify max torque \u2022 Verify spin to power draw ratio CR0004 CubeTorquer - Magnetorquers \u2022 Verify max torque generation \u2022 Test power consumption CubeMag C"
+    },
+    {
+      "src": "slide-162.webp",
+      "alt": "Slide 162: 162 Components cont. CubeSense Sun \u2013 Sun Tracker \u2022 Illumination test CubeSense Earth \u2013 Earth Horizon Sensor \u2022 Air bearing table with simulated LED Horizon \u2022 Compare output values to actual bearing Coarse Suns Sensors \u2013 Sun Sensors \u2022 Illumination test \u2022 Verify axes readings update"
+    },
+    {
+      "src": "slide-163.webp",
+      "alt": "Slide 163: 163 Schedule GNC Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 PDR Design Updates Purchasing + Shipping Unit Testing Magnetorquers Dipole Moment Verifiecation Reaction Wheel Torque Verifiecation Flat-Sat Testing Pointing Budget Test"
+    },
+    {
+      "src": "slide-164.webp",
+      "alt": "Slide 164: Appendix"
+    },
+    {
+      "src": "slide-165.webp",
+      "alt": "Slide 165: 165 GNC Requirements All Requirements - GNC ID Requirement T3.GNC.1 Thee ADCS module shall provide 3-axes control. T3.GNC.2 Thee GPS module shall operate at velocities up to 8 km/s. T3.GNC.3 Thee ADCS module shall provide a magnetic dipole moment greater than 0.4 A\u22c5m2 while detum"
+    },
+    {
+      "src": "slide-166.webp",
+      "alt": "Slide 166: 166 \u2022 MATLAB simulation that randomizes tip off rate up to 10\u00b0/s/axis \u2022 Simplificed inertial matrix \u2022 Assuming no power generation and max magnetorquer usage, no concerns until ~4.5 hours into detumbling \u2022 Assuming random power generation and max magnetorquer usage, no concerns u"
+    },
+    {
+      "src": "slide-167.webp",
+      "alt": "Slide 167: 167 CubeADCS (CubeComputer) Outer Dimensions & Mounting Specifigcations Top-Down ViewFront View (CubeConnect Side) Back View (CubeDoor Side) Mounting Definition: - 4 mounting rails - Core stack slides into rails via 4 mounting holes (3.20 mm)"
+    },
+    {
+      "src": "slide-168.webp",
+      "alt": "Slide 168: 168 Power Characteristics Reaction Wheels External Power Supply Requirements: Digital Supply Voltage [V] Motor Supply Voltage Range [V] Nominal Motor Supply Voltage [V] 3.3 6.4-16.8 12 Power Consumption on Battery Voltage Rail: Power at Rated Momentum [W] Max Current at 12V [mA] "
+    },
+    {
+      "src": "slide-169.webp",
+      "alt": "Slide 169: 169 Electrical Interface Magnetorquers Linear Voltage [V] Linear Current [mA] Avg Power for 10% On- Time [mW] Avg Power for 80% On-Time [mW] 5 125 188 1500 Power Consumption Specifications: Electrical Model Parameters: Linear Magnetic Dipole Moment @ 5V [Am2] Resistance [ ] \u03a9 Ind"
+    },
+    {
+      "src": "slide-170.webp",
+      "alt": "Slide 170: 170 Mounting Specifigcations Magnetometers Deployable: - Mounted in stowed state on \u2013X face - Panel cut-outs required for mounting to an external surface - Secured via 3 M2 screws passing through the magnetometer\u2192 mounting panel Compact: - Mounted on +X face - Secured to the exte"
+    },
+    {
+      "src": "slide-171.webp",
+      "alt": "Slide 171: 171 Power Characteristics Magnetometers External Power Supply Requirements: Supply Voltage [V] Peak Power [mW] Avg Power [mW] Deploymen t Power [mW] 3.3 230 50 2350 Power Consumption on 3.3V Line: Avg Current [mA] Avg Power [mW] Max Current [mA] Max Power [mW] 15 50 70 230 - Depl"
+    },
+    {
+      "src": "slide-172.webp",
+      "alt": "Slide 172: 172 Mounting Specifigcations & Power Characteristics Fine Sun Sensor Power Consumption on 3.3V Line: Avg Current [mA] Avg Power [mW] Max Current [mA] Max Power [mW] 28 93 60 200 Mounting Definition: - Mounted on the zenith face (-Z face) - Panel-mounted via 4 mounting holes (2.0 "
+    },
+    {
+      "src": "slide-173.webp",
+      "alt": "Slide 173: 173 Mounting Specifigcations & Power Characteristics Earth Horizon Sensor Power Consumption on 3.3V Line: Avg Current [mA] Avg Power [mW] Max Current [mA] Max Power [mW] 38 126 46 152 Mounting Definition: - Mounted on either \u2013X or \u00b1 Y faces - Boresight tilted ~ 25\u00b0 towards Nadir "
+    },
+    {
+      "src": "slide-174.webp",
+      "alt": "Slide 174: 174 ABTech Air Bearing Rotary Table | Precision Air Bearings. (2025). Abtechmfg.com. httlps://www.abtechmfg.c om/precision-motion-components/rotary-tables/air-bearing-rotary-tables . Characterization of cubesat reaction wheel assemblies. (2017). httlps://jossonline.com/wp-content"
+    },
+    {
+      "src": "slide-175.webp",
+      "alt": "Slide 175: Command and Data Handling Presenters: Zuzu, Henri, Peyton, Aidan, Sam"
+    },
+    {
+      "src": "slide-176.webp",
+      "alt": "Slide 176: 176 Driving Requirements Top-level requirements ID Requirement T3.CDH.1 Thre CDH subsystem shall establish a communication link with all other subsystems at a data rate of at least 10 kbps on each link. T3.CDH.3 Thre CDH subsystem shall acquire all the defiened payload sensor mea"
+    },
+    {
+      "src": "slide-177.webp",
+      "alt": "Slide 177: 177 \uf0a7 Close choice between platforms that meet Driving Requirements \uf0a7 Built-in radiation tolerance preserves mass budget \uf0a7 CANFD for higher data rates, more efficcient transmission \uf0a7 MCUs consume less power, meet needs of data budget \uf0a7 Customizability metric: Can we conficgure ty"
+    },
+    {
+      "src": "slide-178.webp",
+      "alt": "Slide 178: 178 \uf0a7 Generally much shorter lead times for generalized microcontrollers \uf0a7 Previous poor experience with COTS CDH vendor \uf0a7 Radiation tolerance \uf0a7 STM32H7 tends to fail tests around 47 kRad(Si), at the very high end of radiation dose in LEO. \uf0a7 Typical dose is 30-50 kRad \uf0a7 Additiona"
+    },
+    {
+      "src": "slide-179.webp",
+      "alt": "Slide 179: 179 \uf022 Two cores: 480 MHz Cortex M7 and 240 MHz Cortex M4 \uf022 Faster M7 handles high- throughput payload tasks \uf06f Communications over I2C, SPI and generic GPIOs \uf022 Slower M4 handles communication with other subsystems \uf06f Communications over CANFD and I2C \uf022 MCU choice: STM32H745BITx (du"
+    },
+    {
+      "src": "slide-180.webp",
+      "alt": "Slide 180: 180 Board Schematic STM32 Microcontroller and Supporting Passive Components \uf0a7 Standard hardware design practices \uf06f Each power pin has required decoupling capacitors and ferrite bead \uf06f Solder bridge for boot mode selection during testing \uf06f Reset buttlon \uf06f Pull up resistors on I2C "
+    },
+    {
+      "src": "slide-181.webp",
+      "alt": "Slide 181: 181 \uf0a7 Same CANFD transceiver used on multiple STM32H7 development boards \uf0a7 Backwards compatible with standard CAN protocol Board Schematic CANFD Transceiver"
+    },
+    {
+      "src": "slide-182.webp",
+      "alt": "Slide 182: 182 Board Schematic Connectors to External Peripherals \uf0a7 PC104 connector to interface with COM, EPS, and GNC boards \uf06f Stackable, structurally rigid, used by other subsystem COTS components \uf0a7 Harwin Gecko connector to interface with PAY \uf0a7 Standard 10-pin JTAG connector for debuggi"
+    },
+    {
+      "src": "slide-183.webp",
+      "alt": "Slide 183: 183 \uf022 Standard Hardware Design Practices \uf0a7 Four-layer PCB \uf0a7 Inner two layers dedicated to Vdd and GND nets \uf0a7 Decoupling caps placed as close as possible to power pins \uf0a7 Theicker 0.5mm traces for power nets \uf0a7 Test points \uf022 KiCAD was chosen because of team familiarity and easy vers"
+    },
+    {
+      "src": "slide-184.webp",
+      "alt": "Slide 184: 184 PCB Design Process CDH Subsystem Test Plan & Next Steps"
+    },
+    {
+      "src": "slide-185.webp",
+      "alt": "Slide 185: 185 Board Bring Up CDH Subsystem Test Plan & Next Steps"
+    },
+    {
+      "src": "slide-186.webp",
+      "alt": "Slide 186: 186 Pinouts and ICD"
+    },
+    {
+      "src": "slide-187.webp",
+      "alt": "Slide 187: 187 CDH Subsystem Test Plan Test ID Associated Requirement Test Name Objective CDH_Test_1 T3.CDH.1 Serial Communication Link Data Rate Inspection Theis inspection will verify that the data rate between the CDH subsystem and the other subsystems is adequate for telemetry and comma"
+    },
+    {
+      "src": "slide-188.webp",
+      "alt": "Slide 188: 188 CDH Subsystem Test Plan Test ID Associated Requirement Test Name Objective CDH_Test_4 T3.CDH.4 Instruction Rate Inspection Theis inspection will verify the number of instructions performed per second by the OBC. Inspect chosen OBC datasheets to conficrm the number of instruct"
+    },
+    {
+      "src": "slide-189.webp",
+      "alt": "Slide 189: 189 Schedule CDH Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 Selection of storage modules for the CDH board Finalize board design and hardware architecture Design of the CDH circuit board Design of EGSE-related circuits for subsystem tests Initial CDH board lay"
+    },
+    {
+      "src": "slide-190.webp",
+      "alt": "Slide 190: Soft ware Presenters: Zuzu, Henri, Peyton, Aidan, Sam"
+    },
+    {
+      "src": "slide-191.webp",
+      "alt": "Slide 191: 191 Driving Requirements Top-level requirements ID Requirement T3.SOFT.1 Thre softeware shall implement a set of defiened operational modes which support transitions between these modes which trigger by commands from the ground station. T3.SOFT.3 Following any softeware crash or "
+    },
+    {
+      "src": "slide-192.webp",
+      "alt": "Slide 192: 192 \uf0a7 Our softeware architecture is catered for our mission. It does away with abstractions created in frameworks such as cFS (core Fight System) and F' (F Prime) and instead opts for a clarificed system tailored on our requirements. \uf0a7 We use the STM32 HAL library to abstract awa"
+    },
+    {
+      "src": "slide-193.webp",
+      "alt": "Slide 193: 193 Soft ware Architecture State Machine and Sequencer \uf0a7 Thre main logic of the operating system is built on our state machine. \uf0a7 Blocks of code are run dependent on the state that we are in, which are compatible with our other systems \uf0a7 Thre state machine handles the day-to- day"
+    },
+    {
+      "src": "slide-194.webp",
+      "alt": "Slide 194: 194 \uf0a7 Full Systems Check Mode: A detumbling before deployment to gauge system functionality and interacting nominally - can also be called afteer a softeware update. \uf0a7 Full Downlink Mode: Transmit satellite logs and data to the ground station afteer an acknowledgement. Enter this"
+    },
+    {
+      "src": "slide-195.webp",
+      "alt": "Slide 195: 195 \uf0a7 Safe Mode: Minimum function state. Subsystems unnecessary for mission survival disabled. Only critical systems will be active. Forced transition to safe mode upon encountering a critical error. \uf0a7 Standby/Idle Mode: Low power operation mode the system defaults to when the sy"
+    },
+    {
+      "src": "slide-196.webp",
+      "alt": "Slide 196: 196 Soft ware Architecture Interrupt Service Routine"
+    },
+    {
+      "src": "slide-197.webp",
+      "alt": "Slide 197: 197 Soft ware Architecture Interrupt Service Routine (cont.) Time"
+    },
+    {
+      "src": "slide-198.webp",
+      "alt": "Slide 198: 198 Soft ware Architecture Rate Groups Group Period Priority Typical tasks Timeouts Data product RG1 10 ms Highest Fast IO kick/collect, ADCS fast loop, comms service, WDT heartbeat Sensor gets \"stale\" 20-30 ms, DMA timeouts 50- 100 ms Latest control vectors and raw high-rate sen"
+    },
+    {
+      "src": "slide-199.webp",
+      "alt": "Slide 199: 199 Soft ware Architecture Timers"
+    },
+    {
+      "src": "slide-200.webp",
+      "alt": "Slide 200: 200 Data Storage Mediums Type Role Strengths Limits / Risks NOR Flash Boot image, safe-mode firmware Simple, good random read, strong heritage Lower capacity, slower bulk writes eMMC / SD Bulk science / payload data Very high capacity, easy interface, low effort COTS, weak radiat"
+    },
+    {
+      "src": "slide-201.webp",
+      "alt": "Slide 201: 201 \uf0a7 Data downlink surpasses data generation \uf0a7 32 MB memory required (50% margin) \uf0a7 Data Rate (9.6 kbps) \uf0a7 Orbit Length (90 min) Data Data Budget"
+    },
+    {
+      "src": "slide-202.webp",
+      "alt": "Slide 202: 202 Data Transmission CCSDS Space Packet Protocol (SPP) \uf0a7 Using established CCSDS Space Packet Protocol for communication between ground station and satellite \uf0a7 Contains a primary header, secondary header, and data ficeld to convey telemetry and command messages"
+    },
+    {
+      "src": "slide-203.webp",
+      "alt": "Slide 203: 203 Data Transmission CCSDS SPP, Secondary Headers \uf0a7 Telemetry and Telecommand packets have diffeerent secondary headers \uf0a7 Secondary headers give more message specificc information"
+    },
+    {
+      "src": "slide-204.webp",
+      "alt": "Slide 204: 204 Data Transmission Encryption"
+    },
+    {
+      "src": "slide-205.webp",
+      "alt": "Slide 205: 205 Boot Management A/B/GOLD Image"
+    },
+    {
+      "src": "slide-206.webp",
+      "alt": "Slide 206: 206 Risk Fault Detection, Isolation and Recovery (FDIR) \uf0a7 Fault detection is tied to a rule engine running at a 100 ms priority that uses a majority vote based on sources to trigger whether a fault has been found. \uf0a7 Sources include the WDT pre-warning, communication link timeouts"
+    },
+    {
+      "src": "slide-207.webp",
+      "alt": "Slide 207: 207 \uf0a7 STM32 has a built-in independent watchdog that we can leverage for fault detection and recovery to automatically reset the system. \uf0a7 Timeout events can be caused by: \uf06f Crashed/unresponsive \uf06f Inficnite loop \uf06f Stuck state \uf06f Memory errors \uf0a7 Watchdog fully resets the system. Ri"
+    },
+    {
+      "src": "slide-208.webp",
+      "alt": "Slide 208: 208 Soft ware Testing Overview \uf0a7 Utilizing GTest and GitHub Actions for Continuous Testing \uf0a7 On each pull request, GitHub Actions automatically runs all associated tests to conficrm stability \uf0a7 Tests occur at the Unit, Subsystem, and System levels \uf0a7 GTest mocks allow for simulati"
+    },
+    {
+      "src": "slide-209.webp",
+      "alt": "Slide 209: 209 Soft ware Testing Continuous Integration"
+    },
+    {
+      "src": "slide-210.webp",
+      "alt": "Slide 210: 210 SOFT Subsystem Test Plan Test ID Associated Requirement Test Name Objective SOFT_Test_1 T3.SOFT.1 Softeware Alterable State Test Theis test will ensure that the satellite state machine is alterable by commands. Send mode-change commands from a simulated ground station and ver"
+    },
+    {
+      "src": "slide-211.webp",
+      "alt": "Slide 211: 211 SOFT Subsystem Test Plan Test ID Associated Requirement Test Name Objective SOFT_Test_3 T3.SOFT.3 Softeware Crash Recovery Test Theis will verify that an image of the state is saved and can be used to reboot from a crash. Trigger softeware crashes through fault injection or w"
+    },
+    {
+      "src": "slide-212.webp",
+      "alt": "Slide 212: 212 SOFT Subsystem Test Plan Test ID Associated Requirement Test Name Objective SOFT_Test_6 T3.SOFT.6 Stored Data Downlink Test Theis will verify that the softeware can downlink data to the ground station. Store dummy payload and telemetry data on-board and conficrm successful do"
+    },
+    {
+      "src": "slide-213.webp",
+      "alt": "Slide 213: 213 SOFT Subsystem Test Plan Test ID Associated Requirement Test Name Objective SOFT_Test_9 T3.SOFT.9 State-of-Health Data Reading Test Theis will verify that softeware can read data from the spacecrafte components. Simulate telemetry and diagnostic data that will be shared by su"
+    },
+    {
+      "src": "slide-214.webp",
+      "alt": "Slide 214: 214 SOFT Subsystem Test Plan Test ID Associated Requirement Test Name Objective SOFT_Test_12 T3.SOFT.12 SAFE Mode Test Theis will verify that the satellite can autonomously enter SAFE mode and recover when commanded. Simulate loss of contact and conficrm that the softeware transi"
+    },
+    {
+      "src": "slide-215.webp",
+      "alt": "Slide 215: 215 Design & Testing Status Component Design Status Procurement Status Unit Testing Status Integration Status Protocol drivers Completed In Progress In Progress Not Started FDIR system Completed Not Started Not Started Not Started Core state machine Completed Not Started Not Star"
+    },
+    {
+      "src": "slide-216.webp",
+      "alt": "Slide 216: 216 Schedule CDH Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 Integration of generic drivers for protocols State machine (aka sequencer) outlined in code Creation of interrupt service routine Integration of storage and fiele system (easyFS) Development of precur"
+    },
+    {
+      "src": "slide-217.webp",
+      "alt": "Slide 217: Appendix"
+    },
+    {
+      "src": "slide-218.webp",
+      "alt": "Slide 218: 218 \uf0a7 Fault detection is tied to a rule engine running at a 100 ms priority that uses a majority vote based on sources to trigger whether a fault has been found. \uf0a7 Sources include the WDT pre-warning, communication link timeouts, voltage readouts from the EPS, temperature limits,"
+    },
+    {
+      "src": "slide-219.webp",
+      "alt": "Slide 219: 219 \uf0a7 Memory corruption: ECC when applicable, CRC per page, periodic scrubs and rewrites. \uf0a7 Timing overruns: Worst-case execution time (WCET) budgets, response time analysis, asserts on any missed deadlines, use priority ranking \uf0a7 Storage wear-out: Log structured writes, wear lev"
+    },
+    {
+      "src": "slide-220.webp",
+      "alt": "Slide 220: 220"
+    },
+    {
+      "src": "slide-221.webp",
+      "alt": "Slide 221: 221 CDH Requirements All Requirements - CDH ID Requirement T3.CDH.1 The CDH Subsystem shall establish a serial communication link with all other subsystems at a datarate higher than 10 kbps. T3.CDH.2 The CDH Subsystem shall be capable of storing 32 MB of data in non-volatile stor"
+    },
+    {
+      "src": "slide-222.webp",
+      "alt": "Slide 222: 222 Version Control \uf0a7 Private GitHub repository under a private organization for every codebase worked on. \uf0a7 Tools will have their own repository. \uf0a7 Main STM32 repository will contain the instruction set necessary to flyash the MCU to be mission-ready. \uf0a7 Symlinks via Git submodul"
+    },
+    {
+      "src": "slide-223.webp",
+      "alt": "Slide 223: Structures Subsystem Presenters: Angus Wai, Lucas Galka, Jacob Reiffee, Zach Spurgeon"
+    },
+    {
+      "src": "slide-224.webp",
+      "alt": "Slide 224: 224 Driving Requirements ID Requirement T3.STRUC.1 Thee angular momentum produced by the thruster over the experiment cycle shall not exceed the angular momentum storage of the ADCS system T3.STRUC.2 Thee structure shall withstand a minimum temperature swing of 60\u00b0C in thermal va"
+    },
+    {
+      "src": "slide-225.webp",
+      "alt": "Slide 225: 225 Mass & Volume Budget Center of Mass: X = -0.784 cm Y = 0.424 cm Z = -1.617 cm Internal Stack Allocation (+Y Face) Batteeries EPS Radio Transceiver Flight Computer Payload GNSS Receiver ADCS Z X T3.ST RUC.8 Thee satellite shall have a center of mass within \u00b14.5 (X), \u00b12.0 (Y), "
+    },
+    {
+      "src": "slide-226.webp",
+      "alt": "Slide 226: 226 Current center of mass : X = -0.784 cm Y = 0.424 cm Z = -1.617 cm Therust axis: -Z Average Therust: 0.5 mN Momentum Storage: \u00b19.5 mNms Continuous ficring time to accumulate 9.5 mNm: 35.5 mins Center of Mass and Thrrust Axis T3.STRU C.1 Thee angular momentum produced by the th"
+    },
+    {
+      "src": "slide-227.webp",
+      "alt": "Slide 227: 227 Full Assembly 3U Deployable Panel6U Fixed Panel 2U Antenna GNSS Antenna +X+Y +Z +X +Y +Z"
+    },
+    {
+      "src": "slide-228.webp",
+      "alt": "Slide 228: 228 Exploded Assembly +X +Y +Z"
+    },
+    {
+      "src": "slide-229.webp",
+      "alt": "Slide 229: 229 Internal Structure"
+    },
+    {
+      "src": "slide-230.webp",
+      "alt": "Slide 230: 230 Structure will be manufactured in house, this includes: \u2022 Mounting hardware for components \u2022 Surface panels \u2022 Frame Stack standoffs, RBF, Deployment switches TBD Structure Overview RBF Pins Deployment Switch (1 of four)"
+    },
+    {
+      "src": "slide-231.webp",
+      "alt": "Slide 231: 231 Surface Mounting Hardware Antenna Mount (-Y Face) Solar Panel Deployable Mount (-X Face) Fixed Solar Panel Mount (-X Face)"
+    },
+    {
+      "src": "slide-232.webp",
+      "alt": "Slide 232: 232 Surface Panels -Z Panel +X Panel -Y Panels +Z Panel"
+    },
+    {
+      "src": "slide-233.webp",
+      "alt": "Slide 233: 233 Frame is split into two sections: 1. Payload Frame 2. Stack Frame Stack standoffs, RBF, Deployment switches TBD Frame Overview"
+    },
+    {
+      "src": "slide-234.webp",
+      "alt": "Slide 234: 234 Frame Part Color Quantity Stack Bracket Botteom Grey 3 Stack Bracket Middle Grey 3 Stack Bracket Top Grey 3 Stack Bracket Side Red 12 Stack Rail Blue 2 Rail Blue 2 Rail Mirrored Blue 2 Payload Cross Bar Blue 4 Bill of Materials"
+    },
+    {
+      "src": "slide-235.webp",
+      "alt": "Slide 235: 235 Stack Frame Stack bracket side Stack bracket top Stack bracket bottpom Stack bracket middle"
+    },
+    {
+      "src": "slide-236.webp",
+      "alt": "Slide 236: 236 Payload Frame"
+    },
+    {
+      "src": "slide-237.webp",
+      "alt": "Slide 237: 237 Structural Analysis ID Requirement UNP 12-3 The spacecraft shall be designed for quasi-static loading of 30 g acceleration applied independently in each primary axis. UNP 12-4 The spacecraft should be designed to withstand the launch vehicle vibroacoustic environment of 15 GR"
+    },
+    {
+      "src": "slide-238.webp",
+      "alt": "Slide 238: 238 Materials Thee entire assembly was set to AL 6061-T6 material properties obtained from MMPDS-17. Structural Analysis"
+    },
+    {
+      "src": "slide-239.webp",
+      "alt": "Slide 239: 239 Geometry and Defeaturing Thee detailed CAD was defeatured, total mass is 6.06585 kg compared to the MEV of 6.41 kg Structural Analysis"
+    },
+    {
+      "src": "slide-240.webp",
+      "alt": "Slide 240: 240 Mesh Nodes: 6401340 Elements: 178 11 58 Structural Analysis"
+    },
+    {
+      "src": "slide-241.webp",
+      "alt": "Slide 241: 241 Loads and Setup Static Loads: +- 30 g in all three axes Random Vibration: will be conducted afteer the frequency distribution is obtained from the launch provider Structural Analysis Step Time [s] X [m/s^2] Y [m/s^2] Z [m/s^2] 1 1 293.4 0 0 2 2 -293.4 0 0 3 3 0 293.4 0 4 4 0 "
+    },
+    {
+      "src": "slide-242.webp",
+      "alt": "Slide 242: 242 Loads and Setup Boundary Conditions: Rails that face the direction of acceleration are set to ficxed supports. Structural Analysis"
+    },
+    {
+      "src": "slide-243.webp",
+      "alt": "Slide 243: 243 Results Deformation: Exaggerated 94X Direction: Positive and Negative Y Legend: Maximum Principal Stress Structural Analysis"
+    },
+    {
+      "src": "slide-244.webp",
+      "alt": "Slide 244: 244 Results Deformation: Exaggerated 94X Direction: Negative X Legend: Maximum Principal Stress Structural Analysis"
+    },
+    {
+      "src": "slide-245.webp",
+      "alt": "Slide 245: 245 Results Deformation: Exaggerated 94X Direction: Negative Z Legend: Maximum Principal Stress Structural Analysis"
+    },
+    {
+      "src": "slide-246.webp",
+      "alt": "Slide 246: 246 Design & Testing Status Component Design Status Procurement Status Unit Testing Status Integration Status Stack Bracket Botteom Complete Not Started Not Started Not Started Stack Bracket Middle Complete Not Started Not Started Not Started Stack Bracket Top Complete Not Starte"
+    },
+    {
+      "src": "slide-247.webp",
+      "alt": "Slide 247: 247 STRUC Subsystem Test Plan Test ID Associated Requirement Test Name Objective STRUC_Test_1 T3.STRUC.6 Satellite Frame Material Inspection Theis test will verify the metallic material used in the spacecrafte structure. Inspect and conficrm primary structure material at full ass"
+    },
+    {
+      "src": "slide-248.webp",
+      "alt": "Slide 248: 248 Schedule STRUC Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 Sun & Earth sensors mounted ADCS system assembly design Payload frame design RBF pins selected Deployment switches selected Frame fasteners selected Stack frame manufacturing Full assembly CAD fiena"
+    },
+    {
+      "src": "slide-249.webp",
+      "alt": "Slide 249: Appendix"
+    },
+    {
+      "src": "slide-250.webp",
+      "alt": "Slide 250: 250 STRUC Requirements All Requirements - STRUC ID Requirement T3.STRUC.1 Thee angular momentum produced by the thruster over the experiment cycle shall not exceed the angluar momentum storage of the ADCS system T3.STRUC.2 Thee structure shall withstand a minimum temperature swin"
+    },
+    {
+      "src": "slide-251.webp",
+      "alt": "Slide 251: 251 STRUC Requirements All Requirements - STRUC ID Requirement T3.STRUC.9 Thee satellite shall have a moment of inertia less than TBD about any axis."
+    },
+    {
+      "src": "slide-252.webp",
+      "alt": "Slide 252: 252 Detailed Mass Budget"
+    },
+    {
+      "src": "slide-253.webp",
+      "alt": "Slide 253: Thrermal Control SubsystemPresenters:"
+    },
+    {
+      "src": "slide-254.webp",
+      "alt": "Slide 254: 254 Temperature Requirements by Sub-System Sub-system Operational Min [\u00b0C)] Max [\u00b0C)] Payload (Propellant Tanks) -80 36 EPS -40 85 CDH -20 60 GNSS Board -20 60 Solar Array -70 40 Structures -70 60 ADCS -20 70"
+    },
+    {
+      "src": "slide-255.webp",
+      "alt": "Slide 255: 255 Basic Assumptions \u2022 Constant environmental conditions \u2022 Albedo \u2022 Earth's IR radiation \u2022 Solar Flux \u2022 Perfectly circular orbit \u2022 Fixed satellite orientation throughout hot and cold case \u2022 Spatially averaged thermal properties \u2022 Thee defeatured model resembles thermal behavior "
+    },
+    {
+      "src": "slide-256.webp",
+      "alt": "Slide 256: 256 Radiation Environment Conditions Hot Case \u2022 Altitude = 500 [km] \u2022 Beta Angle = 90\u00b0 \u2022 Solar Flux = 1414 [W/m^2] \u2022 Albedo = 0.57 \u2022 IR = 244 [W/m^2] \u2022 Eclipse Period = 0 s Cold Case \u2022 Altitude = 500 [km] \u2022 Beta Angle = 17.5\u00b0 \u2022 Solar Flux = 1322 [W/m^2] \u2022 Albedo = 0.23 \u2022 IR = 218"
+    },
+    {
+      "src": "slide-257.webp",
+      "alt": "Slide 257: 257 Defeatured Model: \u2022 Part ficdelity was reduced for simulation feasibility according to AFRL guidelines. \u2022 Total node count: 734 Removed: \u2022 Screw Holes \u2022 Complex Geometry \u2022 Thein Surfaces Thrermal Geometry Solar Array PMPD System EPS System ADCS Module GNSS Board CDH COM"
+    },
+    {
+      "src": "slide-258.webp",
+      "alt": "Slide 258: 258 Thrermal and Optical Properties Material Conductivity (W/m/k) Specifiec Heat (J/kg/k) Density (kg/m^3) Absorptance Emissivity Sub-System Aluminum 6061 166.9 896 2700 0.86 0.86 Frame, ADCS and connectors CP-Titanium 17.2 530 4510 0.3 0.9 PMPD chamber and fuel tank FR-4 0.3 110"
+    },
+    {
+      "src": "slide-259.webp",
+      "alt": "Slide 259: 259 Internal Heat Generation Subsystem Hot Case Cold Case Operating Mode: Max power usage while conducting PMPD experiment Condition: Sun-synchronous Operating Mode: Minimal power usage (safe mode) Condition: Eclipse CDH 1.089 W 1.089 W COM 0.27 W 0.20 W GNC 0.76 W 0.00 W ADCS 0."
+    },
+    {
+      "src": "slide-260.webp",
+      "alt": "Slide 260: 260 \u2022 Uncertain Contact conductance \u2022 Assumed Values: \u2022 Structure to Structure: 400 [W/m^2-k] \u2022 PCB to Structure: 50 [W/m^2-k] \u2022 Batteery to Structure: 170 [W/m^2-k] \u2022 Environmental variation \u2022 Surface ficnish degradation \u2022 Geometric Simplificcations Assumed margin of error: +/- "
+    },
+    {
+      "src": "slide-261.webp",
+      "alt": "Slide 261: 261 Simulation Results Hot Case Hot Case Transient simulation Across 5 orbital periods:"
+    },
+    {
+      "src": "slide-262.webp",
+      "alt": "Slide 262: 262 Simulation Results Hot Case - Payload Component Operational Max [\u00b0C)] Min [\u00b0C)] Max [\u00b0C)] Propellant Tank -80 36 30.9"
+    },
+    {
+      "src": "slide-263.webp",
+      "alt": "Slide 263: 263 Thermal Variation: 5.4 [\u00b0C)] Simulation Results Hot Case \u2013 Main Solar Panel"
+    },
+    {
+      "src": "slide-264.webp",
+      "alt": "Slide 264: 264 \u2022 Cold Case transient simulation across 8 orbital periods: Simulation Results Cold Case"
+    },
+    {
+      "src": "slide-265.webp",
+      "alt": "Slide 265: 265 Simulation Results Cold Case \u2013 GNSS Board Operational Min [\u00b0C)] Min [\u00b0C)] Max [\u00b0C)] -20 60 -13.1"
+    },
+    {
+      "src": "slide-266.webp",
+      "alt": "Slide 266: 266 Thermal Variation: 6.8 [ \u00b0C)] Simulation Results Cold Case \u2013 Main Solar Panel"
+    },
+    {
+      "src": "slide-267.webp",
+      "alt": "Slide 267: 267 Simulation Results - Summary Sub-system Operational Results Min [\u00b0C)] Max [\u00b0C)] Min Cold Case [\u00b0C)] Max Hot Case [\u00b0C)] Payload (Propellant Tanks) -80 36 -11.3 30.9 EPS -40 85 -9.2 30.9 CDH -20 60 -8 34.3 GNSS Board -20 60 -13.1 32.4 Solar Array -70 40 -12.2 35.5 Structures -7"
+    },
+    {
+      "src": "slide-268.webp",
+      "alt": "Slide 268: 268 Proposed Active Control System: \u2022 2.5 W Heater to the GNSS Board GNSS heater adjusted results (cold case): Passive Control: \u2022 Component surface ficnishes: \u2022 Structure: Black anodized aluminum coating \u2022 PCB's: Green solder mask \u2022 PMPD anode: Ceramic boron nitride \u2022 Theermal St"
+    },
+    {
+      "src": "slide-269.webp",
+      "alt": "Slide 269: 269 Schedule CDH Schedule 2025 2026 2027 Phase B12 1 2 3 4 5 6 7 8 9 10 11 12 1 Thrermal Design Thrermal Analysis Closes Thrermal Control Systems Manufacturing Thrermal Vacuum Test"
+    },
+    {
+      "src": "slide-270.webp",
+      "alt": "Slide 270: Appendix"
+    },
+    {
+      "src": "slide-271.webp",
+      "alt": "Slide 271: Ground Support EquipmentPresenters: Zach Spurgeon"
+    },
+    {
+      "src": "slide-272.webp",
+      "alt": "Slide 272: 272 Driving Requirements ID Requirement T2.MGSE.2 Spacecrafte MGSE shall be designed such that the satellite can be lifteed in any axis. T2.MGSE.3 All MGSE shall be designed using a factor of safety of 5.0 for ultimate failure and be proof loaded to twice the expected satellite l"
+    },
+    {
+      "src": "slide-273.webp",
+      "alt": "Slide 273: 273 GSE List MGSE Equipment EGSE - Satellite Storage Container - Satellite Transport Cart - Mass Property Verification - Propellant Tank Loading Equipment - Deployment test Equipment - Thruster test vacuum chamber - Thrust Stand - Common Lab Tools - Modular Assembly Table - Mass "
+    },
+    {
+      "src": "slide-274.webp",
+      "alt": "Slide 274: 274 Mechanical GSE: Vacuum Capabilities \uf0a7 EPPL Vacuum Chamber \uf0a7 Ultimate pressure of 1 mPa in about 1 hour \uf0a7 MicroNewton thrust stand for PMPD thruster characterization \uf0a7 Space Flight Projects Lab TVAC Performance \uf0a7 Lowest system vacuum of under 10 mT, enabling solvent removal, m"
+    },
+    {
+      "src": "slide-275.webp",
+      "alt": "Slide 275: 275 Thrruster Test Equipment \uf0a7 Thrrust Stand \uf0a7 Preliminary measurements being taken with inverted- pendulum stand \uf0a7 Final characterization with torsional thrust stand (2.5\u00b5N uncertainty) \uf0a7 Diagnostic probes \uf0a7 Double Langmuir probes for TOF ion exhaust velocity measurements \uf0a7 100\u00b5"
+    },
+    {
+      "src": "slide-276.webp",
+      "alt": "Slide 276: 276 Mechanical GSE: In-House Spacecraft Final Assembly \uf0a7 In-house spacecrafte assembly cleanroom \uf0a7 240 square feet of clean room space \uf0a7 Dedicated to ficnal assembly of satellites \uf0a7 Sputtlering machine thin-ficlm deposition system \uf0a7 Creates thin, uniform layers of material \uf0a7 Can "
+    },
+    {
+      "src": "slide-277.webp",
+      "alt": "Slide 277: 277 GSE Design & Testing Status Component Design Status Procurement Status Unit Testing Status Integration Status Propellant Tank Loading Equipment Complete In Progress Not Started Not Started Deployment Test Equipment In Progress Not Started Not Started Not Started Modular Assem"
+    },
+    {
+      "src": "slide-278.webp",
+      "alt": "Slide 278: Programmatics Presenters: Nick Babusis"
+    },
+    {
+      "src": "slide-279.webp",
+      "alt": "Slide 279: 279 Primary Risks Number Name Brief Description 1 Payload Schedule Theruster payload may not be complete by the time the rest of the satellite is complete 2 Student Safety Undergraduate students will be working with high voltages as well as toxic propellants, which can be harmful"
+    },
+    {
+      "src": "slide-280.webp",
+      "alt": "Slide 280: 280 Risk 1: Payload Schedule \uf0a7 Risk Statement: If the PMPD thruster is not ready for integration by the time the rest of the satellite is complete, then satellite integration and testing may be delayed, which could delay the overall mission timeline. \uf0a7 Risk Likelihood: High \uf0a7 Ris"
+    },
+    {
+      "src": "slide-281.webp",
+      "alt": "Slide 281: 281 Risk 2: Student Safety \uf0a7 Risk Statement: If the undergraduate students working with the ASCENT propellant and high-voltage systems act unsafely, then they could experience physical injury. \uf0a7 Risk Likelihood: Low \uf0a7 Risk Severity: Major Impact \uf0a7 Risk Mitigation: Thre likelihood"
+    },
+    {
+      "src": "slide-282.webp",
+      "alt": "Slide 282: 282 Risk 3: Radiation \uf0a7 Risk Statement: If the satellite components and softeware are not designed to withstand the space radiation environment, then satellite components may degrade or fail. \uf0a7 Risk Likelihood: Low \uf0a7 Risk Severity: Major Impact \uf0a7 Risk Mitigation: Thre severity of"
+    },
+    {
+      "src": "slide-283.webp",
+      "alt": "Slide 283: 283 Risk 4: Launch Vehicle Incompatibility \uf0a7 Risk Statement: If the satellite is not compliant with the requirements of the launch vehicle, then the satellite may not be permittled to launch \uf0a7 Risk Likelihood: Moderate \uf0a7 Risk Severity: Major Impact \uf0a7 Risk Mitigation: Thre likelih"
+    },
+    {
+      "src": "slide-284.webp",
+      "alt": "Slide 284: 284 Risk 5: Antenna Deployment Failure \uf0a7 Risk Statement: If the deployable UHF antenna fails to deploy correctly, then the satellite link margin may be reduced and, at worst, the satellite may not be able to communicate with the ground station entirely. \uf0a7 Risk Likelihood: Low \uf0a7 R"
+    },
+    {
+      "src": "slide-285.webp",
+      "alt": "Slide 285: 285 Risk 6: Antenna Deployment Failure \uf0a7 Risk Statement: If the deployable 3U solar array fails to deploy correctly, then the satellite may not be able to generate enough power to meet its power budget. \uf0a7 Risk Likelihood: Low \uf0a7 Risk Severity: Moderate Impact \uf0a7 Risk Mitigation: Th"
+    },
+    {
+      "src": "slide-286.webp",
+      "alt": "Slide 286: 286 Risk 7: Electromagnetic Interference \uf0a7 Risk Statement: If the PMPD thruster generates too much electromagnetic interference (EMI), then onboard electronics may be damaged or communications may be impaired. \uf0a7 Risk Likelihood: High \uf0a7 Risk Severity: Major Impact \uf0a7 Risk Mitigatio"
+    },
+    {
+      "src": "slide-287.webp",
+      "alt": "Slide 287: 287 Risk Matrix Minimal Impact Minor Impact Moderate Impact Major Impact Mission Catastrophic Very Likely High Likelihood 1, 7 Moderate Likelihood 4 Low Likelihood 6 2, 3 5 Very Low Likelihood"
+    },
+    {
+      "src": "slide-288.webp",
+      "alt": "Slide 288: 288 Risk Matrix \u2013 Aft er Mitigation Minimal Impact Minor Impact Moderate Impact Major Impact Mission Catastrophic Very Likely High Likelihood Moderate Likelihood 1 Low Likelihood 3 4, 7 Very Low Likelihood 6 2 5"
+    },
+    {
+      "src": "slide-289.webp",
+      "alt": "Slide 289: 289 \uf0a7 Lab Safety: \uf0a7 General safety training required for all students \uf0a7 Following Purdue's Environmental Health & Safety guidelines for hazardous material handling and disposal \uf0a7 Buddy system for students working on hardware worth >$1,000, batteeries, or propellant \uf0a7 Propellant H"
+    },
+    {
+      "src": "slide-290.webp",
+      "alt": "Slide 290: 290 Costs & Lead Times Subsystem Component Cost [$] Lead Time [wk] EPS Distribution Board 0 0 Batteery 0 0 6U Fixed Array 16,000 17 3U Deployable Array 18,300 17 SOFTCDH STM32 Chip 11 17 GNC ADCS Module 57,000 16 GPS Receiver 8,670 4 GPS Antenna 0 0 Subsystem Component Cost [$] L"
+    },
+    {
+      "src": "slide-291.webp",
+      "alt": "Slide 291: 291 Program Schedule"
+    },
+    {
+      "src": "slide-292.webp",
+      "alt": "Slide 292: Tha\u0002nk You :3"
+    }
+  ]
+}

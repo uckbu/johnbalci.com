@@ -9,10 +9,9 @@
 .pib-image-slot > span { color: var(--muted); font-size: 12px; }
 .pib-image-label { letter-spacing: .04em; }
 .pib-figure figcaption { margin-top: 12px; color: var(--muted); font-size: 13px; line-height: 1.65; }
-.pib-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: 8px; margin: 28px 0 0; overflow: hidden; }
+.pib-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: 8px; margin: 28px 0 0; overflow: hidden; }
 .pib-facts > div { padding: 20px; display: flex; flex-direction: column; gap: 6px; background: var(--panel); }
-.pib-facts > div:nth-child(odd) { border-right: 1px solid var(--border); }
-.pib-facts > div:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+.pib-facts > div + div { border-left: 1px solid var(--border); }
 .pib-facts strong { font-size: 22px; font-weight: 500; }
 .pib-facts span { font-size: 13px; color: var(--muted); }
 .pib-paths { display: grid; gap: 10px; margin: 28px 0; }
@@ -34,13 +33,14 @@
 .pib-table td { color: var(--muted); }
 .pib-page .section-content > h3:first-child { margin-top: 0; }
 @container (max-width: 600px) { .pib-gallery { grid-template-columns: 1fr; } }
-@media (max-width: 760px) { .pib-gallery { grid-template-columns: 1fr; } .pib-image-slot { min-height: 190px; } .pib-facts strong { font-size: 18px; } }
+@media (max-width: 760px) { .pib-gallery { grid-template-columns: 1fr; } .pib-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pib-facts > div + div { border-left: 0; } .pib-facts > div:nth-child(odd) { border-right: 1px solid var(--border); } .pib-facts > div:nth-child(-n+2) { border-bottom: 1px solid var(--border); } .pib-image-slot { min-height: 190px; } .pib-facts strong { font-size: 18px; } }
 
 /* Overview galleries follow the reference: large image, caption/count, quiet tabs. */
 .pib-page .scrapr-hero { padding-bottom: 0; }
 .pib-page .pib-overview { padding-top: 28px; }
 .pib-overview .section-content > p { margin-bottom: 14px; }
-.pib-carousel { margin-top: 40px; max-width: 820px; }
+.pib-carousel { display: block; width: 100%; max-width: 100%; margin-top: 48px; }
+.pib-overview .section-content { display: block; }
 .pib-carousel > h3 { font-size: 22px; margin: 0 0 20px; letter-spacing: -.02em; }
 .pib-slide { margin: 0; }
 .pib-slide[hidden] { display: none; }

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Accumulator PCB: capacitive sensing of an expanding propellant bladder, with PCB views and the theory behind the measurement.">
+  <title>Accumulator PCB — John Balci</title>
+  <script src="../theme.js"></script>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="scrapr-showcase.css">
+  <link rel="stylesheet" href="payload-interface-board.css">
+  <link rel="stylesheet" href="accumulator-pcb.css">
+  <script src="../navigation.js" defer></script>
+  <script src="payload-interface-board.js" defer></script>
+  <script type="module" src="accumulator-viewer.js"></script>
+  <script src="accumulator-presentation.js" defer></script>
+</head>
+<body class="scrapr-page pib-page accumulator-page">
+<header class="topbar"><a href="../index.html" class="logo">John Balci</a><nav aria-label="Primary navigation"><a href="../index.html#about">About</a><a href="../index.html#projects">Projects</a><a href="../index.html#research">Research</a><a href="../index.html#contact">Contact</a></nav></header>
+<main class="scrapr-main">
+<article class="scrapr-study" data-toc-selector="[data-toc-entry]">
+<header class="scrapr-hero">
+  <a class="scrapr-back" href="../index.html#projects">← All projects</a>
+  <p class="scrapr-kicker">Hardware project · Purdue CubeSat Lab</p>
+  <h1>Accumulator PCB</h1>
+  <p class="project-meta">KiCad · FDC1004 · Capacitive sensing · STM32</p>
+</header>
+<section id="overview" class="scrapr-section pib-overview" data-toc-entry data-toc-label="Overview" aria-labelledby="overview-heading">
+  <div class="section-marker"><h2 id="overview-heading">Overview</h2></div>
+  <div class="section-content">
+    <p>The accumulator is a component in the UNP-sponsored apexsat project that uses the AFRL's ASCENT propellant.</p>
+    <p>The accumulator collects ASCENT propellant at the set mass flow rate of 8g/us inside an expanding bladder. A conductive plate attached beneath the bladder moves toward a second plate on the housing floor as it fills. I designed this such that measuring the capacitance between them provides a way to infer bladder motion and, with a calibrated geometry, the accumulated volume of propellant.</p>
+    <p>This compact PCB reads that capacitance with an FDC1004 and sends measurements over I²C to an STM32 Nucleo. Revision A places the sensing connection and driven shield beside the converter, with a separate 3.3 V host connection.</p>
+   
+<div class="pib-carousel" data-carousel aria-roledescription="carousel" aria-label="PCB views"><h3 data-toc-skip>PCB views</h3><div class="pib-slides"><figure id="pcb-panel-0" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-0" tabindex="0" ><a class="pib-slide-image" href="images/accumulator/kicad-render.png" target="_blank" rel="noopener" aria-label="Open accumulator KiCad render at full size"><img src="images/accumulator/kicad-render.png" alt="KiCad 3D render of the Revision A accumulator PCB, showing the FDC1004, sensing header and I²C host connection." width="2058" height="1322" fetchpriority="high"></a><figcaption>Revision A accumulator PCB — KiCad 3D render.</figcaption></figure><figure id="pcb-panel-1" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-1" tabindex="0" hidden><a class="pib-slide-image" href="images/accumulator/copper-top.png" target="_blank" rel="noopener" aria-label="Open Front copper image at full size"><img src="images/accumulator/copper-top.png" alt="Front copper layout of the 35 × 25 mm capacitance sensor board." width="1600" height="1100" loading=lazy></a><figcaption>Front copper layout of the 35 × 25 mm capacitance sensor board.</figcaption></figure><figure id="pcb-panel-2" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-2" tabindex="0" hidden><a class="pib-slide-image" href="images/accumulator/copper-bottom.png" target="_blank" rel="noopener" aria-label="Open Back copper image at full size"><img src="images/accumulator/copper-bottom.png" alt="Back copper layout of the two-layer sensor board." width="1600" height="1100" loading=lazy></a><figcaption>Back copper layout of the two-layer sensor board.</figcaption></figure></div><div class="pib-carousel-controls"><span class="pib-slide-count" aria-live="polite" aria-atomic="true">1 / 3</span><div class="pib-arrows"><button type="button" data-direction="-1" aria-label="Previous PCB views image">←</button><button type="button" data-direction="1" aria-label="Next PCB views image">→</button></div></div><div class="pib-carousel-tabs" role="tablist" aria-label="PCB views views"><button type="button" role="tab" id="pcb-tab-0" aria-controls="pcb-panel-0" aria-selected="true" tabindex="0">Board render</button><button type="button" role="tab" id="pcb-tab-1" aria-controls="pcb-panel-1" aria-selected="false" tabindex="-1">Front copper</button><button type="button" role="tab" id="pcb-tab-2" aria-controls="pcb-panel-2" aria-selected="false" tabindex="-1">Back copper</button></div></div>
+  </div>
+</section>
+<section id="mechanism" class="scrapr-section" data-toc-entry data-toc-label="The mechanism" aria-labelledby="mechanism-heading">
+   <h2>But... why?</h2>
+    <p>In the development of our pulsed-magnetoplasma dynamic thruster, henceforth known as the PMPD, we encountered an issue with our ability to calculate our specific impulse. Understood colloquially as the efficiency of a given thruster, the Isp requires an accurate mass flow rate to be calculated. This is a parameter to keep track of with the PMPD, because it is a novel thruster and thus we need to prove, through experimental measurements, that we are making genuine improvements over existing pulsed plasma thrusters.</p>
+    <p>The solution to this problem is the Accumulator, which accumulates mass that it measures with its internal diaphragm, and records mass over time with a lower required mass flow rate than the market-available coriolis flow meters.</p>
+  <div class="section-marker"><h2 id="mechanism-heading">The mechanism</h2></div>
+  <div class="section-content">
+    <p>The proposed rigid backing beneath the bladder helps the moving electrode stay flat. Keeping the plates parallel makes the electrical measurement easier to relate to displacement; the mechanical design must also maintain clearance throughout the fill cycle.</p>
+<figure class="acc-viewer" aria-labelledby="cad-heading">
+      <div class="acc-viewer-heading"><h3 id="cad-heading">Accumulator CAD</h3><span>Interactive 3D</span></div>
+      <div class="acc-stage" id="acc-stage"><p id="acc-model-status" role="status">Loading accumulator model…</p></div>
+      <div class="acc-controls-row">
+      <div class="acc-toolbar" role="group" aria-label="Model views">
+        <button type="button" data-model-view="assembled" aria-pressed="false" disabled>Assembled</button>
+        <button type="button" data-model-view="exploded" aria-pressed="true" disabled>Exploded</button>
+        <button type="button" data-model-view="body" aria-pressed="false" disabled>Body</button>
+        <button type="button" data-model-view="gasket" aria-pressed="false" disabled>Gasket</button>
+        <button type="button" data-model-view="lid" aria-pressed="false" disabled>Lid</button>
+      </div>
+      <div class="acc-camera-controls pib-arrows" role="group" aria-label="Camera controls"><button type="button" data-camera="in" aria-label="Zoom in" disabled>+</button><button type="button" data-camera="out" aria-label="Zoom out" disabled>−</button><button type="button" data-camera="reset" aria-label="Reset view" title="Reset view" disabled>↺</button></div>
+      </div>
+      <noscript><p>Enable JavaScript to explore the 3D model.</p></noscript>
+    </figure>
+    <figure class="pib-figure acc-pid">
+      <a class="acc-pid-image" href="images/accumulator/system-pid.png" target="_blank" rel="noopener" aria-label="Open system P&amp;ID at full size"><img src="images/accumulator/system-pid.png" alt="CubeSat propellant system P&amp;ID: tank, ISO 1 valve, orifice, flow meter, accumulator with diaphragm and capacitance mass gauging, ISO 2 valve, gas capacitance sensor, and thruster." width="924" height="271" loading="lazy"></a>
+    </figure>
+  </div>
+</section>
+<section id="theory" class="scrapr-section" data-toc-entry data-toc-label="Mathematical model" aria-labelledby="theory-heading">
+  <div class="section-marker"><h2 id="theory-heading">Mathematical model</h2></div>
+  <div class="section-content">
+    <p class="section-lead">The accumulator was based on a parallel-plate capacitance model: bladder motion changes the plate gap, and that change provides an estimate of stored propellant volume.</p>
+    <div class="acc-model">
+      <div class="acc-model-heading"><span>Design basis</span><p>Capacitance → displacement → volume</p></div>
+      <div class="acc-model-step">
+        <div class="acc-model-label"><span>01</span><h3>Relate capacitance to the gap</h3></div>
+        <div class="acc-model-detail">
+          <math display="block" aria-label="C equals epsilon zero A divided by d; therefore d equals epsilon zero A divided by C"><mi>C</mi><mo>=</mo><mfrac><mrow><msub><mi>ε</mi><mn>0</mn></msub><mi>A</mi></mrow><mi>d</mi></mfrac><mspace width="1em"/><mo>⇒</mo><mspace width="1em"/><mi>d</mi><mo>=</mo><mfrac><mrow><msub><mi>ε</mi><mn>0</mn></msub><mi>A</mi></mrow><mi>C</mi></mfrac></math>
+          <p>As the bladder pushes the moving plate toward the fixed plate, the gap decreases and capacitance increases.</p>
+        </div>
+      </div>
+      <div class="acc-model-step">
+        <div class="acc-model-label"><span>02</span><h3>Recover plate displacement</h3></div>
+        <div class="acc-model-detail">
+          <math display="block" aria-label="Delta h equals d empty minus d, or epsilon zero A times one over C empty minus one over C"><mi>Δh</mi><mo>=</mo><msub><mi>d</mi><mtext>empty</mtext></msub><mo>−</mo><mi>d</mi></math>
+          <math display="block" aria-label="Delta h equals epsilon zero A times one over C empty minus one over C"><mi>Δh</mi><mo>=</mo><msub><mi>ε</mi><mn>0</mn></msub><mi>A</mi><mo>(</mo><mfrac><mn>1</mn><msub><mi>C</mi><mtext>empty</mtext></msub></mfrac><mo>−</mo><mfrac><mn>1</mn><mi>C</mi></mfrac><mo>)</mo></math>
+          <p>Use the empty accumulator as the reference. A positive displacement corresponds to the plates moving closer together.</p>
+        </div>
+      </div>
+      <div class="acc-model-step">
+        <div class="acc-model-label"><span>03</span><h3>Estimate the volume change</h3></div>
+        <div class="acc-model-detail">
+          <math display="block" aria-label="Delta V is approximately A effective times delta h"><mi>ΔV</mi><mo>≈</mo><msub><mi>A</mi><mtext>eff</mtext></msub><mi>Δh</mi></math>
+          <p>For a constant effective swept area, volume change is area × displacement. This idealized extension of the gap model must be calibrated to the actual bladder geometry.</p>
+        </div>
+      </div>
+      <dl class="acc-model-symbols">
+        <div><dt>C / C<sub>empty</sub></dt><dd>Plate capacitance / empty reference</dd></div>
+        <div><dt>A</dt><dd>Overlapping electrode area</dd></div>
+        <div><dt>d / Δh</dt><dd>Plate gap / displacement from empty</dd></div>
+        <div><dt>A<sub>eff</sub></dt><dd>Effective swept area of the bladder</dd></div>
+        <div><dt>ε₀</dt><dd>8.854 × 10⁻¹² F/m, for an approximately air-filled gap</dd></div>
+        <div><dt>ΔV</dt><dd>Volume change relative to empty</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+<section id="presentation" class="scrapr-section" data-toc-entry data-toc-label="PDR presentation" aria-labelledby="presentation-heading">
+  <div class="section-marker"><h2 id="presentation-heading">PDR presentation</h2></div>
+  <div class="section-content">
+    <div class="acc-presentation" aria-label="PDR presentation viewer">
+      <div class="acc-presentation-stage" tabindex="0" aria-label="Presentation slides; use left and right arrow keys to navigate">
+        <div class="acc-presentation-placeholder"><span>SLIDE DECK</span><strong>PDR presentation</strong><p>Slides coming soon</p></div>
+        <img class="acc-presentation-slide" alt="" decoding="async" hidden>
+      </div>
+      <div class="acc-presentation-controls">
+        <span class="acc-presentation-status" role="status" aria-live="polite">Presentation coming soon</span>
+        <a class="acc-slide-full" target="_blank" rel="noopener" hidden>Open slide</a>
+        <div class="acc-presentation-jump" hidden><label for="acc-slide-number">Slide</label><input id="acc-slide-number" type="number" min="1" value="1" aria-label="Go to slide"></div>
+        <div class="pib-arrows"><button type="button" data-slide-step="-1" aria-label="Previous slide" disabled>←</button><button type="button" data-slide-step="1" aria-label="Next slide" disabled>→</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer class="scrapr-end"><a href="../index.html#projects">← Return to project index</a></footer>
+</article>
+</main>
+<footer class="site-footer"><p>&copy; 2026 John Balci</p></footer>
+</body>
+</html>
