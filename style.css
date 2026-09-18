@@ -486,14 +486,11 @@ body main.project-layout { display: grid; grid-template-columns: minmax(0, 1fr) 
 /* Landing page: a focused introduction with a visible path to the work. */
 .landing-page main { max-width: 1500px; padding-inline: clamp(24px, 4vw, 72px); }
 .landing-page .hero { display: flex; flex-direction: column; justify-content: center; gap: 56px; min-height: min(820px, calc(100svh / .9 - var(--header-height))); padding-block: 56px 32px; }
-.hero-intro { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(240px, .8fr); align-items: center; gap: clamp(32px, 5vw, 80px); }
 .landing-page .tagline { font-size: 16px; margin: 0 0 16px; }
 .landing-page .hero h1 { font-size: clamp(48px, 5.5vw, 80px); margin: 0 0 28px; line-height: 1.04; letter-spacing: -.055em; }
 .landing-page .bio { max-width: 42ch; font-size: 20px; line-height: 1.65; margin-bottom: 28px; }
 .landing-page .education-summary { line-height: 1.8; margin-bottom: 24px; }
 .landing-page .about-links { display: flex; flex-wrap: wrap; gap: 24px; margin: 0; font-size: 15px; }
-.hero-photo { margin: 0; width: 100%; max-width: 350px; justify-self: end; }
-.hero-photo img { display: block; width: 100%; height: auto; border-radius: 16px; }
 .project-scroll { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 0 0; border-top: 1px solid var(--border); color: var(--text); font-size: 15px; }
 .project-scroll:hover { color: var(--accent); text-decoration: none; }
 .scroll-arrow { font-size: 24px; }
@@ -502,13 +499,13 @@ body main.project-layout { display: grid; grid-template-columns: minmax(0, 1fr) 
 .landing-page .reveal { opacity: 0; transition: opacity 650ms ease; }
 .landing-page .reveal.is-visible { opacity: 1; }
 @media (max-width: 1000px) {
-  .hero-intro { gap: 32px; grid-template-columns: minmax(0, 1fr) minmax(200px, .7fr); }
   .landing-page .bio { font-size: 18px; }
+  .personal-intro { gap: 32px; grid-template-columns: minmax(0, 1fr) minmax(200px, .7fr); }
 }
 @media (max-width: 760px) {
   .landing-page .hero { min-height: auto; padding-block: 40px 24px; gap: 32px; }
-  .hero-intro { grid-template-columns: 1fr; gap: 32px; }
-  .hero-photo { max-width: 260px; justify-self: start; }
+  .personal-intro { grid-template-columns: 1fr; gap: 28px; }
+  .personal-photo { max-width: 260px; justify-self: start; }
   .landing-page .hero h1 { font-size: clamp(42px, 9vw, 64px); }
   .landing-page .bio { font-size: 17px; }
   .landing-page .project-scroll { font-size: 14px; }
@@ -516,3 +513,9 @@ body main.project-layout { display: grid; grid-template-columns: minmax(0, 1fr) 
 @media (prefers-reduced-motion: reduce) {
   .landing-page .reveal { opacity: 1; transition: none; }
 }
+
+.personal-intro { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(220px, .8fr); align-items: center; gap: clamp(32px, 5vw, 72px); }
+.personal-text p { max-width: 52ch; font-size: 17px; line-height: 1.7; margin: 0 0 18px; }
+.personal-text p:last-child { margin-bottom: 0; }
+.personal-photo { margin: 0; width: 100%; max-width: 320px; justify-self: end; }
+.personal-photo img { display: block; width: 100%; height: auto; border-radius: 16px; }
