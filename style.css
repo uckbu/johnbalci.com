@@ -10,6 +10,7 @@
   --border: #e3e3e3;
   --sidebar-width: 224px;
   --header-height: 64px;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -26,7 +27,7 @@
 html { scroll-behavior: smooth; }
 /* Keep the sticky header aligned with the fixed sidebar at scroll boundaries. */
 html, body { overscroll-behavior-y: none; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-sans); font-optical-sizing: auto; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 button, input { font: inherit; }
