@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Payload Interface Board: the board that lets us instrument a pulsed magnetoplasmadynamic thruster on the bench — one place to plug in pressure, flow and current sensors and read them all from a single STM32."><title>Payload Interface Board — John Balci</title><script src="../theme.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="scrapr-showcase.css"><link rel="stylesheet" href="payload-interface-board.css"><script src="../navigation.js" defer></script><script src="payload-interface-board.js" defer></script>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="A compact STM32 sensor board designed for electric thruster ground testing at Purdue, combining pressure, flow and current measurement."><title>Payload Interface Board — John Balci</title><script src="../theme.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="scrapr-showcase.css"><link rel="stylesheet" href="payload-interface-board.css"><script src="../navigation.js" defer></script><script src="payload-interface-board.js" defer></script>
 </head>
 <body class="scrapr-page pib-page">
 <header class="topbar"><a href="../index.html" class="logo">John Balci</a><nav aria-label="Primary navigation"><a href="../index.html#about">About</a><a href="../index.html#contact">Contact</a></nav>
@@ -15,205 +15,34 @@
 <section id="overview" class="scrapr-section pib-overview" data-toc-entry data-toc-label="Overview" aria-labelledby="overview-heading">
 <div class="section-marker"><h2 id="overview-heading">Overview</h2></div>
 <div class="section-content">
-<p>A NUCLEO-G431KB plugs into the top of the board and does the reading. Everything else — the pressure sensor, the header for the flow meter, the current sensor, the circuit that makes a Rogowski coil legible to an ADC — lives on the board underneath it. You bolt it to the stand, run the sensor cables in, plug the Nucleo into a laptop over USB, and fire the thruster.</p>
-<p>It is worth being clear about what this is not: it is bench equipment, not the flight board. It never leaves the ground. That is what lets it be a cheap two-layer PCB with a removable dev module on top, and why the interesting design work here is all about measuring honestly rather than surviving launch.</p>
-<p>Concretely: four measurement channels, a 12 A continuous-current target, and a 65 × 95 mm two-layer board in 2 oz copper, built to be characterized on the bench ahead of our Critical Design Review.</p>
-<div class="pib-carousel" data-carousel aria-roledescription="carousel" aria-label="PCB layout"><h3 data-toc-skip>PCB layout</h3><div class="pib-slides"><figure id="pcb-panel-0" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-0" tabindex="0"><a class="pib-slide-image" href="images/pib/pcb.png" target="_blank" rel="noopener" aria-label="Open Board image at full size"><img src="images/pib/pcb.png" alt="Combined copper, front silkscreen and outline — the low-voltage circuitry sits above the isolated current section." width="1454" height="1322" fetchpriority="high"></a><figcaption>Combined copper, front silkscreen and outline — the low-voltage circuitry sits above the isolated current section.</figcaption></figure><figure id="pcb-panel-1" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-1" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/personal_board-F_Cu.svg" target="_blank" rel="noopener" aria-label="Open Front copper image at full size"><img src="images/pib/personal_board-F_Cu.svg" alt="Front copper (F.Cu) — sensor routing, component pads and broad primary-current pours." width="1200" height="840" loading="lazy"></a><figcaption>Front copper (F.Cu) — sensor routing, component pads and broad primary-current pours.</figcaption></figure><figure id="pcb-panel-2" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-2" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/personal_board-B_Cu.svg" target="_blank" rel="noopener" aria-label="Open Back copper image at full size"><img src="images/pib/personal_board-B_Cu.svg" alt="Back copper (B.Cu), viewed from above — ground return and primary-current copper on the second layer." width="1200" height="840" loading="lazy"></a><figcaption>Back copper (B.Cu), viewed from above — ground return and primary-current copper on the second layer.</figcaption></figure></div><div class="pib-carousel-controls"><span class="pib-slide-count" aria-live="polite" aria-atomic="true">1 / 3</span><div class="pib-arrows"><button type="button" data-direction="-1" aria-label="Previous pcb layout image">←</button><button type="button" data-direction="1" aria-label="Next pcb layout image">→</button></div></div><div class="pib-carousel-tabs" role="tablist" aria-label="PCB layout views"><button type="button" role="tab" id="pcb-tab-0" aria-controls="pcb-panel-0" aria-selected="true" tabindex="0">Board</button><button type="button" role="tab" id="pcb-tab-1" aria-controls="pcb-panel-1" aria-selected="false" tabindex="-1">Front copper</button><button type="button" role="tab" id="pcb-tab-2" aria-controls="pcb-panel-2" aria-selected="false" tabindex="-1">Back copper</button></div></div>
-<div class="pib-carousel" data-carousel aria-roledescription="carousel" aria-label="Schematic capture"><h3 data-toc-skip>Schematic capture</h3><div class="pib-slides"><figure id="schematic-panel-0" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-0" tabindex="0"><a class="pib-slide-image" href="images/pib/schematic.svg" target="_blank" rel="noopener" aria-label="Open Main image at full size"><img src="images/pib/schematic.svg" alt="Complete schematic — controller, pressure, Hall current, flow and Rogowski conditioning." width="1200" height="840" fetchpriority="high"></a><figcaption>Complete schematic — controller, pressure, Hall current, flow and Rogowski conditioning.</figcaption></figure><figure id="schematic-panel-1" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-1" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/controller.svg" target="_blank" rel="noopener" aria-label="Open Controller &amp; power image at full size"><img src="images/pib/controller.svg" alt="NUCLEO-G431KB connections and local bulk capacitance on the 3.3 V and 5 V rails." width="1200" height="840" loading="lazy"></a><figcaption>NUCLEO-G431KB connections and local bulk capacitance on the 3.3 V and 5 V rails.</figcaption></figure><figure id="schematic-panel-2" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-2" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/pressure.svg" target="_blank" rel="noopener" aria-label="Open Pressure / I²C image at full size"><img src="images/pib/pressure.svg" alt="MS5837 pressure sensor, supply bypass and shared I²C pull-ups." width="1200" height="840" loading="lazy"></a><figcaption>MS5837 pressure sensor, supply bypass and shared I²C pull-ups.</figcaption></figure><figure id="schematic-panel-3" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-3" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/hall.svg" target="_blank" rel="noopener" aria-label="Open Hall current image at full size"><img src="images/pib/hall.svg" alt="ACS725 Hall sensor and the analog filter feeding PA0." width="1200" height="840" loading="lazy"></a><figcaption>ACS725 Hall sensor and the analog filter feeding PA0.</figcaption></figure><figure id="schematic-panel-4" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-4" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/flow.svg" target="_blank" rel="noopener" aria-label="Open Flow image at full size"><img src="images/pib/flow.svg" alt="External flow-sensor header, supply selector and VEXT input." width="1200" height="840" loading="lazy"></a><figcaption>External flow-sensor header, supply selector and VEXT input.</figcaption></figure><figure id="schematic-panel-5" class="pib-slide" role="tabpanel" aria-labelledby="schematic-tab-5" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/rogowski.svg" target="_blank" rel="noopener" aria-label="Open Rogowski image at full size"><img src="images/pib/rogowski.svg" alt="Leaky integrator, buffered 1.65 V reference and analog filter feeding PA1." width="1200" height="840" loading="lazy"></a><figcaption>Leaky integrator, buffered 1.65 V reference and analog filter feeding PA1.</figcaption></figure></div><div class="pib-carousel-controls"><span class="pib-slide-count" aria-live="polite" aria-atomic="true">1 / 6</span><div class="pib-arrows"><button type="button" data-direction="-1" aria-label="Previous schematic capture image">←</button><button type="button" data-direction="1" aria-label="Next schematic capture image">→</button></div></div><div class="pib-carousel-tabs" role="tablist" aria-label="Schematic capture views"><button type="button" role="tab" id="schematic-tab-0" aria-controls="schematic-panel-0" aria-selected="true" tabindex="0">Main</button><button type="button" role="tab" id="schematic-tab-1" aria-controls="schematic-panel-1" aria-selected="false" tabindex="-1">Controller & power</button><button type="button" role="tab" id="schematic-tab-2" aria-controls="schematic-panel-2" aria-selected="false" tabindex="-1">Pressure / I²C</button><button type="button" role="tab" id="schematic-tab-3" aria-controls="schematic-panel-3" aria-selected="false" tabindex="-1">Hall current</button><button type="button" role="tab" id="schematic-tab-4" aria-controls="schematic-panel-4" aria-selected="false" tabindex="-1">Flow</button><button type="button" role="tab" id="schematic-tab-5" aria-controls="schematic-panel-5" aria-selected="false" tabindex="-1">Rogowski</button></div></div>
-</div></section>
-<section id="rationale" class="pib-rationale" data-toc-entry data-toc-label="Rationale" aria-labelledby="rationale-heading">
-<div class="pib-rationale-heading"><p class="scrapr-kicker">Design details</p><h2 id="rationale-heading">Rationale</h2>
+<p>I designed a compact sensor board for ground testing a pulsed electric thruster at Purdue. The thruster uses a brief electrical discharge through vaporized propellant, so testing needs to capture both the propellant supply conditions and the electrical behavior of each firing.</p>
+<p>This board brings pressure, flow, and two types of current measurement into one STM32-based system. It gives the lab a single interface for connecting sensors to the test stand and reading them from a laptop. A removable Nucleo controller keeps development straightforward and lets me focus on the sensor circuits and PCB layout. The board is ground-test equipment; flight hardware is a separate development effort.</p>
+<div class="pib-carousel" data-carousel aria-roledescription="carousel" aria-label="Board and schematic">
+<div class="pib-slides"><figure id="pcb-panel-0" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-0" tabindex="0"><a class="pib-slide-image" href="images/pib/pcb.png" target="_blank" rel="noopener" aria-label="Open Board image at full size"><img src="images/pib/pcb.png" alt="PCB layout with separate sensor and primary-current sections." width="1454" height="1322" fetchpriority="high"></a><figcaption>PCB layout with separate sensor and primary-current sections.</figcaption></figure><figure id="pcb-panel-1" class="pib-slide" role="tabpanel" aria-labelledby="pcb-tab-1" tabindex="0" hidden><a class="pib-slide-image" href="images/pib/schematic.svg" target="_blank" rel="noopener" aria-label="Open Main image at full size"><img src="images/pib/schematic.svg" alt="Schematic integrating the STM32 controller and four measurement channels." width="1200" height="840" loading="lazy"></a><figcaption>Schematic integrating the STM32 controller and four measurement channels.</figcaption></figure></div>
+<div class="pib-carousel-controls"><span class="pib-slide-count" aria-live="polite" aria-atomic="true">1 / 2</span><div class="pib-arrows"><button type="button" data-direction="-1" aria-label="Previous project image">←</button><button type="button" data-direction="1" aria-label="Next project image">→</button></div></div>
+<div class="pib-carousel-tabs" role="tablist" aria-label="Project views"><button type="button" role="tab" id="pcb-tab-0" aria-controls="pcb-panel-0" aria-selected="true" tabindex="0">PCB layout</button><button type="button" role="tab" id="pcb-tab-1" aria-controls="pcb-panel-1" aria-selected="false" tabindex="-1">Schematic</button></div>
 </div>
-<section data-toc-entry id="architecture" class="scrapr-section" data-toc-label="Acquisition architecture" aria-labelledby="architecture-heading">
-<div class="section-marker">
-<h2 id="architecture-heading">Acquisition architecture</h2></div>
-<div class="section-content">
-<p>The two digital sensors, the pressure and flow, share an I²C bus. The two current measurements are analog, however. They get their own ADC pins after their own conditioning circuits. Splitting them that way allows for one of them to track a current that changes over seconds, and the other to reimann-sum over a pulse.</p>
-<div class="pib-paths" aria-label="Sensor signal paths">
-<div><strong>Pressure · U2</strong><span>MS5837 → shared I²C → PB7 / PA15</span></div>
-<div><strong>Flow · J1</strong><span>External digital LG16 → shared I²C → PB7 / PA15</span></div>
-<div><strong>Hall current · J2 / U3</strong><span>Series conductor → Hall output → 15.9 kHz RC → PA0</span></div>
-<div><strong>Rogowski · J4 / U4</strong><span>Floating coil → leaky integrator → 159 kHz RC → PA1</span></div>
-<div class="pib-host"><strong>NUCLEO-G431KB · U1</strong><span>Acquisition firmware → timestamped records → host computer</span></div></div>
-<h3>Why keep a dev board on top?</h3>
-<p>Making my own STM32 section would have involved designing a power supply, a programming header and a crystal, and then debugging all three before I could take a single measurement... which is practically inefficient and expensive for a ground test board. </p>
-<h3>Power distribution</h3>
-<p>There is no regulator on this board; it runs off the rails the Nucleo already provides. The pressure sensor, Hall sensor and op-amp take 3.3 V, and the flow header defaults to 5 V. C8 and C9 hold up those two rails with 10 µF each, and C1, C2, C3 and C10 sit next to the individual parts with 100 nF apiece.</p>
-<p>I could do a full worst-case power budget here, but for a board that spends its life plugged into a laptop on a bench, it would be extravagant for very little practical reason. That analysis matters for the flight hardware, which will be my up-and-coming project!</p></div>
-</section>
-<section data-toc-entry id="pressure-flow" class="scrapr-section" data-toc-label="Pressure & flow interfaces" aria-labelledby="pressure-flow-heading">
-<div class="section-marker">
-<h2 id="pressure-flow-heading">Pressure & flow interfaces</h2></div>
-<div class="section-content">
-<h3>U2 · MS5837-02BA21 pressure sensor</h3>
-<p>This part does its own conversion and hands back a number over I²C, so the pressure channel needs no amplifier and no ADC pin of its own. It's an absolute sensor in the 2 bar family.</p>
-<p>I picked it because FEMTA, a previous project in our lab, already used it. Once we move past the ground stand we'll survey transducers properly, but for getting a bench running, the familiar option wins pretty easily.</p>
-<h3>J1 / JP1 / J3 · selectable flow-sensor supply</h3>
-<p>The flow meter lives off-board, out in the feed line, so it gets a five-pin 2.54 mm header instead of a footprint. This supports the Sensirion LG16-043D, a flow meter that we managed to get working after altering our flow rate to around 20ug/s. This is an unfortunate change to me, because it means the accumulator is on the backburner, but its what our sponsors wanted :(</p>
-<p>Because the part isn't locked down, I didn't want its supply voltage to be either. JP1 is a solder jumper: as fabricated, a copper bridge between pads 1–2 feeds the header 5 V, and cutting that bridge and joining pads 2–3 instead feeds it VEXT from the J3 terminal.    </p>
 </div>
 </section>
-<section data-toc-entry id="hall" class="scrapr-section" data-toc-label="Hall current sensing" aria-labelledby="hall-heading">
-<div class="section-marker">
-<h2 id="hall-heading">Hall current sensing</h2></div>
+<section id="contribution" class="scrapr-section" data-toc-entry data-toc-label="My contribution" aria-labelledby="contribution-heading">
+<div class="section-marker"><h2 id="contribution-heading">My contribution</h2></div>
 <div class="section-content">
-<p>This channel answers a simple question: how much current is the payload actually drawing while it runs? But this is for the slower, steady measurement of amps over seconds, not the discharge pulse itself. It has to be taken without letting that current anywhere near the microcontroller.</p>
-<h3>U3 · ACS725KMATR-20AB-T</h3>
-<p>A Hall sensor is the clean way to do this. The current runs through a conductor inside the chip, and the chip reports the magnetic field around it. In this way, the 'measurement' and the 'measured' are never electrically connected.</p>
-<p>At 66 mV/A the output sits at 1.65 V with no current and swings either side of that with direction. The internal conductor is about 0.85 mΩ typical, which puts roughly 0.122 W into the chip at 12 A. Small, but that number is only the chip. It ignores the board copper, the terminals, the solder joints and the fact that resistance climbs as things heat up. The unfortunately more accurate thermal answer comes from putting 12 A through the assembled board and watching it, not from this line of arithmetic.</p>
-<div class="pib-equation"><span>Nominal transfer at 3.3 V</span><strong>V<sub>OUT</sub> = 1.65 V + (0.066 V/A) × I</strong><span>I = (V<sub>OUT</sub> − calibrated zero) / calibrated sensitivity</span></div>
-<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Primary current table">
-<table class="pib-table">
-<thead>
-<tr><th scope="col">Primary current</th><th scope="col">Nominal output</th><th scope="col">Ideal 12-bit code</th>
-</tr>
-</thead>
-<tbody>
-<tr><th scope="row">−12 A</th><td>0.858 V</td><td>1065</td>
-</tr>
-<tr><th scope="row">0 A</th><td>1.650 V</td><td>2048</td>
-</tr>
-<tr><th scope="row">+12 A</th><td>2.442 V</td><td>3031</td>
-</tr>
-</tbody>
-</table></div>
-<h3>Two filtering stages</h3>
-<p>The signal gets filtered twice on the way to the pin, for two different reasons. C11, a 1 nF C0G part on the sensor’s FILTER pin, works against the chip’s own 1.7 kΩ to roll the sensor off near 94 kHz. R7 = 1 kΩ and C6 = 10 nF then form a 15.9 kHz filter right at PA0, which both limits noise and, just as importantly, gives the ADC a low-impedance source to grab charge from when it samples. C2 handles local supply bypassing.</p>
+<p>My work covers the schematic and PCB layout, from connecting the digital pressure and flow sensors to designing the analog circuits for the two current measurements. The main challenge is that those current channels are looking at very different things: one follows the payload's steady draw, while the other needs to capture a short discharge pulse.</p>
+<p>I brought those circuits together on a 65 × 95 mm, two-layer board in KiCad, with a 12 A continuous-current design target. Keeping a removable Nucleo on top means I can use its existing power and programming connections and spend more time on the measurement side of the project.</p>
 </div>
 </section>
-<section data-toc-entry id="rogowski" class="scrapr-section" data-toc-label="Rogowski integration & bias" aria-labelledby="rogowski-heading">
-<div class="section-marker">
-<h2 id="rogowski-heading">Rogowski integration & bias</h2></div>
+<section id="sensors" class="scrapr-section" data-toc-entry data-toc-label="Why these sensors" aria-labelledby="sensors-heading">
+<div class="section-marker"><h2 id="sensors-heading">Why these sensors</h2></div>
 <div class="section-content">
-<p>The other current channel exists because a PMPD firing is a single, very fast discharge arc over the vaporized propellant in the thruster itself. The Hall sensor is far too slow to see its shape (the important part), including the peak, the ringing, and how long it lasts. A Rogowski coil is a loop of wire you put around the discharge conductor without touching it, and reading its data allows you to read the derivative of the current.</p>
-<h3>Why a second current channel?</h3>
-<p>The catch with a Rogowski coil is that it doesn’t report current. It reports how fast the current is <em>changing</em>, which is why it can be so fast and why it is blind to steady DC. To recover the pulse itself you have to integrate that signal, and that is what this circuit does, using half of an MCP6002 dual op-amp (but this op-amp will likely have to change, like said above, depending on how the GBWP affects our required sample rate).</p>
-<p>Because there is only one supply rail on this board, the whole circuit works around a 1.65 V midpoint instead of ground, so the ADC can see the signal move in both directions. R3 = 100 kΩ sets the input, C4 = 100 nF does the integrating, and R4 = 1 MΩ sits across the capacitor as a deliberate leak. Without that leak, a perfect integrator would slowly accumulate its own offset voltage until it pinned itself against a rail and stopped being useful.</p>
-<div class="pib-equation"><span>Ideal small-signal transfer · output relative to VREF</span><strong>H(s) = −(R4/R3) / (1 + sR4C4)</strong><span>R3C4 = 10 ms · leak pole ≈ 1.59 Hz · low-frequency gain = −10</span></div>
-<p>Above the leak pole, within the useful amplifier and coil bandwidth, VOUT − VREF ≈ −M × I / (R3C4), where M is the coil’s mutual inductance. R4 also controls recovery after a pulse. The finite op-amp bandwidth, output swing, noise and offset keep this ideal model from describing every frequency or amplitude.</p>
-<h3>Why C0G, and why a dual amplifier?</h3>
-<p>C4 is a physically larger 1206 C0G part. This capacitor’s value <em>is</em> the scale factor on every current number this channel produces. A cheaper, high-permittivity ceramic would change value with temperature and applied voltage, and the measurement would drift with it: as you can likely imagine, no good! Even with the good part, a 1% resistor and a 5% capacitor already stack up to about ±6% worst-case error before the coil and amplifier add their own, so this channel is calibrated against a reference.</p>
-<p>The other half of the op-amp, U4B, generates the 1.65 V midpoint reference I was just talking about. R5 and R6 split 3.3 V in half, C5 = 1 µF filters that node, and the buffer keeps the signal circuit from tugging the divider around when it swings. The divider costs about 165 µA and its filter pole lands near 31.8 Hz. Resistor tolerance alone can move the midpoint about 16.5 mV off center, which is another thing calibration absorbs rather than something to optimize with better, bigger, and more expensive parts.</p>
+<p>For pressure, I chose the MS5837 because our lab had already used it on FEMTA, an earlier project. That gave us a familiar starting point for getting the bench running. It does its own conversion and sends the reading digitally, so there is no extra amplifier to design for that channel.</p>
+<p>The flow meter lives off the board, in the propellant feed line. We had gotten the Sensirion LG16 working at our revised flow target, so I gave it a connector on the board to bring its readings into the same system. I also made its supply selectable, leaving some flexibility if the sensor requirements change.</p>
+<p>Current takes two different sensors. The ACS725 Hall sensor tells us how much current the payload is drawing while it runs. It reads the magnetic field around an internal conductor, which keeps the current being measured electrically separate from the microcontroller. That makes it useful for the slower, steady measurement, but it cannot tell us the shape of the discharge pulse itself.</p>
+<p>That is where the Rogowski coil comes in. It loops around the discharge conductor without touching it electrically and responds to how quickly the current changes. To turn that signal back into a current waveform, I designed an integrating circuit on the board. The goal is to see the peak, ringing, and duration of each pulse; how well the circuit captures those details still needs to be checked on the bench, particularly the amplifier's bandwidth.</p>
 </div>
 </section>
-<section data-toc-entry id="layout" class="scrapr-section" data-toc-label="Layout, mechanics & assembly" aria-labelledby="layout-heading">
-<div class="section-marker">
-<h2 id="layout-heading">Layout, mechanics & assembly</h2></div>
-<div class="section-content">
-<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Layout decision table">
-<table class="pib-table">
-<thead>
-<tr><th scope="col">Layout decision</th><th scope="col">Reason & tradeoff</th>
-</tr>
-</thead>
-<tbody>
-<tr><th scope="row">Two copper layers; specified 2 oz outer copper; 1.6 mm FR4</th><td>Broad copper supports the 12 A thermal target without a multilayer stack. Copper weight must be specified in fabrication; current capacity remains a thermal test result.</td>
-</tr>
-<tr><th scope="row">IP_IN / IP_OUT pours on both sides</th><td>Stitching vias and all primary pads share the current path. Direct pad connections avoid narrow thermal-relief spokes, but large copper areas increase assembly heating demands.</td>
-</tr>
-<tr><th scope="row">Low-voltage ground kept outside the primary section</th><td>Provides the sensor circuitry with a common return while preserving the intended isolation boundary. Bypass placement and analog return routing remain important to noise performance.</td>
-</tr>
-<tr><th scope="row">24 × 1.5 mm nonplated slot beneath U3</th><td>Lengthens surface paths between primary and low-voltage areas. It is routed on Edge.Cuts and must be recognized as an internal cutout by the fabricator.</td>
-</tr>
-<tr><th scope="row">7 mm clearance; 8 mm creepage; 2 mm primary-to-edge spacing</th><td>Explicit custom rules make the chosen geometry checkable. They are layout targets, not a standards certification or a complete high-voltage acceptance.</td>
-</tr>
-<tr><th scope="row">Four 3.2 mm M3 nonplated holes</th><td>Controlled mounting locations with copper keepouts. The lower pair has enlarged keepouts for the nearby primary domain; metal hardware must fit the documented 7 mm diameter envelope.</td>
-</tr>
-<tr><th scope="row">Top-side SMD population</th><td>One-sided placement simplifies assembly and inspection. The lab separately fits the Nucleo and connectors, keeping the controller serviceable.</td>
-</tr>
-<tr><th scope="row">Five labeled schematic blocks and named nets</th><td>Power, pressure/I²C, flow, Hall and Rogowski paths are easier to trace. Visible reference designators connect the layout to the component register without crowding the silkscreen with every specification.</td>
-</tr>
-<tr><th scope="row">Project-local sensor footprints and exact connector parts</th><td>Pin mapping, drill sizes and package geometry follow the selected devices. A similar family name is insufficient for a drop-in substitution.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-</section>
-<section data-toc-entry id="components" class="scrapr-section" data-toc-label="Complete component register" aria-labelledby="components-heading">
-<div class="section-marker">
-<h2 id="components-heading">Complete component register</h2></div>
-<div class="section-content">
-<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Reference table">
-<table class="pib-table">
-<thead>
-<tr><th scope="col">Reference</th><th scope="col">Value / device</th><th scope="col">Selected part</th><th scope="col">Circuit role</th>
-</tr>
-</thead>
-<tbody>
-<tr><th scope="row">C1</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Pressure supply bypass</td>
-</tr>
-<tr><th scope="row">C2</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Hall supply bypass</td>
-</tr>
-<tr><th scope="row">C3</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Op-amp supply bypass</td>
-</tr>
-<tr><th scope="row">C4</th><td>100 nF C0G</td><td>GRM31C5C1H104JA01L</td><td>Stable integration capacitor</td>
-</tr>
-<tr><th scope="row">C5</th><td>1 µF</td><td>CL10A105KB8NNNC</td><td>Midpoint divider filter</td>
-</tr>
-<tr><th scope="row">C6</th><td>10 nF</td><td>0603B103K500NT</td><td>Hall ADC shunt filter</td>
-</tr>
-<tr><th scope="row">C7</th><td>1 nF</td><td>C0603C102J5GACTU</td><td>Rogowski ADC shunt filter</td>
-</tr>
-<tr><th scope="row">C8</th><td>10 µF</td><td>CL21A106KAYNNNE</td><td>3.3 V bulk decoupling</td>
-</tr>
-<tr><th scope="row">C9</th><td>10 µF</td><td>CL21A106KAYNNNE</td><td>5 V bulk decoupling</td>
-</tr>
-<tr><th scope="row">C10</th><td>100 nF</td><td>CC0603KRX7R9BB104</td><td>Selected flow supply bypass</td>
-</tr>
-<tr><th scope="row">C11</th><td>1 nF</td><td>C0603C102J5GACTU</td><td>Hall internal FILTER capacitor</td>
-</tr>
-<tr><th scope="row">J1</th><td>FLOW 1x05</td><td>Exact header pending</td><td>External digital flow interface</td>
-</tr>
-<tr><th scope="row">J2</th><td>CURRENT SERIES 12A</td><td>1731721</td><td>Series primary-current terminal</td>
-</tr>
-<tr><th scope="row">J3</th><td>VEXT 2P</td><td>1715721</td><td>External flow supply terminal</td>
-</tr>
-<tr><th scope="row">J4</th><td>ROGOWSKI 2P</td><td>1715721</td><td>Floating coil / VREF terminal</td>
-</tr>
-<tr><th scope="row">JP1</th><td>5V / VEXT</td><td>PCB copper feature</td><td>Manual flow supply selector</td>
-</tr>
-<tr><th scope="row">R1</th><td>4.7 kΩ</td><td>0603WAF4701T5E</td><td>I²C SDA pull-up</td>
-</tr>
-<tr><th scope="row">R2</th><td>4.7 kΩ</td><td>0603WAF4701T5E</td><td>I²C SCL pull-up</td>
-</tr>
-<tr><th scope="row">R3</th><td>100 kΩ</td><td>0603WAF1003T5E</td><td>Integrator input resistance</td>
-</tr>
-<tr><th scope="row">R4</th><td>1 MΩ</td><td>0603WAF1004T5E</td><td>Integrator DC feedback / leak</td>
-</tr>
-<tr><th scope="row">R5</th><td>10 kΩ</td><td>0603WAF1002T5E</td><td>Upper midpoint divider</td>
-</tr>
-<tr><th scope="row">R6</th><td>10 kΩ</td><td>0603WAF1002T5E</td><td>Lower midpoint divider</td>
-</tr>
-<tr><th scope="row">R7</th><td>1 kΩ</td><td>0603WAF1001T5E</td><td>Hall ADC series filter</td>
-</tr>
-<tr><th scope="row">R8</th><td>1 kΩ</td><td>0603WAF1001T5E</td><td>Rogowski ADC series filter</td>
-</tr>
-<tr><th scope="row">U1</th><td>NUCLEO-G431KB</td><td>NUCLEO-G431KB</td><td>Removable controller module</td>
-</tr>
-<tr><th scope="row">U2</th><td>MS5837-02BA21</td><td>MS5837-02BA21</td><td>Absolute pressure measurement</td>
-</tr>
-<tr><th scope="row">U3</th><td>ACS725KMATR-20AB-T</td><td>ACS725KMATR-20AB-T</td><td>Isolated Hall current measurement</td>
-</tr>
-<tr><th scope="row">U4</th><td>MCP6002T-I/SN</td><td>MCP6002T-I/SN</td><td>Integrator and midpoint buffer</td>
-</tr>
-</tbody>
-</table></div></div>
-</section>
-<section data-toc-entry id="verification" class="scrapr-section" data-toc-label="Verification & remaining work" aria-labelledby="verification-heading">
-<div class="section-marker">
-<h2 id="verification-heading">Verification & remaining work</h2></div>
-<div class="section-content">
-    <p>This board is going to be verified after our Critical Design Review in September, so there isn't much to say about it until then. Enjoy the theory and come back for an update!</p>
-<div class="pib-table-wrap" tabindex="0" role="region" aria-label="Measurement table">
-<table class="pib-table">
-<thead>
-</tr>
-</thead>
-<tbody>
-
-</table></div>
-</div>
-</section>
+<section id="status" class="scrapr-section" data-toc-entry data-toc-label="Project status" aria-labelledby="status-heading">
+<div class="section-marker"><h2 id="status-heading">Project status</h2></div>
+<div class="section-content"><p>Schematic and PCB layout complete. Bench validation is planned after the Critical Design Review; measurement accuracy and current-handling performance still need to be verified.</p></div>
 </section>
 <footer class="scrapr-end"><a href="../index.html#projects">← Return to project index</a>
 </footer>
