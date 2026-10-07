@@ -1,7 +1,11 @@
 import { posts } from './blog-posts.js';
 
-const words = post => [post.title, ...post.sections.flatMap(section => [section.title, ...section.paragraphs])].join(' ').trim().split(/\s+/u).filter(Boolean).length;
+const words = post => [post.title, ...post.sections.flatMap(section => [section.title, ...section.paragraphs])].filter(Boolean).join(' ').replace(/\*/gu, '').trim().split(/\s+/u).filter(Boolean).length;
 const dateLabel = date => date ? new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`)) : '';
+const appendRich = (element, text) => text.split(/\*([^*]+)\*/u).forEach((part, index) => {
+  if (index % 2) { const em = document.createElement('em'); em.textContent = part; element.append(em); }
+  else if (part) element.append(part);
+});
 const list = document.querySelector('.blog-list');
 if (list) {
   document.querySelector('.blog-empty').hidden = posts.length > 0;
@@ -74,17 +78,19 @@ if (list) {
     const targets = [heading];
     post.sections.forEach((section, index) => {
       const container = document.createElement('section');
-      const title = document.createElement('h2');
-      title.id = `section-${index}`;
-      title.textContent = section.title;
-      container.append(title);
+      if (section.title) {
+        const title = document.createElement('h2');
+        title.id = `section-${index}`;
+        title.textContent = section.title;
+        container.append(title);
+        targets.push(title);
+      }
       section.paragraphs.forEach(text => {
         const paragraph = document.createElement('p');
-        paragraph.textContent = text;
+        appendRich(paragraph, text);
         container.append(paragraph);
       });
       article.append(container);
-      targets.push(title);
     });
     targets.forEach(target => {
       const item = document.createElement('li');
